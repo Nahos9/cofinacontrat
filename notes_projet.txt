@@ -1,0 +1,59 @@
+Livrable le 08/04/2024:
+    -Préciser que les frais de dossiers sont hors taxe dans le pv [Done]
+    -Télécharger les pv uniquement en pdf
+    -Rendre les commentaire facultatifs pour les garanties
+    -Remplacer le terme garant par Caution
+    -Télécharger le contrat en pdf pour les caf
+    -Le client doit signer la notification avant que le juridique ne puisse continuer le processus
+Livrable le 12/04/2024:
+    -Gérer les notification facilités
+Autres points:
+    -Gérer les TA dans l'application
+    -Gérer les rapports sur les cautions dans l'application
+    -Gérer les renouvellement de crédit
+
+
+avis au niveau de l'upload du contrat au niveau du juridique
+pour tout ce qui est validation il faut mettre un avis
+
+ajouter une option observation au niveau head credit et de l'opération pour permettre un call back en cas de soucis avec le dossier, mais le dossier reste en attente
+
+au niveau du checking post deblocage 
+
+en attente x
+
+
+--Après presentation
+
+pour le pv il faut demande le nom / raison social de l'entreprise
+le pv diffère pour les entreprises
+#A ne pas prendre en compte pour le moment
+
+mettre l'option de la prime d'assurance et de la prime de risque
+la prime de risque est un pourcentagej
+#Demander comment on va afficher la prime de risque ou d'assurance selon les cas
+
+préciser que le frais de dossier est hors taxe
+
+mettre le pv en pdf
+
+ne pas rendre les commentaires pour les garanties obligatoire
+mettre Caution à la place de garant
+
+pour les contrat à télécharger côté caf il faudra lui faire télécharger un pdf
+
+la notification doit être signé par le client avant que le juridique ne puisse prendre la notification pour faire le contrat au niveau du notaire
+
+notification de facilité
+
+avoir les cautions et le nombre de dossier dont ils sont garants...
+
+ajouter la gestion des ta pour scan
+
+ajouter les 
+
+
+ajouter un rapport pour voir les cautions...
+
+prendre en compte les renouvellement du contrat
+#Si j'ai les informations de l'ancien pv

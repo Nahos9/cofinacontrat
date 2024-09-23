@@ -1,0 +1,67 @@
+PV:
+    Numéro Comitée:                                     CFNTG-044-13-12-23-01212
+    Date du comitée:                                    2024-02-02
+    Chargé d'affaire:                                   caf
+    Civilité:                                           Mr
+    Prénom du demandeur:                                Albert
+    Nom du demandeur:                                   Einstein
+    Numéro de compte:                                   251012345678
+    Activé:                                             Homme d'affaire
+    Objet du financement:                               Achat de nouveau locaux
+    Type de credit:                                     CREDIT BFR 6 à 12 mois
+    Montant:                                            15000000
+    Durée du crédit en mois:                            10
+    Periodicité:                                        Mensuelle
+    Montant d'une échéance:                             150000
+    Prime d'assurance:                                  15000
+    Garanties:
+        1:
+            Type de garantie:                                   Dépot de garantie
+            Date d'expiration:                                  2030-03-20
+            Valeur:                                             150000
+            Commentaire:                                        RAS
+
+
+Contrat:
+    Procès verbal:                                      CFNTG-044-13-12-23-01212
+    Montant d'une échéance:                             125000
+    Nombre d'échéance:                                  18
+    Type:                                               Société
+    Gages:
+        1:CFNTG-044-13-12-23-01212
+            Type de Gage:                                       Véhicule
+            Commentaire:                                        RAS
+    Date de naissance:                                  1998-03-03
+    Lieu de naissance:                                  Afagnan
+    Nationalité:                                        Togolaise
+    Addresse du domicile:                               Lomé, Adewi
+    Type de la pièce d'identité:                        Passeport
+    Numéro de la pièce d'identité:                      87F4DSRDQD
+    Date de délivrance de la pièce d'identité:          2024-01-01
+    Numéro de téléphone:                                +228 91 61 11 35
+    Garants:
+        1:
+            Civilité:                                           Mr
+            Prénom:                                             Xavier
+            Nom:                                                Clément
+            Date de naissance:                                  2000-03-03
+            Lieu de naissance:                                  Afagnan
+            Nationalité:                                        Togolaise
+            Addresse du domicile:                               Lomé, Adewi
+            Type de la pièce d'identité:                        Passeport
+            Numéro de la pièce d'identité:                      87F4DSRDQD
+            Date de délivrance de la pièce d'identité:          2024-01-01
+            Fonction:                                           Developpeur
+            Numéro de téléphone:                                +228 91 61 11 35
+        
+CAT:
+    Contrat:                                            CFNTG-044-13-12-23-01212
+    Numéro du crédit:                                   19856542
+    Secteur:                                            Agriculture
+    Date de la première échéance:                       2024-04-04
+    Date de la dernière échéance:                       2024-10-04
+    Source du remboursement:                            Recettes de l'activité
+    Numéro encours prêt à solder:                       158745632
+    Autres frais:                                       45000
+    TEG:                                                15000000
+    Instructions du département risque et crédit:       Restriction sur le compte sous reserve du retrait du tableau d’amortissement et du contrat
