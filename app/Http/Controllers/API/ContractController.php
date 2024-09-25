@@ -531,10 +531,27 @@ class ContractController extends Controller
 						}
 					}
 				}
+				// if(isset($contract->verbal_trial->pep)){
+				// 	$data["pep"] = $contract->verbal_trial->pep->toArray();
+				// 	// dd($data);
+				// }
+				if(isset($contract->verbal_trial->pep)){
+					// $data["pep"] = $contract->verbal_trial->pep->toArray();
+					$data = array_merge($data, collect($contract->verbal_trial->pep)->mapWithKeys(function ($value, $key) {
+						return ['pep.' . $key => $value];
+					})->all());
+				}
+				if(isset($data["pep.montant"])){
 
+					$data["pep.montant.fr"] = SpellNumber::value((float) $data["pep.montant"])->locale('fr')->toLetters();
+				}
+
+				// dd($data);
 				$templateProcessor->cloneBlock('guaranteeList', 0, true, false, $guaranteeList);
 				// dd($contract->pledges);
+				
 				if ($contract->has_pledges == "1") {
+					
 					$pledgeList = [];
 					foreach ($contract->pledges as $pledge) {
 						$tmp = $pledge->toArray();
@@ -589,7 +606,7 @@ class ContractController extends Controller
 				// dd($data);
 				
 				// Enregistrez les modifications dans un nouveau fichier
-				$outputFilePath = public_path("Contrat_avec_gage" . $contract->verbal_trial->applicant_first_name_.$contract->verbal_trial->applicant_last_name.".docx");
+				$outputFilePath = public_path("Contrat_pret-" . $contract->verbal_trial->applicant_first_name_.$contract->verbal_trial->applicant_last_name.".docx");
 				$outputFilePath1 = public_path("Billet-" . $contract->verbal_trial->applicant_first_name_.$contract->verbal_trial->applicant_last_name . ".docx");
 				$outputFilePath2 = public_path("Declaration_cession-" . $contract->verbal_trial->applicant_first_name_.$contract->verbal_trial->applicant_last_name . ".docx");
 				$outputFilePath3 = public_path("Contrat_PEP-" . $contract->verbal_trial->applicant_first_name_.$contract->verbal_trial->applicant_last_name . ".docx");
@@ -602,7 +619,7 @@ class ContractController extends Controller
 				$outputFilePath10= public_path("Billet_a_ordre-" . $contract->verbal_trial->applicant_first_name_.$contract->verbal_trial->applicant_last_name . ".docx");
 				$outputFilePath11= public_path("Contrat_cautionnement-personne-physique-" . $contract->verbal_trial->applicant_first_name_.$contract->verbal_trial->applicant_last_name . ".docx");
 				$outputFilePath12= public_path("Contrat_de_pret_personne_morale" . $contract->verbal_trial->applicant_first_name_.$contract->verbal_trial->applicant_last_name . ".docx");
-				$outputFilePath13= public_path("Contrat" . $contract->verbal_trial->applicant_first_name_.$contract->verbal_trial->applicant_last_name . ".docx");
+				$outputFilePath13= public_path("Contrat-" . $contract->verbal_trial->applicant_first_name_.$contract->verbal_trial->applicant_last_name . ".docx");
 				$templateProcessor->saveAs($outputFilePath);
 				$templateProcessor1->saveAs($outputFilePath1);
 				$templateProcessor2->saveAs($outputFilePath2);

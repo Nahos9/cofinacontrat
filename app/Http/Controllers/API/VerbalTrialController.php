@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Traits\CustomResponseTrait;
 use App\Jobs\SendEmail;
 use App\Models\Guarantee;
+use App\Models\Pep;
 use App\Models\User;
 use App\Models\VerbalTrial;
 use Carbon\Carbon;
@@ -247,7 +248,7 @@ class VerbalTrialController extends Controller
       unset($data["caf.ability_rules"]);
       $templateProcessor->setValues($data);
       // return $data;
-
+      dd($data);
       // Enregistrez les modifications dans un nouveau fichier
       $wordFilePath = public_path("PV-" . $verbalTrial->committee_id . ".docx");
       $templateProcessor->saveAs($wordFilePath);
@@ -363,6 +364,17 @@ class VerbalTrialController extends Controller
                     "type_of_guarantee_id" => $guarantee["type_of_guarantee_id"],
                     "comment" => $guarantee["comment"]
                   ]);
+
+                  if(isset($guarantee["type_of_guarantee_id"]) && $guarantee["type_of_guarantee_id"] == "7"){
+                    Pep::create([
+                      "verbal_trial_id" => $verbalTrial->id,
+                      "type_of_guarantee_id" => $guarantee["type_of_guarantee_id"],
+                      "montant" => $guarantee["montant"],
+                      "duree" => $guarantee["duree"],
+                      "taux_annuel" => $guarantee["taux_annuel"],
+                      "date_debut" => $guarantee["date_debut"],
+                    ]);
+                  }
                 }
               }
               $receiver = User::find($requestData["caf_id"]);

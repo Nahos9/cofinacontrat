@@ -74,6 +74,10 @@ class VerbalTrial extends Model
         return $this->hasOne(Contract::class, 'verbal_trial_id', 'id');
     }
 
+    public function pep(): HasOne
+    {
+        return $this->hasOne(Pep::class, 'verbal_trial_id', 'id');
+    }
     public function caf(): BelongsTo
     {
         return $this->belongsTo(User::class, 'caf_id', "id");
