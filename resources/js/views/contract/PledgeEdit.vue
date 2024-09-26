@@ -53,56 +53,56 @@ const removePledge = () => {
             :rules="[requiredValidator]"
           />
         </VCol>
-        <VCol cols="12" md="6">
+        <VCol v-if="localPledgeData.type == 'vehicle'" cols="12" md="6">
           <AppTextField
             v-model="localPledgeData.montant_estime"
             label="Montant estimé"
             :rules="[requiredValidator]"
           />
         </VCol>
-        <VCol cols="12" md="6">
+        <VCol v-if="localPledgeData.type == 'vehicle'" cols="12" md="6">
           <AppTextField
             v-model="localPledgeData.genre"
             label="Genre"
             :rules="[requiredValidator]"
           />
         </VCol>
-        <VCol cols="12" md="6">
+        <VCol v-if="localPledgeData.type == 'vehicle'" cols="12" md="6">
           <AppTextField
             v-model="localPledgeData.marque"
             label="Marque"
             :rules="[requiredValidator]"
           />
         </VCol>
-        <VCol cols="12" md="6">
+        <VCol v-if="localPledgeData.type == 'vehicle'" cols="12" md="6">
           <AppTextField
             v-model="localPledgeData.model"
             label="Model"
             :rules="[requiredValidator]"
           />
         </VCol>
-        <VCol cols="12" md="6">
+        <VCol v-if="localPledgeData.type == 'vehicle'" cols="12" md="6">
           <AppTextField
             v-model="localPledgeData.numero_serie"
             label="Numéro de série/châssis"
             :rules="[requiredValidator]"
           />
         </VCol>
-        <VCol cols="12" md="6">
+        <VCol v-if="localPledgeData.type == 'vehicle'" cols="12" md="6">
           <AppTextField
             v-model="localPledgeData.immatriculation"
             label="Immatriculation"
             :rules="[requiredValidator]"
           />
         </VCol>
-        <VCol cols="12" md="6">
+        <VCol v-if="localPledgeData.type == 'vehicle'" cols="12" md="6">
           <AppDateTimePicker
             v-model="localPledgeData.date_carte_crise"
             label="Date d'établissement carte grise"
             :rules="[requiredValidator]"
           />
         </VCol>
-        <VCol cols="12" md="6">
+        <VCol v-if="localPledgeData.type == 'vehicle'" cols="12" md="6">
           <AppDateTimePicker
             v-model="localPledgeData.date_mise_en_circulation"
             label="Date mise en circulation"
