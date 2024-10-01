@@ -62,7 +62,7 @@ class User extends Authenticatable
 		$data["created_at_fr"] = Carbon::parse($data["created_at"])->format("d/m/Y H:i:s");
 		$data["updated_at_fr"] = Carbon::parse($data["updated_at"])->format("d/m/Y H:i:s");
 		$data["email_verified_at_fr"] = Carbon::parse($data["email_verified_at"])->format("d/m/Y H:i:s");
-		$data["signatory_path"] = "/storage" . $data["signatory_path"];
+		// $data["signatory_path"] = "/storage" . $data["signatory_path"];
 		return $data;
 	}
 

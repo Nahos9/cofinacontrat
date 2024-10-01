@@ -97,6 +97,8 @@ declare module 'vue-router/auto/routes' {
     'simple-notification-edit-id': RouteRecordInfo<'simple-notification-edit-id', '/simple-notification/edit/:id', { id: ParamValue<true> }, { id: ParamValue<false> }>,
     'simple-notification-historical': RouteRecordInfo<'simple-notification-historical', '/simple-notification/historical', Record<never, never>, Record<never, never>>,
     'simple-notification-without-signed-notification': RouteRecordInfo<'simple-notification-without-signed-notification', '/simple-notification/without-signed-notification', Record<never, never>, Record<never, never>>,
+    'user': RouteRecordInfo<'user', '/user', Record<never, never>, Record<never, never>>,
+    'user-add': RouteRecordInfo<'user-add', '/user/add', Record<never, never>, Record<never, never>>,
   }
 }
 

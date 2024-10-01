@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
 use PhpOffice\PhpWord\TemplateProcessor;
+use Rmunate\Utilities\SpellNumber;
 
 /**
  * @group Procès Verbal
@@ -213,7 +214,8 @@ class VerbalTrialController extends Controller
     $verbalTrial = VerbalTrial::find($id);
     if ($verbalTrial) {
       // if (($authorisation = Gate::inspect('view', $verbalTrial))->allowed()) {
-      $templateProcessor = new TemplateProcessor("../document_templates/PVs/PV-$verbalTrial->status-$verbalTrial->validation_level.docx");
+      // $templateProcessor = new TemplateProcessor("../document_templates/PVs/PV-$verbalTrial->status-$verbalTrial->validation_level.docx");
+      $templateProcessor = new TemplateProcessor("../document_templates/PVs/PV.docx");
       $data = $verbalTrial->toArray();
       $data = array_merge($data, collect($verbalTrial->caf)->mapWithKeys(function ($value, $key) {
         return ['caf.' . $key => $value];
@@ -224,11 +226,13 @@ class VerbalTrialController extends Controller
 
       $data["administrative_fees_percentage.value"] = number_format((float) $data["administrative_fees_percentage"] * $data["amount"] / 100, 0, ',', ' ');
       $data["created_at"] = Carbon::parse($verbalTrial->created_at)->format("d/m/Y");
-      $data["amount"] = number_format(((float) $data["amount"]), 0, ',', ' ');
+      // $data["amount"] = number_format(((float) $data["amount"]), 0, ',', ' ');
       $data["due_amount"] = number_format(((float) $data["due_amount"]), 0, ',', ' ');
+      $data["amount"] = (float) $data["amount"];
       $data["insurance_premium"] = number_format(((float) $data["insurance_premium"]), 0, ',', ' ');
       $data["periodicity.fr"] = ["mensual" => "Mensuel", "quarterly" => "Trimestrielle", "semi-annual" => "Semestrielle", "annual" => "Annuel", "in-fine" => "A la fin"][$data["periodicity"]];
       $data["line_review_bonus"] = (((float) $data["duration"]) < 18) ? "" : "Prime de révision de ligne                                          : « 1% du capital restant dû après 12 mois »";
+			$data["amount.fr"] = SpellNumber::value((float) $data["amount"])->locale('fr')->toLetters();
 
 
       $guaranteeList = [];
@@ -248,7 +252,7 @@ class VerbalTrialController extends Controller
       unset($data["caf.ability_rules"]);
       $templateProcessor->setValues($data);
       // return $data;
-      dd($data);
+      // dd($data);
       // Enregistrez les modifications dans un nouveau fichier
       $wordFilePath = public_path("PV-" . $verbalTrial->committee_id . ".docx");
       $templateProcessor->saveAs($wordFilePath);
