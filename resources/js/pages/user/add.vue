@@ -1,6 +1,7 @@
 <script setup>
 import { $api } from "@/utils/api";
-import { useRouter } from "vue-router";
+import axios from "axios";
+// import { useRouter } from "vue-router";
 
 definePage({
   meta: {
@@ -35,14 +36,15 @@ const roles = [
 ];
 
 const router = useRouter();
+const userToken = useCookie("userToken").value;
 
 const refForm = ref();
 const onSubmit = () => {
   refForm.value?.validate().then(async ({ valid }) => {
     if (valid) {
-      const res = $api("/user", {
-        method: "POST",
-        body: {
+      const { data } = await axios.post(
+        "/api/user",
+        {
           email: pvData.value.email,
           name: pvData.value.name,
           password: pvData.value.password,
@@ -51,11 +53,16 @@ const onSubmit = () => {
           activated: 1,
           password_change_required: 0,
         },
-      });
-      let nexRoute = "/user";
-      if (res.status == 201) {
-        router.push(nexRoute);
-        // refForm.value?.resetValidation();
+        {
+          headers: {
+            // "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${userToken}`,
+          },
+        }
+      );
+
+      if (data.status == 201) {
+        router.push("/user");
       }
     }
   });

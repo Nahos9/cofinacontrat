@@ -133,6 +133,10 @@ watch(numPret, async (newValue) => {
     contractData.value.due_amount = pretList.value.data.data[0].mt_ech_pret;
     contractData.value.number_of_due_dates =
       pretList.value.data.data[0].nb_ech_pret;
+    contractData.value.date_of_first_echeance =
+      pretList.value.data.data[0].d_prem_ech;
+    contractData.value.date_of_last_echeance =
+      pretList.value.data.data[0].d_der_ech;
   } else {
     clientsList.value = [];
   }

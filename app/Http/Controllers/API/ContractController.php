@@ -388,9 +388,9 @@ class ContractController extends Controller
 					$templateProcessor2 = new TemplateProcessor($templatePath3);
 					$templateProcessor3 = new TemplateProcessor($templatePath4);
 					$templateProcessor4 = new TemplateProcessor($templatePath5);
-					// dd($data);
+					// dd($data["verbal_trial.type_of_credit.name"] == "CREDIT FDR ");
 					// dd(($data["verbal_trial.type_of_credit.name"] == "CREDIT FDR" || $data["verbal_trial.type_of_credit.name"] == "CREDIT  BFR"));
-					if($contract->type == "individual_business" && ($data["verbal_trial.type_of_credit.name"] == "CREDIT FDR" || $data["verbal_trial.type_of_credit.name"] == "CREDIT  BFR"))
+					if($contract->type == "individual_business" && ($data["verbal_trial.type_of_credit.name"] == "CREDIT FDR " || $data["verbal_trial.type_of_credit.name"] == "CREDIT  BFR"))
 					{
 						// dd("ok");
 					$templatePath6 = "../document_templates/Contracts/$contract->type/fdr/billet_a_ordre_societe.docx";
@@ -408,10 +408,12 @@ class ContractController extends Controller
 						$templatePath11 = "../document_templates/Contracts/$contract->type/investissement/contrat_pret_personne_morale.docx";
 						$templatePath12 = "../document_templates/Contracts/$contract->type/investissement/contrat_nantissement.docx";
 						$templatePath13 = "../document_templates/Contracts/$contract->type/investissement/billet_a_ordre_societe.docx";
+						$templatePath14 = "../document_templates/Contracts/$contract->type/contract_$contract->type.docx";// ajouter le 02 oct 2024
 						$templateProcessor9= new TemplateProcessor($templatePath10);
 						$templateProcessor10= new TemplateProcessor($templatePath11);
 						$templateProcessor11= new TemplateProcessor($templatePath12);
 						$templateProcessor12= new TemplateProcessor($templatePath13);
+						$templateProcessor13= new TemplateProcessor($templatePath14);
 					
 					}
 					
@@ -435,17 +437,21 @@ class ContractController extends Controller
 					$templatePath6 = "../document_templates/Contracts/$contract->type/conso/abandon_de_droit.docx";
 					$templatePath7 = "../document_templates/Contracts/$contract->type/conso/contrat_de_delegation.docx";
 					$templatePath8 = "../document_templates/Contracts/$contract->type/conso/contrat_de_nantissement.docx";
+					$templatePath9 = "../document_templates/Contracts/$contract->type/conso/contract_pret.docx";
 					$templateProcessor5 = new TemplateProcessor($templatePath6);
 					$templateProcessor6 = new TemplateProcessor($templatePath7);
 					$templateProcessor7 = new TemplateProcessor($templatePath8);
+					$templateProcessor8 = new TemplateProcessor($templatePath9);
 						
 					}
 					if($contract->type == "particular" &&($data["verbal_trial.type_of_credit.name"] == "PP COMMERCANT" || $data["verbal_trial.type_of_credit.name"] == "COMMERCANT PP"))
 					{
 					 $templatePath9 = "../document_templates/Contracts/$contract->type/pp_commercant/collecte.docx";
 					 $templatePath10 = "../document_templates/Contracts/$contract->type/pp_commercant/engagement_domiciliation.docx";
+					 $templatePath11 = "../document_templates/Contracts/$contract->type/contract_$contract->type.docx";
 					 $templateProcessor8 = new TemplateProcessor($templatePath9);
 					 $templateProcessor9 = new TemplateProcessor($templatePath10);
+					 $templateProcessor10 = new TemplateProcessor($templatePath11);
 
 						
 					}
@@ -469,7 +475,7 @@ class ContractController extends Controller
 				// dd($data["total_amount_of_interest"]);
 				$data["verbal_trial.duration.fr"] = SpellNumber::value((float) $data["verbal_trial.duration"])->locale('fr')->toLetters();
 				$data["verbal_trial.due_amount.fr"] = SpellNumber::value((float) $data["verbal_trial.due_amount"])->locale('fr')->toLetters();
-				$data["total_to_pay"] = (float) $data["total_amount_of_interest"] + (float) $data["verbal_trial.amount"];
+				$data["total_to_pay"] = (float) $data["total_amount_of_interest"] + (float) $data["verbal_trial.amount"] +(((float) $data["total_amount_of_interest"] / 100)*18);
 				$data["total_to_pay.fr"] = SpellNumber::value((float) $data["total_to_pay"])->locale('fr')->toLetters();
 				$data["echance.fr"] = SpellNumber::value((float) $data["verbal_trial.duration"])->locale('fr')->toLetters();
 				// dd($data["echance.fr"]);
@@ -529,6 +535,7 @@ class ContractController extends Controller
 						return ['type_of_guarantee.' . $key => $value];
 					})->all());
 				}
+				// dd($guaranteeList);
 				
 				$garants = [];
 				if (!empty($contract->guarantors)) {
@@ -557,7 +564,7 @@ class ContractController extends Controller
 					$data["pep.montant.fr"] = SpellNumber::value((float) $data["pep.montant"])->locale('fr')->toLetters();
 				}
 
-				// dd($data);
+				// dd($guaranteeList);
 				$templateProcessor->cloneBlock('guaranteeList', 0, true, false, $guaranteeList);
 				// dd($contract->pledges);
 				
@@ -598,13 +605,14 @@ class ContractController extends Controller
 					$templateProcessor5->setValues($data);
 					$templateProcessor6->setValues($data);
 					$templateProcessor7->setValues($data);
+					$templateProcessor8->setValues($data);
 				}
 				if($contract->type == "particular" &&($data["verbal_trial.type_of_credit.name"] == "PP COMMERCANT" || $data["verbal_trial.type_of_credit.name"] == "COMMERCANT PP"))
 				{
 					$templateProcessor8->setValues($data);
 					$templateProcessor9->setValues($data);
 				}
-				if($contract->type == "individual_business" && ($data["verbal_trial.type_of_credit.name"] == "CREDIT FDR" || $data["verbal_trial.type_of_credit.name"] == "CREDIT  BFR"))
+				if($contract->type == "individual_business" && ($data["verbal_trial.type_of_credit.name"] == "CREDIT FDR " || $data["verbal_trial.type_of_credit.name"] == "CREDIT  BFR"))
 				{
 					// dd("ooook");
 					$templateProcessor5->setValues($data);
@@ -619,11 +627,12 @@ class ContractController extends Controller
 					$templateProcessor10->setValues($data);
 					$templateProcessor11->setValues($data);
 					$templateProcessor12->setValues($data);
+					$templateProcessor13->setValues($data);
 				}
 				// dd($data);
 				
 				// Enregistrez les modifications dans un nouveau fichier
-				$outputFilePath = public_path("Contrat_pret-" . $contract->verbal_trial->applicant_first_name_.$contract->verbal_trial->applicant_last_name.".docx");
+				$outputFilePath = public_path("Contrat_gage-" . $contract->verbal_trial->applicant_first_name_.$contract->verbal_trial->applicant_last_name.".docx");
 				$outputFilePath1 = public_path("Billet-" . $contract->verbal_trial->applicant_first_name_.$contract->verbal_trial->applicant_last_name . ".docx");
 				$outputFilePath2 = public_path("Declaration_cession-" . $contract->verbal_trial->applicant_first_name_.$contract->verbal_trial->applicant_last_name . ".docx");
 				$outputFilePath3 = public_path("Contrat_PEP-" . $contract->verbal_trial->applicant_first_name_.$contract->verbal_trial->applicant_last_name . ".docx");
@@ -651,14 +660,17 @@ class ContractController extends Controller
 					$templateProcessor5->saveAs($outputFilePath5);
 					$templateProcessor6->saveAs($outputFilePath6);
 					$templateProcessor7->saveAs($outputFilePath7);
+					$templateProcessor8->saveAs($outputFilePath13);
+
 				}
 				if($contract->type == "particular" &&($data["verbal_trial.type_of_credit.name"] == "PP COMMERCANT" || $data["verbal_trial.type_of_credit.name"] == "COMMERCANT PP"))
 				{
 					$templateProcessor8->saveAs($outputFilePath8);
 					$templateProcessor9->saveAs($outputFilePath9);
+					$templateProcessor10->saveAs($outputFilePath13);
 				}
 				
-				if($contract->type == "individual_business" && ($data["verbal_trial.type_of_credit.name"] == "CREDIT FDR" || $data["verbal_trial.type_of_credit.name"] == "CREDIT  BFR"))
+				if($contract->type == "individual_business" && ($data["verbal_trial.type_of_credit.name"] == "CREDIT FDR " || $data["verbal_trial.type_of_credit.name"] == "CREDIT  BFR"))
 				{
 					// dd("dedans");
 					$templateProcessor5->saveAs($outputFilePath10);
@@ -672,6 +684,7 @@ class ContractController extends Controller
 					$templateProcessor10->saveAs($outputFilePath15);
 					$templateProcessor11->saveAs($outputFilePath16);
 					$templateProcessor12->saveAs($outputFilePath17);
+					$templateProcessor13->saveAs($outputFilePath13);
 				}
 				// Vérifiez si les fichiers ont été créés
 				if (file_exists($outputFilePath) && file_exists($outputFilePath1)) {
@@ -685,14 +698,16 @@ class ContractController extends Controller
 						$zip->addFile($outputFilePath5, basename($outputFilePath5));
 						$zip->addFile($outputFilePath6, basename($outputFilePath6));
 						$zip->addFile($outputFilePath7, basename($outputFilePath7));
+						$zip->addFile($outputFilePath13, basename($outputFilePath13));
 					}
 					if($contract->type == "particular" &&($data["verbal_trial.type_of_credit.name"] == "PP COMMERCANT" || $data["verbal_trial.type_of_credit.name"] == "COMMERCANT PP"))
 						{
 							$zip->addFile($outputFilePath8, basename($outputFilePath8));
 							$zip->addFile($outputFilePath9, basename($outputFilePath9));
+							$zip->addFile($outputFilePath13, basename($outputFilePath13));
 
 						}
-						if($contract->type == "individual_business" && ($data["verbal_trial.type_of_credit.name"] == "CREDIT FDR" || $data["verbal_trial.type_of_credit.name"] == "CREDIT  BFR"))
+						if($contract->type == "individual_business" && ($data["verbal_trial.type_of_credit.name"] == "CREDIT FDR " || $data["verbal_trial.type_of_credit.name"] == "CREDIT  BFR"))
 						{
 							// dd("ok");
 							$zip->addFile($outputFilePath10, basename($outputFilePath10));
@@ -707,6 +722,7 @@ class ContractController extends Controller
 						$zip->addFile($outputFilePath15, basename($outputFilePath15));
 						$zip->addFile($outputFilePath16, basename($outputFilePath16));
 						$zip->addFile($outputFilePath17, basename($outputFilePath17));
+						$zip->addFile($outputFilePath13, basename($outputFilePath13));
 
 					}
 					$zip->close();
@@ -770,7 +786,7 @@ class ContractController extends Controller
 				$data["total_amount_of_interest.fr"] = SpellNumber::value((float) $data["total_amount_of_interest"])->locale('fr')->toLetters();
 				$data["verbal_trial.duration.fr"] = SpellNumber::value((float) $data["verbal_trial.duration"])->locale('fr')->toLetters();
 				$data["verbal_trial.due_amount.fr"] = SpellNumber::value((float) $data["verbal_trial.due_amount"])->locale('fr')->toLetters();
-				$data["total_to_pay"] = (float) $data["total_amount_of_interest"] + (float) $data["verbal_trial.amount"];
+				$data["total_to_pay"] = (float) $data["total_amount_of_interest"] + (float) $data["verbal_trial.amount"] +(((float) $data["total_amount_of_interest"] / 100)*18);
 				$data["total_to_pay.fr"] = SpellNumber::value((float) $data["total_to_pay"])->locale('fr')->toLetters();
 				$data["verbal_trial.duration.fr"] = SpellNumber::value((float) $data["verbal_trial.duration"])->locale('fr')->toLetters();
 				$data["signatory"] = (((float) $data["verbal_trial.amount"]) <= 10000000) ? "Madame Ameh Délali MESSANGAN épouse AMEDEMEGNAH, Responsable juridique" : "Mr. Koffi Djramedo GAMADO, Head Crédit";
