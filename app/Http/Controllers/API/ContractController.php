@@ -438,10 +438,16 @@ class ContractController extends Controller
 					$templatePath7 = "../document_templates/Contracts/$contract->type/conso/contrat_de_delegation.docx";
 					$templatePath8 = "../document_templates/Contracts/$contract->type/conso/contrat_de_nantissement.docx";
 					$templatePath9 = "../document_templates/Contracts/$contract->type/conso/contract_pret.docx";
+					$templatePath10 = "../document_templates/Contracts/$contract->type/conso/note_information.docx";
+					$templatePath11 = "../document_templates/Contracts/$contract->type/conso/contrat_pah.docx";
+					$templatePath12 = "../document_templates/Contracts/$contract->type/conso/RCCM_LOYERS.docx";
 					$templateProcessor5 = new TemplateProcessor($templatePath6);
 					$templateProcessor6 = new TemplateProcessor($templatePath7);
 					$templateProcessor7 = new TemplateProcessor($templatePath8);
 					$templateProcessor8 = new TemplateProcessor($templatePath9);
+					$templateProcessor9 = new TemplateProcessor($templatePath10);
+					$templateProcessor10 = new TemplateProcessor($templatePath11);
+					$templateProcessor11 = new TemplateProcessor($templatePath12);
 						
 					}
 					if($contract->type == "particular" &&($data["verbal_trial.type_of_credit.name"] == "PP COMMERCANT" || $data["verbal_trial.type_of_credit.name"] == "COMMERCANT PP"))
@@ -478,7 +484,13 @@ class ContractController extends Controller
 				$data["total_to_pay"] = (float) $data["total_amount_of_interest"] + (float) $data["verbal_trial.amount"] +(((float) $data["total_amount_of_interest"] / 100)*18);
 				$data["total_to_pay.fr"] = SpellNumber::value((float) $data["total_to_pay"])->locale('fr')->toLetters();
 				$data["echance.fr"] = SpellNumber::value((float) $data["verbal_trial.duration"])->locale('fr')->toLetters();
-				// dd($data["echance.fr"]);
+				if($data["verbal_trial.amount"] > 500000){
+					$data["montant_fudiciaire"] = ($data["verbal_trial.amount"] / 100)*10;
+				}else{
+					$data["montant_fudiciaire"] = ($data["verbal_trial.amount"] / 100)*5;
+				}
+				// dd(($data["verbal_trial.amount"] / 100));
+				$data["montant_fudiciaire.fr"] = SpellNumber::value((float) $data["montant_fudiciaire"])->locale('fr')->toLetters();
 				$data["verbal_trial.duration.fr"] = SpellNumber::value((float) $data["verbal_trial.duration"])->locale('fr')->toLetters();
 				$data["signatory"] = (((float) $data["verbal_trial.amount"]) <= 10000000) ? "Madame Ameh Délali MESSANGAN épouse AMEDEMEGNAH, Responsable juridique" : "Mr. Koffi Djramedo GAMADO, Head Crédit";
 				$data["verbal_trial.periodicity.fr"] = ["mensual" => "Mensuel", "quarterly" => "Trimestrielle", "semi-annual" => "Semestrielle", "annual" => "Annuel", "in-fine" => "A la fin"][$data["verbal_trial.periodicity"]];
@@ -511,6 +523,7 @@ class ContractController extends Controller
 				$data["verbal_trial.due_amount"] = number_format(((float) $data["verbal_trial.due_amount"]), 0, ',', ' ');
 				// $data["due_amount"] = number_format(((float) $data["due_amount"]), 0, ',', ' ');
 				$data["due_amount"] = (float) $data["due_amount"];
+				// $data["verbal_trial.amount"] = (float) $data["verbal_trial.amount"];
 				// $data["due_amount"] = number_format(((float) $data["due_amount"]), 0, ',', ' ');
 				$data["due_amount.fr"] = SpellNumber::value((float) $data["due_amount"])->locale('fr')->toLetters();
 				$data["verbal_trial.administrative_fees_percentage"] = number_format(((float) $data["verbal_trial.administrative_fees_percentage"]), 0, ',', ' ');
@@ -526,7 +539,7 @@ class ContractController extends Controller
 				$data["individual_business.date_naiss"] = Carbon::createFromFormat('Y-m-d', $data["individual_business.date_naiss"])->translatedFormat('d F Y');
 				$data["individual_business.date_delivrance"] = Carbon::createFromFormat('Y-m-d', $data["individual_business.date_delivrance"])->translatedFormat('d F Y');
 				}
-				// dd($data);
+				
 				
 				$guaranteeList = [];
 				foreach ($contract->verbal_trial->guarantees as $guarantee) {
@@ -606,6 +619,9 @@ class ContractController extends Controller
 					$templateProcessor6->setValues($data);
 					$templateProcessor7->setValues($data);
 					$templateProcessor8->setValues($data);
+					$templateProcessor9->setValues($data);
+					$templateProcessor10->setValues($data);
+					$templateProcessor11->setValues($data);
 				}
 				if($contract->type == "particular" &&($data["verbal_trial.type_of_credit.name"] == "PP COMMERCANT" || $data["verbal_trial.type_of_credit.name"] == "COMMERCANT PP"))
 				{
@@ -650,6 +666,9 @@ class ContractController extends Controller
 				$outputFilePath15= public_path("Contrat_pret-personne-morale-" . $contract->verbal_trial->applicant_first_name_.$contract->verbal_trial->applicant_last_name . ".docx");
 				$outputFilePath16= public_path("Contrat_nantissement-" . $contract->verbal_trial->applicant_first_name_.$contract->verbal_trial->applicant_last_name . ".docx");
 				$outputFilePath17= public_path("Billet_a_ordre-" . $contract->verbal_trial->applicant_first_name_.$contract->verbal_trial->applicant_last_name . ".docx");
+				$outputFilePath18= public_path("Note_information-" . $contract->verbal_trial->applicant_first_name_.$contract->verbal_trial->applicant_last_name . ".docx");
+				$outputFilePath19= public_path("Contrat_PAH-" . $contract->verbal_trial->applicant_first_name_.$contract->verbal_trial->applicant_last_name . ".docx");
+				$outputFilePath20= public_path("RCCM_LOYERS-" . $contract->verbal_trial->applicant_first_name_.$contract->verbal_trial->applicant_last_name . ".docx");
 				$templateProcessor->saveAs($outputFilePath);
 				$templateProcessor1->saveAs($outputFilePath1);
 				$templateProcessor2->saveAs($outputFilePath2);
@@ -661,6 +680,9 @@ class ContractController extends Controller
 					$templateProcessor6->saveAs($outputFilePath6);
 					$templateProcessor7->saveAs($outputFilePath7);
 					$templateProcessor8->saveAs($outputFilePath13);
+					$templateProcessor9->saveAs($outputFilePath18);
+					$templateProcessor10->saveAs($outputFilePath19);
+					$templateProcessor11->saveAs($outputFilePath20);
 
 				}
 				if($contract->type == "particular" &&($data["verbal_trial.type_of_credit.name"] == "PP COMMERCANT" || $data["verbal_trial.type_of_credit.name"] == "COMMERCANT PP"))
@@ -699,6 +721,9 @@ class ContractController extends Controller
 						$zip->addFile($outputFilePath6, basename($outputFilePath6));
 						$zip->addFile($outputFilePath7, basename($outputFilePath7));
 						$zip->addFile($outputFilePath13, basename($outputFilePath13));
+						$zip->addFile($outputFilePath18, basename($outputFilePath18));
+						$zip->addFile($outputFilePath19, basename($outputFilePath19));
+						$zip->addFile($outputFilePath20, basename($outputFilePath20));
 					}
 					if($contract->type == "particular" &&($data["verbal_trial.type_of_credit.name"] == "PP COMMERCANT" || $data["verbal_trial.type_of_credit.name"] == "COMMERCANT PP"))
 						{

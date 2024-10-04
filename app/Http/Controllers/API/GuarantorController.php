@@ -173,7 +173,7 @@ class GuarantorController extends Controller
             $data["contract.total_amount_of_interest.fr"] = SpellNumber::value((float) $data["contract.total_amount_of_interest"])->locale('fr')->toLetters();
             $data["contract.verbal_trial.duration.fr"] = SpellNumber::value((float) $data["contract.verbal_trial.duration"])->locale('fr')->toLetters();
             $data["contract.verbal_trial.due_amount.fr"] = SpellNumber::value((float) $data["contract.verbal_trial.due_amount"])->locale('fr')->toLetters();
-            $data["contract.total_to_pay"] = (float) $data["contract.total_amount_of_interest"] + (float) $data["contract.verbal_trial.amount"];
+            $data["contract.total_to_pay"] = (float) $data["contract.total_amount_of_interest"] + (float) $data["contract.verbal_trial.amount"] + (($data["contract.total_amount_of_interest"] /100)*18);
             $data["contract.total_to_pay.fr"] = SpellNumber::value((float) $data["contract.total_to_pay"])->locale('fr')->toLetters();
             $data["contract.verbal_trial.duration.fr"] = SpellNumber::value((float) $data["contract.verbal_trial.duration"])->locale('fr')->toLetters();
             $data["contract.verbal_trial.periodicity.fr"] = ["mensual" => "Mensuel", "quarterly" => "Trimestrielle", "semi-annual" => "Semestrielle", "annual" => "Annuel", "in-fine" => "A la fin"][$data["contract.verbal_trial.periodicity"]];
@@ -181,7 +181,8 @@ class GuarantorController extends Controller
             $data["contract.verbal_trial.periodicity.fr3"] = ["mensual" => "mensualité", "quarterly" => "trimestre", "semi-annual" => "semestre", "annual" => "année", "in-fine" => "echéance."][$data["contract.verbal_trial.periodicity"]];
             $data["line_review_bonus"] = (((float) $data["contract.verbal_trial.duration"]) < 18) ? "" : "Prime de révision de ligne      : « 1% du capital restant dû après 12 mois »";
             $data["signatory"] = (((float) $data["contract.verbal_trial.amount"]) <= 10000000) ? "Madame Ameh Délali MESSANGAN épouse AMEDEMEGNAH, Responsable juridique" : "Mr. Koffi Djramedo GAMADO, Head Crédit";
-
+            // dd($data["contract.total_to_pay"]);
+            
             $data["contract.verbal_trial.amount"] = number_format(((float) $data["contract.verbal_trial.amount"]), 0, ',', ' ');
             $data["amount_plus_interets"] = number_format(((float) $data["amount_plus_interets"]),0,',','');
             // dd($data["amount_plus_interets"]);
@@ -250,7 +251,7 @@ class GuarantorController extends Controller
             $data["contract.total_amount_of_interest.fr"] = SpellNumber::value((float) $data["contract.total_amount_of_interest"])->locale('fr')->toLetters();
             $data["contract.verbal_trial.duration.fr"] = SpellNumber::value((float) $data["contract.verbal_trial.duration"])->locale('fr')->toLetters();
             $data["contract.verbal_trial.due_amount.fr"] = SpellNumber::value((float) $data["contract.verbal_trial.due_amount"])->locale('fr')->toLetters();
-            $data["contract.total_to_pay"] = (float) $data["contract.total_amount_of_interest"] + (float) $data["contract.verbal_trial.amount"];
+            $data["contract.total_to_pay"] = (float) $data["contract.total_amount_of_interest"] + (float) $data["contract.verbal_trial.amount"] + (($data["contract.total_amount_of_interest"] /100)*18) ;
             $data["contract.total_to_pay.fr"] = SpellNumber::value((float) $data["contract.total_to_pay"])->locale('fr')->toLetters();
             $data["contract.verbal_trial.duration.fr"] = SpellNumber::value((float) $data["contract.verbal_trial.duration"])->locale('fr')->toLetters();
             $data["contract.verbal_trial.periodicity.fr"] = ["mensual" => "Mensuel", "quarterly" => "Trimestrielle", "semi-annual" => "Semestrielle", "annual" => "Annuel", "in-fine" => "A la fin"][$data["contract.verbal_trial.periodicity"]];

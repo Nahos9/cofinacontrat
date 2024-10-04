@@ -1,6 +1,8 @@
 <script setup>
 import { $api } from "@/utils/api";
 import axios from "axios";
+import { useToast } from "vue-toast-notification";
+import "vue-toast-notification/dist/theme-sugar.css";
 // import { useRouter } from "vue-router";
 
 definePage({
@@ -37,6 +39,7 @@ const roles = [
 
 const router = useRouter();
 const userToken = useCookie("userToken").value;
+const $toast = useToast();
 
 const refForm = ref();
 const onSubmit = () => {
@@ -62,6 +65,9 @@ const onSubmit = () => {
       );
 
       if (data.status == 201) {
+        let instance = $toast.success("Utilisateur ajouté!!", {
+          position: "top-right",
+        });
         router.push("/user");
       }
     }

@@ -475,7 +475,7 @@ const addGuaranteeItem = () => {
               </VRow>
             </VCardText>
           </VCard>
-          <VCard class="mb-6" title="Information des cautionies">
+          <VCard class="mb-6" title="Information des garanties">
             <VCardText class="add-products-form">
               <div
                 v-for="(guarantee, index) in pvData.guarantees"

@@ -137,7 +137,7 @@ const apiDelete = async (id) => {
   await $api(`guarantor/${id}`, { method: "DELETE" });
   fetchGuarantors();
 };
-console.log(contractData.value);
+// console.log(contractData.value);
 if (contractData.value.data.contract.observations.length == 0) {
   backRoute = "/contract/historical";
 }
