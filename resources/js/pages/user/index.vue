@@ -1,7 +1,7 @@
 <script setup>
 import { paginationMeta } from "@/plugins/fake-api/utils/paginationMeta";
 import axios from "axios";
-import { onMounted, ref, watch } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
 import { VDataTableServer } from "vuetify/lib/labs/components.mjs";
 import { useToast } from "vue-toast-notification";
 import "vue-toast-notification/dist/theme-sugar.css";
@@ -30,6 +30,16 @@ const user = ref({
   password: "",
   role: "",
 });
+const roles = [
+  { value: "admin", title: "Administrateur" },
+  { value: "credit_analyst", title: "Analyst crédit" },
+  { value: "head_credit", title: "Head credit" },
+  { value: "credit_admin", title: "Admin crédit" },
+  { value: "operation", title: "Opérations" },
+  { value: "md", title: "MD" },
+  { value: "caf", title: "CAF" },
+  { value: "ca", title: "CA" },
+];
 const getResetPvError = () => {
   return {
     email: "",
@@ -61,24 +71,78 @@ const apiDelete = async (id) => {
   fetchUsers();
 };
 
+// const getUser = async () => {
+//   // console.log(
+//   //   "Récupération des données pour l'utilisateur avec ID:",
+//   //   userId.value
+//   // ); // Log pour débogage
+//   if (userId.value) {
+//     const { data } = await useApi(`/user/${userId.value}`);
+//     user.value = data.value;
+//     console.log("userData found", data); // Assigner les données récupérées à l'utilisateur
+//   }
+// };
 const getUser = async () => {
-  if (userIdToDelete.value) {
-    const { data } = await useApi(`/user/${userId.value}`);
-    user.value = data; // Assigner les données récupérées à l'utilisateur
+  if (userId.value) {
+    axios
+      .get(`/api/user/${userId.value}`, {
+        headers: {
+          Authorization: `Bearer ${userToken}`,
+        },
+      })
+      .then(({ data }) => {
+        // console.log("voici", data);
+        user.value.name = data.data.user.name;
+        user.value.email = data.data.user.email;
+        user.value.role = data.data.user.profile;
+        user.value.password = data.data.user.password;
+      });
   }
 };
-const openModal = (id) => {
-  userId.value = id; // Mettre à jour l'ID de l'utilisateur
-  getUser(); // Récupérer les données de l'utilisateur
-  isDialogVisible.value = true; // Ouvrir le modal
+
+const editUser = async () => {
+  axios
+    .put(
+      `/api/user/${userId.value}`,
+      {
+        name: user.value.name,
+        full_name: user.value.name,
+        email: user.value.email,
+        profile: user.value.role,
+        password: user.value.password,
+        activated: 1,
+        password_change_required: 0,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${userToken}`,
+        },
+      }
+    )
+    .then((res) => {
+      if (res.status == 200) {
+        let instance = $toast.success("Utilisateur modifié!!", {
+          position: "top-right",
+        });
+        isDialogEditVisible.value = false;
+        fetchUsers();
+      }
+    });
 };
 
-watch(userIdToDelete, (newId) => {
+const openModal = (id) => {
+  userId.value = id; // Mettre à jour l'ID de l'utilisateur
   getUser();
-});
+  isDialogEditVisible.value = true; // Ouvrir le modal
+};
+
+// watch(userIdToDelete, (newId) => {
+//   getUser();
+// });
 const userList = computed(() => userData.value.data);
 const totalusers = computed(() => userData.value.total);
 const lastPage = computed(() => userData.value.last_page);
+
 const headers = [
   {
     title: "Nom complet",
@@ -136,18 +200,12 @@ const headers = [
       @update:options="updateOptions"
     >
       <template #item.actions="{ item }">
-        <IconBtn
-          @click="
-            userIdToDelete = item.id;
-            isDialogEditVisible = true;
-          "
-        >
+        <IconBtn @click="openModal(item.id)">
           <VTooltip
             activator="parent"
             transition="scroll-x-transition"
             location="top"
             v-if="$can('update', 'user')"
-            :to="{ name: 'user-edit-id', params: { id: item.id } }"
             >Modifier</VTooltip
           >
           <VIcon icon="tabler-edit" />
@@ -255,7 +313,7 @@ const headers = [
       <!-- <VCardText>
         Etes vous sûr de vouloir supprimer cet utilisateur?
       </VCardText> -->
-      <VForm ref="refForm">
+      <VForm ref="refForm" @submit.prevent="editUser">
         <VRow>
           <VCol md="12">
             <!-- 👉 PV Information -->
@@ -320,23 +378,6 @@ const headers = [
           </VCol>
         </VRow>
       </VForm>
-      <VCardText class="d-flex justify-end gap-3 flex-wrap">
-        <VBtn
-          color="secondary"
-          variant="tonal"
-          @click="isDialogVisible = false"
-        >
-          Annuler
-        </VBtn>
-        <VBtn
-          @click="
-            apiDelete(userIdToDelete);
-            isDialogVisible = false;
-          "
-        >
-          Supprimer
-        </VBtn>
-      </VCardText>
     </VCard>
   </VDialog>
 </template>
