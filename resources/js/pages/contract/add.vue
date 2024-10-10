@@ -36,6 +36,9 @@ const contractData = ref({
   company_head_office_address: null,
   company_rccm_number: null,
   company_phone_number: null,
+  company_nif: null,
+  company_bp: null,
+  company_commune: null,
   individual_business_denomination: null,
   individual_business_corporate_purpose: null,
   individual_business_head_office_address: null,
@@ -167,6 +170,9 @@ const getResetPvError = () => {
     company_head_office_address: "",
     company_rccm_number: "",
     company_phone_number: "",
+    company_nif: "",
+    company_bp: "",
+    company_commune: "",
     individual_business_denomination: "",
     individual_business_corporate_purpose: "",
     individual_business_head_office_address: "",
@@ -266,6 +272,9 @@ const onSubmit = () => {
       if (contractData.value.type == "company") {
         $data.company_denomination = contractData.value.company_denomination;
         $data.company_legal_status = contractData.value.company_legal_status;
+        $data.company_bp = contractData.value.company_bp;
+        $data.company_nif = contractData.value.company_nif;
+        $data.company_commune = contractData.value.company_commune;
         $data.company_head_office_address =
           contractData.value.company_head_office_address;
         $data.company_rccm_number = contractData.value.company_rccm_number;
@@ -652,6 +661,30 @@ if (route.query.id) {
                     v-model="contractData.company_phone_number"
                     :error-messages="formError.company_phone_number"
                     label="Telephone de la société"
+                    :rules="[requiredValidator]"
+                  />
+                </VCol>
+                <VCol cols="12" md="6">
+                  <AppTextField
+                    v-model="contractData.company_bp"
+                    :error-messages="formError.company_bp"
+                    label="BP"
+                    :rules="[requiredValidator]"
+                  />
+                </VCol>
+                <VCol cols="12" md="6">
+                  <AppTextField
+                    v-model="contractData.company_commune"
+                    :error-messages="formError.company_commune"
+                    label="Commune"
+                    :rules="[requiredValidator]"
+                  />
+                </VCol>
+                <VCol cols="12" md="6">
+                  <AppTextField
+                    v-model="contractData.company_nif"
+                    :error-messages="formError.company_nif"
+                    label="NIF"
                     :rules="[requiredValidator]"
                   />
                 </VCol>

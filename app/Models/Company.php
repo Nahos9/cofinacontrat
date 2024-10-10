@@ -19,7 +19,10 @@ class Company extends Model
         "legal_status",
         "head_office_address",
         "rccm_number",
-        "phone_number"
+        "phone_number",
+        "nif",
+        "bp",
+        "commune"
     ];
 
     public function toArray()
