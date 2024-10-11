@@ -242,6 +242,7 @@ class CATController extends Controller
 					return ['type_of_guarantee.' . $key => $value];
 				})->all());
 			}
+			dd($guaranteeList);
 			$templateProcessor->cloneBlock('guaranteeList', 0, true, false, $guaranteeList);
 			unset($data["$parentRelation.observations"]);
 			unset($data["$parentRelation.guarantors"]);

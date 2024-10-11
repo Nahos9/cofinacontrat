@@ -52,11 +52,11 @@ class DatabaseSeeder extends Seeder
 		$moral_person = TypeOfApplicant::factory(1)->create(["name" => "Personne Morale"])->first();
 
 		$typeOfCredit = TypeOfCredit::factory(1)->create(["name" => "AVANCE SUR FACTURE", "min_month" => 0, "max_month" => 6, "type_of_applicant_id" => $moral_person->id])->first();
-		TypeOfCredit::factory(1)->create(["name" => "AVANCE SUR FACTURE ", "min_month" => 6, "max_month" => 12, "type_of_applicant_id" => $moral_person->id]);
+		TypeOfCredit::factory(1)->create(["name" => "AVANCE SUR FACTURE", "min_month" => 6, "max_month" => 12, "type_of_applicant_id" => $moral_person->id]);
 		TypeOfCredit::factory(1)->create(["name" => "AVANCE SUR LOYER", "min_month" => 0, "max_month" => 6, "type_of_applicant_id" => $physical_person->id]);
 		TypeOfCredit::factory(1)->create(["name" => "AVANCE MARCHE/BC", "min_month" => 0, "max_month" => 6, "type_of_applicant_id" => $moral_person->id]);
-		TypeOfCredit::factory(1)->create(["name" => "AVANCE MARCHE/BC_SOLO ", "min_month" => 6, "max_month" => 12, "type_of_applicant_id" => $moral_person->id]);
-		TypeOfCredit::factory(1)->create(["name" => "AV SALAIRE/PENSION ", "min_month" => 0, "max_month" => 6, "type_of_applicant_id" => $physical_person->id]);
+		TypeOfCredit::factory(1)->create(["name" => "AVANCE MARCHE/BC_SOLO", "min_month" => 6, "max_month" => 12, "type_of_applicant_id" => $moral_person->id]);
+		TypeOfCredit::factory(1)->create(["name" => "AV SALAIRE/PENSION", "min_month" => 0, "max_month" => 6, "type_of_applicant_id" => $physical_person->id]);
 		TypeOfCredit::factory(1)->create(["name" => "CREDIT DE CAMPAGNE", "min_month" => 0, "max_month" => 6, "type_of_applicant_id" => $moral_person->id]);
 		TypeOfCredit::factory(1)->create(["name" => "CREDIT DE CAMPAGNE", "min_month" => 6, "max_month" => 12, "type_of_applicant_id" => $moral_person->id]);
 		TypeOfCredit::factory(1)->create(["name" => "CREDIT EXPLOITATION", "min_month" => 0, "max_month" => 6, "type_of_applicant_id" => $physical_person->id]);
@@ -69,8 +69,8 @@ class DatabaseSeeder extends Seeder
 		TypeOfCredit::factory(1)->create(["name" => "ESCOMPTE DE CHEQUE", "min_month" => 0, "max_month" => 6, "type_of_applicant_id" => $moral_person->id]);
 		TypeOfCredit::factory(1)->create(["name" => "ESCOMPTE DE TRAITE", "min_month" => 0, "max_month" => 6, "type_of_applicant_id" => $moral_person->id]);
 		TypeOfCredit::factory(1)->create(["name" => "ESCOMPTE DE TRAITE_SOLO", "min_month" => 6, "max_month" => 12, "type_of_applicant_id" => $moral_person->id]);
-		TypeOfCredit::factory(1)->create(["name" => "CREDIT FDR ", "min_month" => 0, "max_month" => 6, "type_of_applicant_id" => $moral_person->id]);
-		TypeOfCredit::factory(1)->create(["name" => "CREDIT FDR ", "min_month" => 6, "max_month" => 12, "type_of_applicant_id" => $moral_person->id]);
+		TypeOfCredit::factory(1)->create(["name" => "CREDIT FDR", "min_month" => 0, "max_month" => 6, "type_of_applicant_id" => $moral_person->id]);
+		TypeOfCredit::factory(1)->create(["name" => "CREDIT FDR", "min_month" => 6, "max_month" => 12, "type_of_applicant_id" => $moral_person->id]);
 		TypeOfCredit::factory(1)->create(["name" => "CREDIT DE IMMOBILIER", "min_month" => 0, "max_month" => 6, "type_of_applicant_id" => $physical_person->id]);
 		TypeOfCredit::factory(1)->create(["name" => "CREDIT EXPLOITATION", "min_month" => 12, "max_month" => 24, "type_of_applicant_id" => $physical_person->id]);
 		TypeOfCredit::factory(1)->create(["name" => "CREDIT DE GROUPE", "min_month" => 12, "max_month" => 24, "type_of_applicant_id" => $moral_person->id]);
@@ -78,7 +78,7 @@ class DatabaseSeeder extends Seeder
 		TypeOfCredit::factory(1)->create(["name" => "CREDIT D'INVESTISSEMENT", "min_month" => 24, "max_month" => 36, "type_of_applicant_id" => $physical_person->id]);
 		TypeOfCredit::factory(1)->create(["name" => "CREDIT  CONSO", "min_month" => 12, "max_month" => 24, "type_of_applicant_id" => $physical_person->id]);
 		TypeOfCredit::factory(1)->create(["name" => "CREDIT  CONSO", "min_month" => 24, "max_month" => 36, "type_of_applicant_id" => $physical_person->id]);
-		TypeOfCredit::factory(1)->create(["name" => "CREDIT FDR ", "min_month" => 12, "max_month" => 24, "type_of_applicant_id" => $moral_person->id]);
+		TypeOfCredit::factory(1)->create(["name" => "CREDIT FDR", "min_month" => 12, "max_month" => 24, "type_of_applicant_id" => $moral_person->id]);
 		TypeOfCredit::factory(1)->create(["name" => "CREDIT IMMOBILIER", "min_month" => 24, "max_month" => 36, "type_of_applicant_id" => $physical_person->id]);
 		TypeOfCredit::factory(1)->create(["name" => "CREDIT D'INVESTISSEMENT", "min_month" => 36, "max_month" => 120, "type_of_applicant_id" => $physical_person->id]);
 		TypeOfCredit::factory(1)->create(["name" => "CREDIT  CONSO", "min_month" => 36, "max_month" => 120, "type_of_applicant_id" => $physical_person->id]);
@@ -91,7 +91,7 @@ class DatabaseSeeder extends Seeder
 		TypeOfCredit::factory(1)->create(["name" => "PP COMMERCANT", "min_month" => 0, "max_month" => 6, "type_of_applicant_id" => $physical_person->id]);
 		TypeOfCredit::factory(1)->create(["name" => "PP COMMERCANT", "min_month" => 6, "max_month" => 12, "type_of_applicant_id" => $physical_person->id]);
 
-		foreach (["Dépôt de garantie", "Caution personnelle et solidaire", "Gage de véhicule", "Gage d'équipement", "Billet à ordre", "Engagement de domiciliation de paiement", "Constitution de PEP", "Constitution de dépôt hebdomadaire", "Hypothèque", "Nantissement de Dépôt à terme (DAT)","Domiciliation irrévocable de salaire","domiciliation partielle de salaire","domiciliation irrévocable de salaire","Transfert fiduciaire","PAH"] as $typeOfGuaranteeName) {
+		foreach (["Dépôt de garantie", "Caution personnelle et solidaire", "Gage de véhicule", "Gage d'équipement", "Billet à ordre", "Engagement de domiciliation de paiement", "Constitution de PEP", "Constitution de dépôt hebdomadaire", "Hypothèque", "Nantissement de Dépôt à terme (DAT)","Domiciliation irrévocable de salaire","Domiciliation partielle de salaire","Transfert fiduciaire","PAH"] as $typeOfGuaranteeName) {
 			TypeOfGuarantee::factory(1)->create(["name" => $typeOfGuaranteeName]);
 		}
 
