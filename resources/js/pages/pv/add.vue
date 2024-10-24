@@ -234,66 +234,6 @@ const addGuaranteeItem = () => {
               <VRow>
                 <VCol cols="12" md="6" lg="4">
                   <AppTextField
-                    v-model="pvData.committee_id"
-                    :error-messages="pvError.committee_id"
-                    label="Numéro du comitée"
-                    :rules="[requiredValidator]"
-                  />
-                </VCol>
-                <VCol cols="12" md="6" lg="4">
-                  <AppDateTimePicker
-                    v-model="pvData.committee_date"
-                    :error-messages="pvError.committee_date"
-                    label="Date du comitée"
-                    :rules="[requiredValidator]"
-                  />
-                </VCol>
-                <VCol cols="12" md="6" lg="4">
-                  <AppAutocomplete
-                    v-model="pvData.caf_id"
-                    :items="cafList"
-                    :error-messages="pvError.caf_id"
-                    label="Chargé d'affaire"
-                    item-title="full_name"
-                    item-value="id"
-                    :rules="[requiredValidator]"
-                  />
-                </VCol>
-                <VCol cols="12" md="6" lg="4">
-                  <AppAutocomplete
-                    v-model="pvData.credit_admin_id"
-                    :items="creditAdminList"
-                    :error-messages="pvError.credit_admin_id"
-                    label="Administrateur Crédit"
-                    item-title="full_name"
-                    item-value="id"
-                    :rules="[requiredValidator]"
-                  />
-                </VCol>
-                <!-- Ca va certainement m'aider pour la suite -->
-                <!-- <VCol cols="12" md="6" lg="4">
-                  <AppAutocomplete
-                    v-model="pvData.credit_admin_id"
-                    :items="clients.user"
-                    :error-messages="pvError.credit_admin_id"
-                    label="Matricule client"
-                    item-title="matricule_client"
-                    item-value="id"
-                    :rules="[requiredValidator]"
-                  />
-                </VCol> -->
-                <VCol cols="12" md="6" lg="4">
-                  <AppSelect
-                    v-model="pvData.civility"
-                    :items="civilityItemList"
-                    :error-messages="pvError.civility"
-                    label="Civilité"
-                    placeholder="Ex: Mr"
-                    :rules="[requiredValidator]"
-                  />
-                </VCol>
-                <VCol cols="12" md="6" lg="4">
-                  <AppTextField
                     v-model="pvData.applicant_first_name"
                     :error-messages="pvError.applicant_first_name"
                     label="Prénom du demandeur"
@@ -307,33 +247,6 @@ const addGuaranteeItem = () => {
                     :error-messages="pvError.applicant_last_name"
                     label="Nom du demandeur"
                     placeholder="Ex: Endure"
-                    :rules="[requiredValidator]"
-                  />
-                </VCol>
-                <VCol cols="12" md="6" lg="4">
-                  <AppTextField
-                    v-model="pvData.account_number"
-                    :error-messages="pvError.account_number"
-                    label="Numéro de compte"
-                    placeholder="Ex: 251012345678"
-                    :rules="[requiredValidator]"
-                  />
-                </VCol>
-                <VCol cols="12" md="6" lg="4">
-                  <AppTextField
-                    v-model="pvData.activity"
-                    :error-messages="pvError.activity"
-                    label="Activé"
-                    placeholder="Ex: Homme d'affaire"
-                    :rules="[requiredValidator]"
-                  />
-                </VCol>
-                <VCol cols="12" md="6" lg="4">
-                  <AppTextField
-                    v-model="pvData.purpose_of_financing"
-                    :error-messages="pvError.purpose_of_financing"
-                    label="Objet du financement"
-                    placeholder="Ex: Achat nouveau locaux"
                     :rules="[requiredValidator]"
                   />
                 </VCol>
@@ -473,26 +386,6 @@ const addGuaranteeItem = () => {
                   </VSlider>
                 </VCol>
               </VRow>
-            </VCardText>
-          </VCard>
-          <VCard class="mb-6" title="Information des garanties">
-            <VCardText class="add-products-form">
-              <div
-                v-for="(guarantee, index) in pvData.guarantees"
-                class="my-4 ma-sm-4"
-              >
-                <GuaranteeEdit
-                  :id="index"
-                  :data="guarantee"
-                  @remove-guarantee="removeGuaranteeItem"
-                />
-              </div>
-
-              <div class="mt-4 ma-sm-4">
-                <VBtn prepend-icon="tabler-plus" @click="addGuaranteeItem">
-                  Ajouter
-                </VBtn>
-              </div>
             </VCardText>
           </VCard>
         </VCol>
