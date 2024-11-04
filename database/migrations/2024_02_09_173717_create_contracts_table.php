@@ -24,7 +24,7 @@ return new class extends Migration {
             $table->float('risk_premium_percentage');
             $table->decimal('total_amount_of_interest', 30, 10);
             $table->integer('number_of_due_dates');
-            $table->enum('type', ['particular', 'company', 'individual_business']);
+            $table->enum('type', ['particular', 'company', 'individual_business','ong','professions_libérales']);
             $table->boolean("has_pledges")->default(0);
             $table->foreignId("creator_id")->constrained(table: "users", column: "id")->cascadeOnDelete();
             $table->string("signed_contract_path")->nullable();

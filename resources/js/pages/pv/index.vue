@@ -47,10 +47,10 @@ const headers = [
     title: "Montant",
     key: "amount_fr",
   },
-  {
-    title: "Statut",
-    key: "status",
-  },
+  // {
+  //   title: "Statut",
+  //   key: "status",
+  // },
   {
     title: "Actions",
     key: "actions",
@@ -161,7 +161,7 @@ const type_of_credit_list = computed(() => type_of_credit_list_data.value.data);
               clear-icon="tabler-x"
             />
           </VCol>
-          <VCol cols="12" sm="4">
+          <!-- <VCol cols="12" sm="4">
             <VSelect
               v-model="status"
               placeholder="Statut"
@@ -173,7 +173,7 @@ const type_of_credit_list = computed(() => type_of_credit_list_data.value.data);
               clear-icon="tabler-x"
               clearable=""
             />
-          </VCol>
+          </VCol> -->
         </VRow>
       </VCardText>
 
@@ -241,40 +241,6 @@ const type_of_credit_list = computed(() => type_of_credit_list_data.value.data);
 
         <template #item.duration="{ item }">
           {{ item.duration }} mois
-        </template>
-
-        <template #item.status="{ item }">
-          <VChip
-            label
-            :color="
-              { validated: 'success', rejected: 'error', waiting: 'warning' }[
-                item.status
-              ]
-            "
-          >
-            <VTooltip
-              v-if="item.comment"
-              activator="parent"
-              transition="scroll-x-transition"
-              location="start"
-              >Raison:
-              {{ item.comment }}
-            </VTooltip>
-            {{
-              {
-                validated: "Validé",
-                waiting: "En attente",
-                rejected: "Rejeté",
-              }[item.status]
-            }}
-            ({{
-              {
-                credit_admin: "Admin Crédit",
-                head_credit: "Head Crédit",
-                md: "MD",
-              }[item.validation_level]
-            }})
-          </VChip>
         </template>
 
         <template #item.actions="{ item }">
@@ -403,9 +369,9 @@ const type_of_credit_list = computed(() => type_of_credit_list_data.value.data);
               </IconBtn>
             </span>
           </div>
-          <div v-if="$can('create', 'contract') && item.status == 'validated'">
+          <div v-if="$can('create', 'contract')">
             <VDivider />
-            <span class="full-width-icon" v-if="item.status == 'validated'">
+            <span class="full-width-icon">
               <IconBtn
                 v-if="$can('create', 'contract')"
                 :to="{ name: 'contract-add', query: { id: item.id } }"

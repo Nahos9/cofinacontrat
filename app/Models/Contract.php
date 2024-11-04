@@ -37,6 +37,10 @@ class Contract extends Model
 		'due_amount',
 		'status',
 		'status_observation',
+		'number_of_pret',
+		'montant_fudiciaire',
+		'montant_second_ech',
+ 		 'montant_troisieme_ech'
 	];
 
 	// protected $with = ['company', 'individual_business'];

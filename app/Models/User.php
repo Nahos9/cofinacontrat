@@ -126,9 +126,18 @@ class User extends Authenticatable
 						"subject" => ["pv"],
 					],
 					[
+						"action" => ["create", "read", "historical", "update", "change_status", "reject", "validate", "delete", "download","upload"],
+						"subject" => ["contract"],
+					],
+					[
 						"action" => ["read_caf"],
 						"subject" => ["user"]
 					],
+					[
+						"action" => ["create", "read", "update", "delete", "download"],
+						"subject" => ["guarantor"],
+					],
+					
 					[
 						"action" => ["read"],
 						"subject" => ["type-of-guarantee", "type-of-credit", "type-of-applicant"]

@@ -27,7 +27,11 @@ const contractData = ref({
   representative_office_delivery: null,
   risk_premium_percentage: null,
   total_amount_of_interest: null,
+  number_of_pret: null,
+  montant_fudiciaire: null,
   due_amount: null,
+  montant_second_ech: null,
+  montant_troisieme_ech: null,
   number_of_due_dates: null,
   type: null,
   has_pledges: null,
@@ -163,6 +167,10 @@ const getResetPvError = () => {
     total_amount_of_interest: "",
     due_amount: "",
     number_of_due_dates: "",
+    number_of_pret: "",
+    montant_fudiciaire: "",
+    montant_second_ech: "",
+    montant_troisieme_ech: "",
     type: "",
     has_pledges: "",
     company_denomination: "",
@@ -204,7 +212,7 @@ const { data: verbalTrialListData } = await useApi(
       has_contract: 0,
       paginate: 0,
       has_mortgage: 0,
-      status: "v",
+      // status: "v",
     },
   })
 );
@@ -215,6 +223,8 @@ const typeList = [
   { value: "company", title: "Société" },
   { value: "individual_business", title: "Entreprise Individuel" },
   { value: "particular", title: "Particulier" },
+  { value: "ong", title: "Mutuelles-Association-ONG" },
+  { value: "professions_libérales", title: "Professions libérales" },
 ];
 const civilityItemList = [
   { value: "Mr", title: "Mr" },
@@ -251,6 +261,10 @@ const onSubmit = () => {
           contractData.value.representative_home_address,
         representative_phone_number:
           contractData.value.representative_phone_number,
+        number_of_pret: contractData.value.number_of_pret,
+        montant_fudiciaire: contractData.value.montant_fudiciaire,
+        montant_second_ech: contractData.value.montant_second_ech,
+        montant_troisieme_ech: contractData.value.montant_troisieme_ech,
         representative_type_of_identity_document:
           contractData.value.representative_type_of_identity_document,
         date_of_first_echeance: contractData.value.date_of_first_echeance,
@@ -396,7 +410,7 @@ if (route.query.id) {
           <VCard class="mb-6" title="Information sur contrat">
             <VCardText>
               <VRow>
-                <VCol cols="12" md="6" lg="6">
+                <VCol cols="12" md="6" lg="4">
                   <AppAutocomplete
                     v-model="contractData.verbal_trial_id"
                     :items="verbalTrialList"
@@ -407,7 +421,7 @@ if (route.query.id) {
                     item-value="id"
                   />
                 </VCol>
-                <VCol cols="12" md="6" lg="6">
+                <VCol cols="12" md="6" lg="4">
                   <AppTextField
                     v-model="contractData.total_amount_of_interest"
                     type="number"
@@ -416,6 +430,16 @@ if (route.query.id) {
                     :rules="[requiredValidator]"
                   />
                 </VCol>
+                <VCol cols="12" md="6" lg="4">
+                  <AppTextField
+                    v-model="contractData.montant_fudiciaire"
+                    type="number"
+                    :error-messages="formError.montant_fudiciaire"
+                    label="Montant transfère fudiciaire"
+                    :rules="[requiredValidator]"
+                  />
+                </VCol>
+
                 <!-- <VCol cols="12" md="4" lg="4">
                   <AppTextField
                     v-model="contractData.number_of_due_dates"
@@ -455,7 +479,33 @@ if (route.query.id) {
                     v-model="contractData.due_amount"
                     type="number"
                     :error-messages="formError.due_amount"
-                    label="Montant d'une échéance"
+                    label="Montant première échéance"
+                    :rules="[requiredValidator]"
+                  />
+                </VCol>
+                <VCol cols="12" md="4" lg="4">
+                  <AppTextField
+                    v-model="contractData.montant_second_ech"
+                    type="number"
+                    :error-messages="formError.montant_second_ech"
+                    label="Montant seconde échéance"
+                    :rules="[requiredValidator]"
+                  />
+                </VCol>
+                <VCol cols="12" md="4" lg="4">
+                  <AppTextField
+                    v-model="contractData.montant_troisieme_ech"
+                    type="number"
+                    :error-messages="formError.montant_troisieme_ech"
+                    label="Montant troisième échéance"
+                    :rules="[requiredValidator]"
+                  />
+                </VCol>
+                <VCol cols="12" md="4" lg="4">
+                  <AppTextField
+                    v-model="contractData.number_of_pret"
+                    :error-messages="formError.number_of_pret"
+                    label="Numéro de prêt"
                     :rules="[requiredValidator]"
                   />
                 </VCol>
@@ -626,7 +676,11 @@ if (route.query.id) {
           </VCard>
           <!-- 👉 Information sur la société -->
           <VCard
-            v-if="contractData.type == 'company'"
+            v-if="
+              contractData.type == 'company' ||
+              contractData.type == 'professions_libérales' ||
+              contractData.type == 'ong'
+            "
             class="mb-6"
             title="Information sur la société"
           >

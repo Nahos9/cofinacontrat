@@ -90,8 +90,12 @@ class DatabaseSeeder extends Seeder
 		TypeOfCredit::factory(1)->create(["name" => "COFI SCHOOL", "min_month" => 24, "max_month" => 36, "type_of_applicant_id" => $physical_person->id]);
 		TypeOfCredit::factory(1)->create(["name" => "PP COMMERCANT", "min_month" => 0, "max_month" => 6, "type_of_applicant_id" => $physical_person->id]);
 		TypeOfCredit::factory(1)->create(["name" => "PP COMMERCANT", "min_month" => 6, "max_month" => 12, "type_of_applicant_id" => $physical_person->id]);
+		TypeOfCredit::factory(1)->create(["name" => "CREDIT CONSO/IMMO", "min_month" => 0, "max_month" => 6, "type_of_applicant_id" => $physical_person->id]);
+		TypeOfCredit::factory(1)->create(["name" => "CREDIT CONSO/IMMO", "min_month" => 6, "max_month" => 12, "type_of_applicant_id" => $physical_person->id]);
+		TypeOfCredit::factory(1)->create(["name" => "CREDIT CONSO/IMMO", "min_month" => 12, "max_month" => 24, "type_of_applicant_id" => $physical_person->id]);
+		TypeOfCredit::factory(1)->create(["name" => "CREDIT CONSO/IMMO", "min_month" => 24, "max_month" => 36, "type_of_applicant_id" => $physical_person->id]);
 
-		foreach (["Dépôt de garantie", "Caution personnelle et solidaire", "Gage de véhicule", "Gage d'équipement", "Billet à ordre", "Engagement de domiciliation de paiement", "Constitution de PEP", "Constitution de dépôt hebdomadaire", "Hypothèque", "Nantissement de Dépôt à terme (DAT)","Domiciliation irrévocable de salaire","Domiciliation partielle de salaire","Transfert fiduciaire","PAH"] as $typeOfGuaranteeName) {
+		foreach (["Dépôt de garantie", "Caution solidaire et personnelle", "Gage de véhicule", "Gage de materiel professionnel","Un engagement de domiciliation de recette", "Engagement de domiciliation de paiement","Domiciliation de bon de commande","Domiciliation irrévocable du marché","Domiciliation irrévocable du bon de commande","Domiciliation irrevocable de facture", "Domiciliation irrévocable de contrat","FDG","Constitution de PEP", "Constitution de dépôt hebdomadaire", "Hypothèque", "Nantissement de compte bancaire","Domiciliation irrévocable de salaire","Domiciliation partielle de salaire","Transfert fiduciaire","Session de salaire","PAH"] as $typeOfGuaranteeName) {
 			TypeOfGuarantee::factory(1)->create(["name" => $typeOfGuaranteeName]);
 		}
 

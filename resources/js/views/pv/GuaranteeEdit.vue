@@ -38,7 +38,7 @@ const typeOfGuaranteeList = computed(
 );
 
 const localGuaranteeData = ref(props.data);
-
+console.log("local", localGuaranteeData);
 const removeGuarantee = () => {
   emit("removeGuarantee", props.id);
 };
@@ -68,18 +68,19 @@ watch(
             :items="typeOfGuaranteeList"
             item-title="name"
             item-value="id"
-            label="Type de cautionie"
-            placeholder="Choisir le type de cautionie"
+            label="Type de garantie"
+            placeholder="Choisir le type de garantie"
             class="mb-3"
             :rules="[requiredValidator]"
           />
         </VCol>
       </VRow>
-      <VRow v-if="localGuaranteeData.type_of_guarantee_id === 7">
+      <VRow v-if="localGuaranteeData.type_of_guarantee_id === 13">
         <VCol cols="12">
           <AppTextField
             v-model="localGuaranteeData.montant"
             label="Montant"
+            type="number"
             placeholder="Entrer le montant"
           />
         </VCol>
