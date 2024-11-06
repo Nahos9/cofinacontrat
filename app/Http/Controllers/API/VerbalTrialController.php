@@ -71,7 +71,9 @@ class VerbalTrialController extends Controller
   {
     if (($authorisation = Gate::inspect('viewAny', VerbalTrial::class))->allowed()) {
       $verbalTrialList = VerbalTrial::query();
+      // dd($verbalTrialList);
       $currentUser = $request->user();
+      // dd($request->search);
       if ($search = $request->search) {
         $verbalTrialList
           ->where(function ($query) use ($search) {
@@ -103,15 +105,15 @@ class VerbalTrialController extends Controller
         }
       }
 
-      if (isset($request["status"])) {
-        $verbalTrialList->where(function ($query) use ($request) {
-          foreach (str_split($request["status"]) as $char) {
-            if (in_array($char, ['w', 'v', 'r', 'c'])) {
-              $query->orWhere("status", ["w" => "waiting", "v" => "validated", "r" => "rejected"][$char]);
-            }
-          }
-        });
-      }
+      // if (isset($request["status"])) {
+      //   $verbalTrialList->where(function ($query) use ($request) {
+      //     foreach (str_split($request["status"]) as $char) {
+      //       if (in_array($char, ['w', 'v', 'r', 'c'])) {
+      //         $query->orWhere("status", ["w" => "waiting", "v" => "validated", "r" => "rejected"][$char]);
+      //       }
+      //     }
+      //   });
+      // }
 
       if (isset($request["has_contract"])) {
         $has_contract = (int) $request["has_contract"];
@@ -160,7 +162,7 @@ class VerbalTrialController extends Controller
       } else {
         $data = $verbalTrialList->orderByDesc('updated_at')->paginate(8)->toArray();
       }
-
+     
       return $this->responseOkPaginate($data);
     } else {
       return $this->responseError(["auth" => [$authorisation->message()]], 403);

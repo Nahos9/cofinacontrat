@@ -154,8 +154,12 @@ class User extends Authenticatable
 						"subject" => ["non-mortgage-contract", "mortgage-contract"]
 					],
 					[
-						"action" => ["read", "historical", "download", "change_status", "validate", "reject","upload"],
+						"action" => ["create","read", "historical", "download", "change_status", "validate", "reject","upload"],
 						"subject" => ["pv"],
+					],
+					[
+						"action" => ["read_caf"],
+						"subject" => ["user"]
 					],
 					[
 						"action" => ["create", "read", "historical", "update", "change_status", "reject", "validate", "delete", "download","upload"],

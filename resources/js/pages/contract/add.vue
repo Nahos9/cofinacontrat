@@ -212,7 +212,7 @@ const { data: verbalTrialListData } = await useApi(
       has_contract: 0,
       paginate: 0,
       has_mortgage: 0,
-      // status: "v",
+      status: "w",
     },
   })
 );

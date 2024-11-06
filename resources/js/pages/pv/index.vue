@@ -62,11 +62,10 @@ const { data: pvData, execute: fetchPv } = await useApi(
     query: {
       search: searchQuery,
       type_of_credit_id: type_of_credit_id,
-      status: status,
       page: page,
       has_contract: 0,
-      has_notification: 0,
       has_mortgage: 0,
+      status: "v",
       with_caf: 1,
       with_type_of_credit: 1,
     },
@@ -127,6 +126,7 @@ const apiChangeStatus = async (id) => {
 };
 
 const pvList = computed(() => pvData.value.data);
+console.log(pvList);
 const totalPv = computed(() => pvData.value.total);
 const lastPage = computed(() => pvData.value.last_page);
 const type_of_credit_list = computed(() => type_of_credit_list_data.value.data);
