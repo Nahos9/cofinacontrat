@@ -243,6 +243,7 @@ const documentTypeList = [
   { value: "residence_certificate", title: "Certificat de résidence" },
   { value: "driving_licence", title: "Permis de conduire" },
   { value: "carte_sej", title: "Carte de séjour" },
+  { value: "recep", title: "Recepice carte d'identité" },
 ];
 
 const refForm = ref();
