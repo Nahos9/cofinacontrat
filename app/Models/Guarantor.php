@@ -28,6 +28,7 @@ class Guarantor extends Model
         "date_of_issue_of_identity_document",
         "function",
         "phone_number",
+        "office_delivery",
         'signed_contract_path',
         'signed_promissory_note_path',
     ];

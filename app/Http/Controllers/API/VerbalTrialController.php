@@ -327,7 +327,7 @@ class VerbalTrialController extends Controller
         'civility' => 'required|in:Mr,Mme,Mlle',
         'applicant_first_name' => 'required|min:2',
         'applicant_last_name' => 'required|min:2',
-        'account_number' => 'required|min:12',
+        'account_number' => 'required|min:10',
         'activity' => 'required|min:2',
         'purpose_of_financing' => 'required|min:2',
         'type_of_credit_id' => 'required|exists:types_of_credit,id',

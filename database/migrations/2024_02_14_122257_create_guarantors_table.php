@@ -18,7 +18,7 @@ return new class extends Migration {
             $table->string("first_name");
             $table->string("last_name");
             $table->string("home_address");
-            $table->enum("type_of_identity_document", ["cni", "passport", "residence_certificate", "driving_licence","carte_sej"])->default('cni');
+            $table->enum("type_of_identity_document", ["cni", "passport", "residence_certificate", "driving_licence","carte_sej","recep"])->default('cni');
             $table->string("number_of_identity_document");
             $table->date("date_of_issue_of_identity_document");
             $table->date("birth_date");

@@ -543,6 +543,7 @@ class ContractController extends Controller
 					"residence_certificate" => "Certificat de résidence",
 					"driving_licence" => "Permis de conduire",
 					"carte_sej"=>"Carte de séjour",
+					"recep" =>"Récépissé de la carte nationale d’identité "
 				][$data["representative_type_of_identity_document"]];
 				if(isset($data["individual_business.type_of_identity_document"])){
 					$data["individual_business.type_of_identity_document"] = [
@@ -551,6 +552,7 @@ class ContractController extends Controller
 						"residence_certificate" => "Certificat de résidence",
 						"driving_licence" => "Permis de conduire",
 						"carte_sej"=>"Carte de séjour",
+						"recep"=>"Récépissé de la carte nationale d’identité "
 					][$data["individual_business.type_of_identity_document"]];
 				}
 				$data["frais_dossier"] = ((float)$data["verbal_trial.amount"] * (float) $data["verbal_trial.administrative_fees_percentage"]) / 100;
@@ -1051,7 +1053,7 @@ class ContractController extends Controller
 				'representative_birth_place' => 'required|min:2',
 				'representative_nationality' => 'required|min:2',
 				'representative_home_address' => 'required|min:2',
-				'representative_type_of_identity_document' => 'required|in:cni,passport,residence_certificate,driving_licence,carte_sej',
+				'representative_type_of_identity_document' => 'required|in:cni,passport,residence_certificate,driving_licence,carte_sej,recep',
 				'representative_number_of_identity_document' => 'required|min:2',
 				'representative_office_delivery' => 'required|min:2',
 				'representative_date_of_issue_of_identity_document' => 'required|date',

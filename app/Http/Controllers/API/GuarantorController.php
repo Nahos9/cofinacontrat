@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Http\Traits\CustomResponseTrait;
+use App\Models\Contract;
 use App\Models\Guarantor;
 use Carbon\Carbon;
 use DB;
@@ -195,6 +196,14 @@ class GuarantorController extends Controller
             $data["birth_date"] = Carbon::createFromFormat('Y-m-d', $data["birth_date"])->translatedFormat('d F Y');
             $data["contract.representative_birth_date"] = Carbon::createFromFormat('Y-m-d', $data["contract.representative_birth_date"])->translatedFormat('d F Y');
             $data["contract.representative_date_of_issue_of_identity_document"] = Carbon::createFromFormat('Y-m-d', $data["contract.representative_date_of_issue_of_identity_document"])->translatedFormat('d F Y');
+            $data["contract.representative_type_of_identity_document"] = [
+                "cni" => "Carte d'identité nationale",
+                "passport" => "Passeport",
+                "residence_certificate" => "Certificat de résidence",
+                "driving_licence" => "Permis de conduire",
+                "carte_sej"=>"Carte de séjour",
+                "recep" =>"Récépissé de la carte nationale d’identité "
+            ][$data["contract.representative_type_of_identity_document"]];
             $guaranteeList = [];
             foreach ($guarantor->contract->verbal_trial->guarantees as $guarantee) {
                 $guaranteeList[] = array_merge($guarantee->toArray(), collect($guarantee->type_of_guarantee)->mapWithKeys(function ($value, $key) {
@@ -217,6 +226,9 @@ class GuarantorController extends Controller
             return $this->responseError(["id" => "La caution n'existe pas"], 404);
         }
     }
+    
+	
+	/**
     /**
      * Télécharge le billet à ordre d'une caution
      *
@@ -270,7 +282,7 @@ class GuarantorController extends Controller
             unset($data["contract.observations"]);
             unset($data["contract.guarantors"]);
             $templateProcessor->setValues($data);
-            // dd($data);
+            dd($data);
             // Enregistrez les modifications dans un nouveau fichier
             $outputFilePath = public_path("Billet-a-ordre-caution-" . $guarantor->contract->verbal_trial->committee_id . ".docx");
             $templateProcessor->saveAs($outputFilePath);
@@ -321,10 +333,11 @@ class GuarantorController extends Controller
                 'birth_place' => 'required|min:2',
                 'nationality' => 'required|min:2',
                 'home_address' => 'required|min:2',
-                'type_of_identity_document' => 'required|in:cni,passport,residence_certificate,driving_licence,carte_sej',
+                'type_of_identity_document' => 'required|in:cni,passport,residence_certificate,driving_licence,carte_sej,recep',
                 'number_of_identity_document' => 'required|min:2',
                 'date_of_issue_of_identity_document' => 'required|date',
                 'function' => 'required|min:2',
+                'office_delivery' => 'required|min:2',
                 'phone_number' => 'required|min:2',
             ]);
             if ($validator->fails()) {

@@ -18,7 +18,7 @@ return new class extends Migration {
             $table->string("representative_nationality");
             $table->string("representative_home_address");
             $table->string("representative_phone_number");
-            $table->enum("representative_type_of_identity_document", ["cni", "passport", "residence_certificate", "driving_licence","carte_sej"])->default('cni');
+            $table->enum("representative_type_of_identity_document", ["cni", "passport", "residence_certificate", "driving_licence","carte_sej","recep"])->default('cni');
             $table->string("representative_number_of_identity_document");
             $table->date("representative_date_of_issue_of_identity_document");
             $table->float('risk_premium_percentage');

@@ -20,6 +20,7 @@ const guarantorItem = ref({
   nationality: null,
   home_address: null,
   type_of_identity_document: null,
+  office_delivery: null,
   number_of_identity_document: null,
   date_of_issue_of_identity_document: null,
   function: null,
@@ -35,6 +36,7 @@ const getResetGuarantorError = () => {
     birth_place: "",
     nationality: "",
     home_address: "",
+    office_delivery: "",
     type_of_identity_document: "",
     number_of_identity_document: "",
     date_of_issue_of_identity_document: "",
@@ -57,6 +59,7 @@ const documentTypeList = [
   { value: "residence_certificate", title: "Certificat de résidence" },
   { value: "driving_licence", title: "Permis de conduire" },
   { value: "carte_sej", title: "Carte de séjour" },
+  { value: "recep", title: "Récépissé de la carte nationale d’identité" },
 ];
 
 const refForm = ref();
@@ -79,6 +82,7 @@ const onSubmit = () => {
             guarantorItem.value.type_of_identity_document,
           number_of_identity_document:
             guarantorItem.value.number_of_identity_document,
+          office_delivery: guarantorItem.value.office_delivery,
           date_of_issue_of_identity_document:
             guarantorItem.value.date_of_issue_of_identity_document,
           function: guarantorItem.value.function,
@@ -223,6 +227,15 @@ const onSubmit = () => {
                     :error-messages="guarantorError.function"
                     label="Fonction"
                     placeholder="Ex: Agent de change"
+                    :rules="[requiredValidator]"
+                  />
+                </VCol>
+                <VCol cols="12" md="6" lg="4">
+                  <AppTextField
+                    v-model="guarantorItem.office_delivery"
+                    :error-messages="guarantorError.office_delivery"
+                    label="Delivrée par"
+                    placeholder="Ex: DGDI"
                     :rules="[requiredValidator]"
                   />
                 </VCol>
