@@ -323,7 +323,7 @@ const addGuaranteeItem = () => {
                   <AppTextField
                     v-model="pvData.activity"
                     :error-messages="pvError.activity"
-                    label="Activé"
+                    label="Fonction"
                     placeholder="Ex: Homme d'affaire"
                     :rules="[requiredValidator]"
                   />

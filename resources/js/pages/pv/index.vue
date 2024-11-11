@@ -65,7 +65,7 @@ const { data: pvData, execute: fetchPv } = await useApi(
       page: page,
       has_contract: 0,
       has_mortgage: 0,
-      status: "v",
+      // status: "v",
       with_caf: 1,
       with_type_of_credit: 1,
     },
