@@ -137,7 +137,8 @@ watch(numPret, async (newValue) => {
     console.log("dans le wacth", pretList.value);
     contractData.value.total_amount_of_interest =
       pretList.value.data.data[0].mt_pret_int;
-    contractData.value.due_amount = pretList.value.data.data[0].mt_ech_pret;
+    contractData.value.montant_second_ech =
+      pretList.value.data.data[0].mt_ech_pret;
     contractData.value.number_of_due_dates =
       pretList.value.data.data[0].nb_ech_pret;
     contractData.value.date_of_first_echeance =
@@ -480,7 +481,7 @@ if (route.query.id) {
                     v-model="contractData.due_amount"
                     type="number"
                     :error-messages="formError.due_amount"
-                    label="Montant première échéance"
+                    label="Montant intercalaire"
                     :rules="[requiredValidator]"
                   />
                 </VCol>
@@ -489,7 +490,7 @@ if (route.query.id) {
                     v-model="contractData.montant_second_ech"
                     type="number"
                     :error-messages="formError.montant_second_ech"
-                    label="Montant seconde échéance"
+                    label="Montant echéance"
                     :rules="[requiredValidator]"
                   />
                 </VCol>
@@ -498,7 +499,7 @@ if (route.query.id) {
                     v-model="contractData.montant_troisieme_ech"
                     type="number"
                     :error-messages="formError.montant_troisieme_ech"
-                    label="Montant troisième échéance"
+                    label="Montant dernière échéance"
                     :rules="[requiredValidator]"
                   />
                 </VCol>
