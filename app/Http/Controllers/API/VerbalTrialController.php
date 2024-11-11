@@ -370,7 +370,7 @@ class VerbalTrialController extends Controller
                     "type_of_guarantee_id" => $guarantee["type_of_guarantee_id"],
                     "comment" => $guarantee["comment"]
                   ]);
-
+                  //toujours verfier cela pour le PEP
                   if(isset($guarantee["type_of_guarantee_id"]) && $guarantee["type_of_guarantee_id"] == "14"){
                     Pep::create([
                       "verbal_trial_id" => $verbalTrial->id,
