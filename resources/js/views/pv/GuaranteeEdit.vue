@@ -75,7 +75,7 @@ watch(
           />
         </VCol>
       </VRow>
-      <VRow v-if="localGuaranteeData.type_of_guarantee_id === 13">
+      <VRow v-if="localGuaranteeData.type_of_guarantee_id === 14">
         <VCol cols="12">
           <AppTextField
             v-model="localGuaranteeData.montant"
