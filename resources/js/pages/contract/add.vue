@@ -140,6 +140,10 @@ watch(numMatricule, async (newValue) => {
       clientsList.value.data.data[0].lieu_delivrance_piece;
     contractData.value.individual_business_num_piece =
       clientsList.value.data.data[0].numero_piece_identite;
+    contractData.value.individual_business_home_address =
+      clientsList.value.data.data[0].adr_replegal;
+    contractData.value.individual_business_number_phone =
+      clientsList.value.data.data[0].tel_port;
   } else {
     clientsList.value = [];
   }
@@ -940,7 +944,9 @@ if (route.query.id) {
                 <VCol cols="12" md="6" lg="4">
                   <AppTextField
                     v-model="contractData.individual_business_office_delivery"
-                    :error-messages="formError.individual_business_home_address"
+                    :error-messages="
+                      formError.individual_business_office_delivery
+                    "
                     label="Délivrée par"
                     :rules="[requiredValidator]"
                   />
