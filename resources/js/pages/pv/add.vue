@@ -432,6 +432,16 @@ watch(numPret, async (newValue) => {
                     :rules="[requiredValidator]"
                   />
                 </VCol>
+                <VCol cols="12" md="6" lg="4">
+                  <AppTextField
+                    v-model="pvData.insurance_premium"
+                    type="number"
+                    :error-messages="pvError.insurance_premium"
+                    label="Prime d'assurance"
+                    placeholder="Ex: 25000"
+                    :rules="[requiredValidator]"
+                  />
+                </VCol>
                 <!-- <VCol cols="12">
                   <VSlider
                     v-model="pvData.taf"
