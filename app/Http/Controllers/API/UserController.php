@@ -334,16 +334,35 @@ class UserController extends Controller
         "data" => $clients
     ]);
 }
-public function comptes(Request $requet){
-	$search = $requet->input('search', '');
-	$comptes = DB::connection('oracle')
-    ->table(DB::raw('"COFINA"."COMPTE"'))
-	->where('matricule_client', '=', $search)
-	->get();
-	return $this->responseOk([
+// public function comptes(Request $requet){
+// 	$search = $requet->input('search', '');
+// 	$comptes = DB::connection('oracle')
+//     ->table(DB::raw('"COFINA"."CLIENT"'))
+// 	// ->join(DB::raw('"COFINA"."COMPTE"'), 'CLIENT.matricule_client', '=', 'COMPTE.matricule_client')
+// 	->where('matricule_client', '=', $search)
+// 	->get();
+// 	return $this->responseOk([
+//         "data" => $comptes
+//     ]);
+// }
+public function comptes(Request $requet)
+{
+    $search = $requet->input('search', '');
+    
+    // Requête SQL avec noms qualifiés pour éviter des erreurs de casse
+    $comptes = DB::connection('oracle')
+        ->table(DB::raw('"COFINA"."CLIENT" c'))  // Nom de la table CLIENT avec guillemets
+        ->join(DB::raw('"COFINA"."COMPTE" cp'), 
+            DB::raw('c."MATRICULE_CLIENT"'), '=', DB::raw('cp."MATRICULE_CLIENT"'))  // Utilisation des guillemets pour la colonne MATRICULE_CLIENT
+        ->where(DB::raw('c."MATRICULE_CLIENT"'), '=', $search)  // Utilisation des guillemets pour la colonne MATRICULE_CLIENT
+        ->select(DB::raw('c.*'), DB::raw('cp.*'))  // Sélectionner toutes les colonnes des deux tables avec guillemets
+        ->get();
+    
+    return $this->responseOk([
         "data" => $comptes
     ]);
 }
+
 public function prets(Request $requet){
 	$search = $requet->input('search', '');
 	$prets = DB::connection('oracle')

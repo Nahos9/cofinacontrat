@@ -110,10 +110,8 @@ watch(numMatricule, async (newValue) => {
   if (newValue) {
     clientsList.value = await recherClient(newValue);
     console.log("dans le wacth", clientsList.value);
-    contractData.value.representative_birth_date = clientsList.value.data
-      .data[0].date_naissance
-      ? clientsList.value.data.data[0].date_naissance
-      : clientsList.value.data.data[0].date_naissance_entrepreneur;
+    contractData.value.representative_birth_date =
+      clientsList.value.data.data[0].date_naissance_entrepreneur;
     contractData.value.representative_birth_place =
       clientsList.value.data.data[0].lieu_naissance;
     contractData.value.representative_nationality =
@@ -126,6 +124,22 @@ watch(numMatricule, async (newValue) => {
       clientsList.value.data.data[0].adresse_1;
     contractData.value.representative_phone_number =
       clientsList.value.data.data[0].tel_port;
+    contractData.value.representative_office_delivery =
+      clientsList.value.data.data[0].lieu_delivrance_piece;
+    contractData.value.individual_business_last_name =
+      clientsList.value.data.data[0].nom_replegal;
+    contractData.value.individual_business_first_name =
+      clientsList.value.data.data[0].nom_replegal;
+    contractData.value.individual_business_date_naiss =
+      clientsList.value.data.data[0].date_naissance_entrepreneur;
+    contractData.value.individual_business_lieux_naiss =
+      clientsList.value.data.data[0].lieu_naissance;
+    contractData.value.individual_business_date_delivrance =
+      clientsList.value.data.data[0].date_delivrance_piece;
+    contractData.value.individual_business_office_delivery =
+      clientsList.value.data.data[0].lieu_delivrance_piece;
+    contractData.value.individual_business_num_piece =
+      clientsList.value.data.data[0].numero_piece_identite;
   } else {
     clientsList.value = [];
   }
@@ -145,6 +159,7 @@ watch(numPret, async (newValue) => {
       pretList.value.data.data[0].d_prem_ech;
     contractData.value.date_of_last_echeance =
       pretList.value.data.data[0].d_der_ech;
+    contractData.value.number_of_pret = pretList.value.data.data[0].no_pret;
   } else {
     clientsList.value = [];
   }

@@ -13,6 +13,8 @@ definePage({
 import { ref } from "vue";
 
 const router = useRouter();
+const numPret = ref("");
+const pretList = ref(null);
 
 const clientsList = ref(null);
 const numMatrucle = ref("");
@@ -60,9 +62,9 @@ watch(numMatrucle, async (newValue) => {
     clientsList.value = await recherClient(newValue);
     // console.log("dans le wacth", clientsList.value);
     pvData.value.applicant_first_name =
-      clientsList.value.data.data[0].intitule_compte;
+      clientsList.value.data.data[0].nom_replegal;
     pvData.value.applicant_last_name =
-      clientsList.value.data.data[0].intitule_compte;
+      clientsList.value.data.data[0].nom_replegal;
     pvData.value.account_number = clientsList.value.data.data[0].no_compte;
   } else {
     clientsList.value = [];
@@ -209,6 +211,31 @@ const addGuaranteeItem = () => {
     comment: "",
   });
 };
+const recherPret = async () => {
+  if (numPret.value) {
+    const response = await fetch(
+      `/api/clients/prets?search=${encodeURIComponent(numPret.value)}`
+    );
+    if (!response.ok) {
+      throw new Error("Erreur lors de la récupération des données");
+    }
+    return await response.json();
+  }
+};
+watch(numPret, async (newValue) => {
+  if (newValue) {
+    pretList.value = await recherPret(newValue);
+    console.log("dans le wacth", pretList.value);
+    pvData.value.amount = pretList.value.data.data[0].mt_demande;
+    pvData.value.due_amount = pretList.value.data.data[0].mt_pret_int;
+    pvData.value.insurance_premium = pretList.value.data.data[0].mt_assurance;
+    pvData.value.duration = pretList.value.data.data[0].nb_ech_pret;
+    pvData.value.tax_fee_interest_rate =
+      pretList.value.data.data[0].tx_int_pret;
+  } else {
+    clientsList.value = [];
+  }
+});
 </script>
 
 <template>
@@ -222,9 +249,14 @@ const addGuaranteeItem = () => {
         <span>Procès verbal pour un nouveau crédit</span>
       </div>
     </div>
-    <VCol cols="12" md="6" lg="4">
-      <AppTextField v-model="numMatrucle" label="Numéro du matricule" />
-    </VCol>
+    <VRow>
+      <VCol cols="12" md="6" lg="4">
+        <AppTextField v-model="numMatrucle" label="Numéro du matricule" />
+      </VCol>
+      <VCol cols="12" md="6" lg="4">
+        <AppTextField v-model="numPret" label="Numéro du prêt" />
+      </VCol>
+    </VRow>
     <VForm ref="refForm" @submit.prevent="onSubmit">
       <VRow>
         <VCol md="12">
