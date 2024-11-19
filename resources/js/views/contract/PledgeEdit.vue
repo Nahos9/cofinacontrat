@@ -10,7 +10,6 @@ const props = defineProps({
     required: true,
     default: () => ({
       type: "vehicule",
-      comment: "",
       montant_estime: "",
       marque: "",
       date_mise_en_circulation: "",
@@ -107,16 +106,6 @@ const removePledge = () => {
             v-model="localPledgeData.date_mise_en_circulation"
             label="Date mise en circulation"
             :rules="[requiredValidator]"
-          />
-        </VCol>
-      </VRow>
-      <VRow>
-        <VCol cols="12">
-          <AppTextarea
-            v-model="localPledgeData.comment"
-            rows="2"
-            label="Commentaire"
-            placeholder="Entrer un commentaire du gage"
           />
         </VCol>
       </VRow>

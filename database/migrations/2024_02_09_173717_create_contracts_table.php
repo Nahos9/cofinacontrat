@@ -21,7 +21,6 @@ return new class extends Migration {
             $table->enum("representative_type_of_identity_document", ["cni", "passport", "residence_certificate", "driving_licence","carte_sej","recep"])->default('cni');
             $table->string("representative_number_of_identity_document");
             $table->date("representative_date_of_issue_of_identity_document");
-            $table->float('risk_premium_percentage');
             $table->decimal('total_amount_of_interest', 30, 10);
             $table->integer('number_of_due_dates');
             $table->enum('type', ['particular', 'company', 'individual_business','ong','professions_libérales']);

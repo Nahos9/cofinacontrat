@@ -78,6 +78,10 @@ class VerbalTrial extends Model
     {
         return $this->hasOne(Pep::class, 'verbal_trial_id', 'id');
     }
+    public function pah(): HasOne
+    {
+        return $this->hasOne(Pah::class, 'verbal_trial_id', 'id');
+    }
     public function caf(): BelongsTo
     {
         return $this->belongsTo(User::class, 'caf_id', "id");

@@ -16,7 +16,6 @@ class Pledge extends Model
     protected $fillable = [
         "contract_id",
         "type",
-        "comment",
         "montant_estime",
         "marque",
         "date_mise_en_circulation",

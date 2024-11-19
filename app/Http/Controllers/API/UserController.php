@@ -363,11 +363,24 @@ public function comptes(Request $requet)
     ]);
 }
 
+// public function prets(Request $requet){
+// 	$search = $requet->input('search', '');
+// 	$prets = DB::connection('oracle')
+//     ->table(DB::raw('"COFINA"."PRET"'))
+// 	->where('no_pret', '=', $search)
+// 	->get();
+// 	return $this->responseOk([
+//         "data" => $prets
+//     ]);
+// }
 public function prets(Request $requet){
 	$search = $requet->input('search', '');
 	$prets = DB::connection('oracle')
-    ->table(DB::raw('"COFINA"."PRET"'))
-	->where('no_pret', '=', $search)
+    ->table(DB::raw('"COFINA"."PRET" cp'))
+	->join(DB::raw('"COFINA"."ECHEANCE" ce'), 
+            DB::raw('cp."NO_PRET"'), '=', DB::raw('ce."NO_PRET"'))
+	->where(DB::raw('cp."NO_PRET"'), '=', $search)
+	->select(DB::raw('cp.*'), DB::raw('ce.*'))
 	->get();
 	return $this->responseOk([
         "data" => $prets

@@ -633,11 +633,21 @@ class ContractController extends Controller
 						return ['pep.' . $key => $value];
 					})->all());
 				}
+				if(isset($contract->verbal_trial->pah)){
+					// $data["pep"] = $contract->verbal_trial->pep->toArray();
+					$data = array_merge($data, collect($contract->verbal_trial->pah)->mapWithKeys(function ($value, $key) {
+						return ['pah.' . $key => $value];
+					})->all());
+				}
 				if(isset($data["pep.montant"])){
 
 					$data["pep.montant.fr"] = SpellNumber::value((float) $data["pep.montant"])->locale('fr')->toLetters();
 				}
+				if(isset($data["pah.montant_terrain"])){
 
+					$data["pah.montant_terrain.fr"] = SpellNumber::value((float) $data["pah.montant_terrain"])->locale('fr')->toLetters();
+				}
+				// dd($data);
 				// dd($guaranteeList);
 				$templateProcessor->cloneBlock('guaranteeList', 0, true, false, $guaranteeList);
 				$templateProcessor1->cloneBlock('guaranteeList', 0, true, false, $guaranteeList);
@@ -1111,7 +1121,7 @@ class ContractController extends Controller
 				'representative_office_delivery' => 'required|min:2',
 				'representative_date_of_issue_of_identity_document' => 'required|date',
 				'representative_phone_number' => 'required|min:2',
-				'risk_premium_percentage' => 'required|numeric',
+				// 'risk_premium_percentage' => 'required|numeric',
 				'total_amount_of_interest' => 'required|numeric',
 				'number_of_due_dates' => 'required|numeric',
 				'type' => 'required|in:particular,company,individual_business,ong,professions_libérales',
@@ -1214,7 +1224,6 @@ class ContractController extends Controller
 						$validator = Validator::make($requestData, [
 							"pledges" => "required|array|min:1",
 							"pledges.*.type" => "required|in:vehicle,stock",
-							"pledges.*.comment" => "required|min:2",
 							"pledges.*.montant_estime" => "required|min:2",
 							"pledges.*.marque" => "required|min:2",
 							"pledges.*.genre" => "required|min:2",
@@ -1231,7 +1240,6 @@ class ContractController extends Controller
 							Pledge::create([
 								"contract_id" => $contract->id,
 								"type" => $pledge["type"],
-								"comment" => $pledge["comment"],
 								"montant_estime" => $pledge["montant_estime"],
 								"marque" => $pledge["marque"],
 								"genre" => $pledge["genre"],

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Traits\CustomResponseTrait;
 use App\Jobs\SendEmail;
 use App\Models\Guarantee;
+use App\Models\Pah;
 use App\Models\Pep;
 use App\Models\User;
 use App\Models\VerbalTrial;
@@ -322,7 +323,7 @@ class VerbalTrialController extends Controller
     if (($authorisation = Gate::inspect('create', VerbalTrial::class))->allowed()) {
       $requestData = $request->all();
       $validator = Validator::make($requestData, [
-        "committee_id" => "required|unique:verbals_trials",
+        "committee_id" => "required",
         "committee_date" => "required|date",
         'civility' => 'required|in:Mr,Mme,Mlle',
         'applicant_first_name' => 'required|min:2',
@@ -379,6 +380,16 @@ class VerbalTrialController extends Controller
                       "duree" => $guarantee["duree"],
                       "taux_annuel" => $guarantee["taux_annuel"],
                       "date_debut" => $guarantee["date_debut"],
+                    ]);
+                  }
+                  if(isset($guarantee["type_of_guarantee_id"]) && $guarantee["type_of_guarantee_id"] == "22"){
+                    Pah::create([
+                      "verbal_trial_id" => $verbalTrial->id,
+                      "type_of_guarantee_id" => $guarantee["type_of_guarantee_id"],
+                      "commune" => $guarantee["commune"],
+                      "adresse" => $guarantee["adresse"],
+                      "superficie" => $guarantee["superficie"],
+                      "montant_terrain" => $guarantee["montant_terrain"],
                     ]);
                   }
                 }

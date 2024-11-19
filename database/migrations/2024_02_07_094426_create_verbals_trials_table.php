@@ -12,7 +12,7 @@ return new class extends Migration {
 	{
 		Schema::create('verbals_trials', function (Blueprint $table) {
 			$table->id();
-			$table->string("committee_id")->unique();
+			$table->string("committee_id")->nullable();
 			$table->date("committee_date");
 			$table->enum("civility", ["Mr", "Mme", "Mlle"]);
 			$table->string("applicant_first_name");

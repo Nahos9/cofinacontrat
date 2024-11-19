@@ -25,7 +25,6 @@ const contractData = ref({
   representative_number_of_identity_document: null,
   representative_date_of_issue_of_identity_document: null,
   representative_office_delivery: null,
-  risk_premium_percentage: null,
   total_amount_of_interest: null,
   number_of_pret: null,
   montant_fudiciaire: null,
@@ -183,7 +182,6 @@ const getResetPvError = () => {
     representative_number_of_identity_document: "",
     representative_date_of_issue_of_identity_document: "",
     representative_office_delivery: "",
-    risk_premium_percentage: "",
     total_amount_of_interest: "",
     due_amount: "",
     number_of_due_dates: "",
@@ -296,7 +294,6 @@ const onSubmit = () => {
           contractData.value.representative_office_delivery,
         representative_date_of_issue_of_identity_document:
           contractData.value.representative_date_of_issue_of_identity_document,
-        risk_premium_percentage: contractData.value.risk_premium_percentage,
         total_amount_of_interest: contractData.value.total_amount_of_interest,
         due_amount: contractData.value.due_amount,
         number_of_due_dates: contractData.value.number_of_due_dates,
@@ -538,30 +535,6 @@ if (route.query.id) {
                     label="Type"
                     :rules="[requiredValidator]"
                   />
-                </VCol>
-                <VCol cols="10">
-                  <VSlider
-                    v-model="contractData.risk_premium_percentage"
-                    label="Prime de risque (en pourcentage) du demandeur"
-                    :error-messages="formError.risk_premium_percentage"
-                    :thumb-size="15"
-                    thumb-label="always"
-                    :rules="[requiredValidator]"
-                    step="0.1"
-                  >
-                    <template #append>
-                      <VTextField
-                        v-model="contractData.risk_premium_percentage"
-                        :error-messages="formError.risk_premium_percentage"
-                        type="number"
-                        style="width: 80px"
-                        density="compact"
-                        hide-details
-                        variant="outlined"
-                        suffix="%"
-                      />
-                    </template>
-                  </VSlider>
                 </VCol>
                 <VCol cols="2">
                   <VCheckbox

@@ -232,6 +232,7 @@ watch(numPret, async (newValue) => {
     pvData.value.duration = pretList.value.data.data[0].nb_ech_pret;
     pvData.value.tax_fee_interest_rate =
       pretList.value.data.data[0].tx_int_pret;
+    pvData.value.committee_id = pretList.value.data.data[0].ref_comite;
   } else {
     clientsList.value = [];
   }

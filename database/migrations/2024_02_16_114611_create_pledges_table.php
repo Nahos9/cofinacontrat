@@ -14,7 +14,6 @@ return new class extends Migration {
             $table->id();
             $table->foreignId("contract_id")->constrained(table: "contracts", column: "id")->cascadeOnDelete();
             $table->enum("type", ["vehicle", "stock"]);
-            $table->text("comment");
             $table->timestamps();
         });
     }

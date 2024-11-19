@@ -19,6 +19,10 @@ const props = defineProps({
       duree: "",
       date_debut: "",
       taux_annuel: "",
+      commune: "",
+      adresse: "",
+      superficie: "",
+      montant_terrain: "",
     }),
   },
 });
@@ -117,6 +121,37 @@ watch(
               />
             </template>
           </VSlider>
+        </VCol>
+      </VRow>
+      <VRow v-if="localGuaranteeData.type_of_guarantee_id === 22">
+        <VCol cols="12">
+          <AppTextField
+            v-model="localGuaranteeData.commune"
+            label="Commune"
+            placeholder="Entrer la commune"
+          />
+        </VCol>
+        <VCol cols="12">
+          <AppTextField
+            v-model="localGuaranteeData.adresse"
+            label="Quartier"
+            placeholder="Entrer le quartier"
+          />
+        </VCol>
+        <VCol cols="12">
+          <AppTextField
+            v-model="localGuaranteeData.superficie"
+            label="Superficie"
+            placeholder="Entrer la superficie"
+          />
+        </VCol>
+        <VCol cols="12">
+          <AppTextField
+            v-model="localGuaranteeData.montant_terrain"
+            label="Montant estimé"
+            type="number"
+            placeholder="Entrer le montant"
+          />
         </VCol>
       </VRow>
       <VRow>
