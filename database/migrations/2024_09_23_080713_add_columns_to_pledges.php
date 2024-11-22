@@ -20,6 +20,21 @@ return new class extends Migration
             $table->string('marque')->nullable();
             $table->string('model')->nullable();
             $table->string('numero_serie')->nullable();
+            $table->string('civility')->nullable();
+            $table->string('nom')->nullable();
+            $table->string('prenom')->nullable();
+            $table->date('date_naiss')->nullable();
+            $table->string('lieux_naiss')->nullable();
+            $table->string('identity_document')->nullable();
+            $table->string('num_identity_document')->nullable();
+            $table->string('office_delivery')->nullable();
+            $table->string('phone')->nullable();
+            $table->string('adresse')->nullable();
+            $table->string('nationalite')->nullable();
+            $table->date('date_delivery_document')->nullable();
+
+
+
             
         });
     }

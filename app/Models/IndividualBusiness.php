@@ -16,7 +16,6 @@ class IndividualBusiness extends Model
     protected $fillable = [
         "contract_id",
         "denomination",
-        "corporate_purpose",
         "head_office_address",
         "rccm_number",
         "nif",

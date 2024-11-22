@@ -14,7 +14,6 @@ return new class extends Migration {
             $table->id();
             $table->foreignId("contract_id")->constrained(table: "contracts", column: "id")->cascadeOnDelete();
             $table->string("denomination");
-            $table->string("corporate_purpose");
             $table->string("head_office_address");
             $table->string("rccm_number");
             $table->string("phone_number");

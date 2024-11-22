@@ -24,6 +24,18 @@ class Pledge extends Model
         "numero_serie",
         "model",
         "genre",
+        "civility",
+        "nom",
+        "prenom",
+        "date_naiss",
+        "lieux_naiss",
+        "identity_document",
+        "num_identity_document",
+        "office_delivery",
+        "phone",
+        "adresse",
+        "nationalite",
+        "date_delivery_document"
 
     ];
 

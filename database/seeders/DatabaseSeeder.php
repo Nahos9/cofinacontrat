@@ -29,8 +29,10 @@ class DatabaseSeeder extends Seeder
 		$credit_analyst = User::factory(1)->create(["name" => "credit_analyst", "full_name" => "Credit Analyst", "profile" => "credit_analyst", "password" => "P@sse123", "password_change_required" => false, "activated" => true, "email" => "credit_analyst@cofinacorp.com"])->first();
 
 		$credit_admin = User::factory(1)->create(["name" => "credit_admin", "full_name" => "Credit Admin", "profile" => "credit_admin", "password" => "P@sse123", "password_change_required" => false, "activated" => true, "email" => "credit_admin@cofinacorp.com"])->first();
-
+		$credit_admin = User::factory(1)->create(["name" => "BOULINGUI", "full_name" => "Eddy Armel BOULINGUI MIHINDOU", "profile" => "credit_admin", "password" => "P@sse123", "password_change_required" => false, "activated" => true, "email" => "eddy.boulingui@cofinacorp.com"])->first();
+		$credit_admin = User::factory(1)->create(["name" => "Christie Noadiah", "full_name" => "Christie Noadiah NZIENGUI AMVAME", "profile" => "credit_admin", "password" => "P@sse123", "password_change_required" => false, "activated" => true, "email" => "christie.nziengui@cofinacorp.com"])->first();
 		$head_credit = User::factory(1)->create(["name" => "head_credit", "full_name" => "Head Credit", "profile" => "head_credit", "password" => "P@sse123", "password_change_required" => false, "activated" => true, "email" => "head_credit@cofinacorp.com"])->first();
+		$head_credit = User::factory(1)->create(["name" => "Lewis BACHAMA", "full_name" => "Lewis Fieldere BACHAMA", "profile" => "head_credit", "password" => "P@sse123", "password_change_required" => false, "activated" => true, "email" => "lewis.bachame@cofinacorp.com"])->first();
 
 		$operation = User::factory(1)->create(["name" => "operation", "full_name" => "Operation", "profile" => "operation", "password" => "P@sse123", "password_change_required" => false, "activated" => true, "email" => "operation@cofinacorp.com"])->first();
 
@@ -94,8 +96,13 @@ class DatabaseSeeder extends Seeder
 		TypeOfCredit::factory(1)->create(["name" => "CREDIT CONSO/IMMO", "min_month" => 6, "max_month" => 12, "type_of_applicant_id" => $physical_person->id]);
 		TypeOfCredit::factory(1)->create(["name" => "CREDIT CONSO/IMMO", "min_month" => 12, "max_month" => 24, "type_of_applicant_id" => $physical_person->id]);
 		TypeOfCredit::factory(1)->create(["name" => "CREDIT CONSO/IMMO", "min_month" => 24, "max_month" => 36, "type_of_applicant_id" => $physical_person->id]);
+		TypeOfCredit::factory(1)->create(["name" => "CREDIT SPOT", "min_month" => 0, "max_month" => 6, "type_of_applicant_id" => $physical_person->id]);
+		TypeOfCredit::factory(1)->create(["name" => "CREDIT SPOT", "min_month" => 6, "max_month" => 12, "type_of_applicant_id" => $physical_person->id]);
+		TypeOfCredit::factory(1)->create(["name" => "CREDIT SPOT", "min_month" => 12, "max_month" => 24, "type_of_applicant_id" => $physical_person->id]);
+		TypeOfCredit::factory(1)->create(["name" => "CREDIT SPOT", "min_month" => 24, "max_month" => 36, "type_of_applicant_id" => $physical_person->id]);
+		TypeOfCredit::factory(1)->create(["name" => "AVANCE SUR SALAIRE", "min_month" => 0, "max_month" => 6, "type_of_applicant_id" => $physical_person->id]);
 
-		foreach (["Dépôt de garantie", "Caution solidaire et personnelle", "Gage de véhicule", "Gage de materiel professionnel","Un engagement de domiciliation de recette", "Engagement de domiciliation de paiement","Domiciliation de bon de commande","Domiciliation irrévocable du marché","Domiciliation irrévocable du bon de commande","Domiciliation irrevocable de facture", "Domiciliation irrévocable de contrat","Domiciliation et nantissement des loyers","FDG","Constitution de PEP", "Constitution de dépôt hebdomadaire", "Hypothèque", "Nantissement de compte bancaire","Domiciliation irrévocable de salaire","Domiciliation partielle de salaire","Transfert fiduciaire","Session de salaire","PAH"] as $typeOfGuaranteeName) {
+		foreach (["Dépôt de garantie", "Caution solidaire et personnelle", "Gage de véhicule", "Gage de materiel professionnel","Un engagement de domiciliation de recette", "Engagement de domiciliation de paiement","Domiciliation de bon de commande","Domiciliation irrévocable du marché","Domiciliation irrévocable du bon de commande","Domiciliation irrevocable de facture", "Domiciliation irrévocable de contrat","Domiciliation et nantissement des loyers","FDG","Constitution de PEP", "Constitution de dépôt hebdomadaire", "Hypothèque", "Nantissement de compte bancaire","Domiciliation irrévocable de salaire","Domiciliation partielle de salaire","Transfert fiduciaire","Cession de salaire","PAH","Nantissement de bon de commande"] as $typeOfGuaranteeName) {
 			TypeOfGuarantee::factory(1)->create(["name" => $typeOfGuaranteeName]);
 		}
 

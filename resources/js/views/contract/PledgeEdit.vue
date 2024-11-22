@@ -1,5 +1,7 @@
 <!-- eslint-disable vue/no-mutating-props -->
 <script setup>
+import { VRow } from "vuetify/lib/components/index.mjs";
+
 const props = defineProps({
   id: {
     type: Number,
@@ -18,6 +20,18 @@ const props = defineProps({
       numero_serie: "",
       genre: "",
       model: "",
+      civility: "",
+      nom: "",
+      prenom: "",
+      date_naiss: "",
+      lieux_naiss: "",
+      identity_document: "",
+      num_identity_document: "",
+      office_delivery: "",
+      phone: "",
+      adresse: "",
+      nationalite: "",
+      date_delivery_document: "",
     }),
   },
 });
@@ -28,7 +42,19 @@ const typeOfPledgeList = [
   { value: "vehicle", name: "Véhicule" },
   { value: "stock", name: "Stock" },
 ];
-
+const documentTypeList = [
+  { value: "cni", title: "Carte d'identité nationale" },
+  { value: "passport", title: "Passeport" },
+  { value: "residence_certificate", title: "Certificat de résidence" },
+  { value: "driving_licence", title: "Permis de conduire" },
+  { value: "carte_sej", title: "Carte de séjour" },
+  { value: "recep", title: "Récépissé de la carte nationale d’identité " },
+];
+const civilityItemList = [
+  { value: "Mr", title: "Mr" },
+  { value: "Mme", title: "Mme" },
+  { value: "Mlle", title: "Mlle" },
+];
 const localPledgeData = ref(props.data);
 
 const removePledge = () => {
@@ -52,62 +78,151 @@ const removePledge = () => {
             :rules="[requiredValidator]"
           />
         </VCol>
-        <VCol v-if="localPledgeData.type == 'vehicle'" cols="12" md="6">
-          <AppTextField
-            v-model="localPledgeData.montant_estime"
-            label="Montant estimé"
-            :rules="[requiredValidator]"
-          />
-        </VCol>
-        <VCol v-if="localPledgeData.type == 'vehicle'" cols="12" md="6">
-          <AppTextField
-            v-model="localPledgeData.genre"
-            label="Genre"
-            :rules="[requiredValidator]"
-          />
-        </VCol>
-        <VCol v-if="localPledgeData.type == 'vehicle'" cols="12" md="6">
-          <AppTextField
-            v-model="localPledgeData.marque"
-            label="Marque"
-            :rules="[requiredValidator]"
-          />
-        </VCol>
-        <VCol v-if="localPledgeData.type == 'vehicle'" cols="12" md="6">
-          <AppTextField
-            v-model="localPledgeData.model"
-            label="Model"
-            :rules="[requiredValidator]"
-          />
-        </VCol>
-        <VCol v-if="localPledgeData.type == 'vehicle'" cols="12" md="6">
-          <AppTextField
-            v-model="localPledgeData.numero_serie"
-            label="Numéro de série/châssis"
-            :rules="[requiredValidator]"
-          />
-        </VCol>
-        <VCol v-if="localPledgeData.type == 'vehicle'" cols="12" md="6">
-          <AppTextField
-            v-model="localPledgeData.immatriculation"
-            label="Immatriculation"
-            :rules="[requiredValidator]"
-          />
-        </VCol>
-        <VCol v-if="localPledgeData.type == 'vehicle'" cols="12" md="6">
-          <AppDateTimePicker
-            v-model="localPledgeData.date_carte_crise"
-            label="Date d'établissement carte grise"
-            :rules="[requiredValidator]"
-          />
-        </VCol>
-        <VCol v-if="localPledgeData.type == 'vehicle'" cols="12" md="6">
-          <AppDateTimePicker
-            v-model="localPledgeData.date_mise_en_circulation"
-            label="Date mise en circulation"
-            :rules="[requiredValidator]"
-          />
-        </VCol>
+        <VRow v-if="localPledgeData.type == 'vehicle'">
+          <VCol cols="12" md="6">
+            <AppTextField
+              v-model="localPledgeData.montant_estime"
+              label="Montant estimé"
+              :rules="[requiredValidator]"
+            />
+          </VCol>
+          <VCol cols="12" md="6">
+            <AppTextField
+              v-model="localPledgeData.genre"
+              label="Genre"
+              :rules="[requiredValidator]"
+            />
+          </VCol>
+          <VCol cols="12" md="6">
+            <AppTextField
+              v-model="localPledgeData.marque"
+              label="Marque"
+              :rules="[requiredValidator]"
+            />
+          </VCol>
+          <VCol cols="12" md="6">
+            <AppTextField
+              v-model="localPledgeData.model"
+              label="Model"
+              :rules="[requiredValidator]"
+            />
+          </VCol>
+          <VCol cols="12" md="6">
+            <AppTextField
+              v-model="localPledgeData.numero_serie"
+              label="Numéro de série/châssis"
+              :rules="[requiredValidator]"
+            />
+          </VCol>
+          <VCol cols="12" md="6">
+            <AppTextField
+              v-model="localPledgeData.immatriculation"
+              label="Immatriculation"
+              :rules="[requiredValidator]"
+            />
+          </VCol>
+          <VCol cols="12" md="6">
+            <AppDateTimePicker
+              v-model="localPledgeData.date_carte_crise"
+              label="Date d'établissement carte grise"
+              :rules="[requiredValidator]"
+            />
+          </VCol>
+          <VCol cols="12" md="6">
+            <AppDateTimePicker
+              v-model="localPledgeData.date_mise_en_circulation"
+              label="Date mise en circulation"
+              :rules="[requiredValidator]"
+            />
+          </VCol>
+          <VCol cols="12" md="6" lg="4">
+            <AppSelect
+              v-model="localPledgeData.civility"
+              :items="civilityItemList"
+              label="Civilité"
+              placeholder="Ex: Mr"
+              :rules="[requiredValidator]"
+            />
+          </VCol>
+          <VCol cols="12" md="4">
+            <AppTextField
+              v-model="localPledgeData.nom"
+              label="Nom"
+              :rules="[requiredValidator]"
+            />
+          </VCol>
+          <VCol cols="12" md="4">
+            <AppTextField
+              v-model="localPledgeData.prenom"
+              label="Prénom"
+              :rules="[requiredValidator]"
+            />
+          </VCol>
+          <VCol cols="12" md="4">
+            <AppDateTimePicker
+              v-model="localPledgeData.date_naiss"
+              label="Date de naissance"
+              :rules="[requiredValidator]"
+            />
+          </VCol>
+          <VCol cols="12" md="4">
+            <AppTextField
+              v-model="localPledgeData.lieux_naiss"
+              label="Lieux de naissance"
+              :rules="[requiredValidator]"
+            />
+          </VCol>
+          <VCol cols="12" md="4">
+            <AppSelect
+              v-model="localPledgeData.identity_document"
+              :items="documentTypeList"
+              label="Type de la pièce d'identité"
+              :rules="[requiredValidator]"
+            />
+          </VCol>
+          <VCol cols="12" md="4">
+            <AppTextField
+              v-model="localPledgeData.num_identity_document"
+              label="Numéro de la pièce"
+              :rules="[requiredValidator]"
+            />
+          </VCol>
+          <VCol cols="12" md="4">
+            <AppDateTimePicker
+              v-model="localPledgeData.date_delivery_document"
+              label="Date de délivrance"
+              :rules="[requiredValidator]"
+            />
+          </VCol>
+          <VCol cols="12" md="4">
+            <AppTextField
+              v-model="localPledgeData.office_delivery"
+              label="Delivrée par"
+              :rules="[requiredValidator]"
+            />
+          </VCol>
+          <VCol cols="12" md="4">
+            <AppTextField
+              v-model="localPledgeData.adresse"
+              label="Adresse"
+              :rules="[requiredValidator]"
+            />
+          </VCol>
+          <VCol cols="12" md="4">
+            <AppTextField
+              v-model="localPledgeData.nationalite"
+              label="Nationalité"
+              :rules="[requiredValidator]"
+            />
+          </VCol>
+          <VCol cols="12" md="4">
+            <AppTextField
+              v-model="localPledgeData.phone"
+              label="Numéro de téléhone"
+              :rules="[requiredValidator]"
+            />
+          </VCol>
+        </VRow>
       </VRow>
     </div>
 

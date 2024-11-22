@@ -43,7 +43,6 @@ const contractData = ref({
   company_bp: null,
   company_commune: null,
   individual_business_denomination: null,
-  individual_business_corporate_purpose: null,
   individual_business_head_office_address: null,
   individual_business_rccm_number: null,
   individual_business_nif_number: null,
@@ -143,6 +142,14 @@ watch(numMatricule, async (newValue) => {
       clientsList.value.data.data[0].adr_replegal;
     contractData.value.individual_business_number_phone =
       clientsList.value.data.data[0].tel_port;
+    contractData.value.company_denomination =
+      clientsList.value.data.data[0].raison_sociale_client;
+    contractData.value.individual_business_denomination =
+      clientsList.value.data.data[0].raison_sociale_client;
+    contractData.value.company_head_office_address =
+      clientsList.value.data.data[0].adresse_1;
+    contractData.value.individual_business_head_office_address =
+      clientsList.value.data.data[0].adresse_1;
   } else {
     clientsList.value = [];
   }
@@ -154,7 +161,7 @@ watch(numPret, async (newValue) => {
     console.log("dans le wacth", pretList.value);
     contractData.value.total_amount_of_interest =
       pretList.value.data.data[0].mt_pret_int;
-    contractData.value.montant_second_ech =
+    contractData.value.montant_troisieme_ech =
       pretList.value.data.data[0].mt_ech_pret;
     contractData.value.number_of_due_dates =
       pretList.value.data.data[0].nb_ech_pret;
@@ -200,7 +207,6 @@ const getResetPvError = () => {
     company_bp: "",
     company_commune: "",
     individual_business_denomination: "",
-    individual_business_corporate_purpose: "",
     individual_business_head_office_address: "",
     individual_business_rccm_number: "",
     individual_business_nif_number: "",
@@ -314,8 +320,6 @@ const onSubmit = () => {
       } else if (contractData.value.type == "individual_business") {
         $data.individual_business_denomination =
           contractData.value.individual_business_denomination;
-        $data.individual_business_corporate_purpose =
-          contractData.value.individual_business_corporate_purpose;
         $data.individual_business_head_office_address =
           contractData.value.individual_business_head_office_address;
         $data.individual_business_rccm_number =
@@ -815,7 +819,7 @@ if (route.query.id) {
                     :rules="[requiredValidator]"
                   />
                 </VCol>
-                <VCol cols="12">
+                <!-- <VCol cols="12">
                   <AppTextField
                     v-model="contractData.individual_business_corporate_purpose"
                     :error-messages="
@@ -824,7 +828,7 @@ if (route.query.id) {
                     label="Objet social"
                     :rules="[requiredValidator]"
                   />
-                </VCol>
+                </VCol> -->
               </VRow>
             </VCardText>
           </VCard>

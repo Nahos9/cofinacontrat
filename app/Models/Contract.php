@@ -79,12 +79,15 @@ class Contract extends Model
 	{
 		return $this->hasOne(IndividualBusiness::class, "contract_id", "id");
 	}
-
+	public function pledge() : BelongsTo
+	{
+		return $this->BelongsTo(Pledge::class,'contrat_id',"id");
+	}
 	public function pledges(): HasMany
 	{
 		return $this->hasMany(Pledge::class, "contract_id", "id");
 	}
-
+	
 	public function creator(): BelongsTo
 	{
 		return $this->belongsTo(User::class, "creator_id", "id");

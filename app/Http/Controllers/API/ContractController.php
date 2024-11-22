@@ -404,7 +404,9 @@ class ContractController extends Controller
 					$templateProcessor8= new TemplateProcessor($templatePath9);
 					$templateProcessor9= new TemplateProcessor($templatePath10);
 					}
-					if($contract->type == "individual_business" && ($data["verbal_trial.type_of_credit.name"] == "CREDIT D'INVESTISSEMENT" ))
+					if($contract->type == "individual_business" && ($data["verbal_trial.type_of_credit.name"] == "CREDIT D'INVESTISSEMENT" || 
+					$data["verbal_trial.type_of_credit.name"] == "AVANCE MARCHE/BC" || $data["verbal_trial.type_of_credit.name"] == "AVANCE SUR FACTURE"
+					 || $data["verbal_trial.type_of_credit.name"] == "PP COMMERCANT"))
 					{
 						$templatePath10 = "../document_templates/Contracts/$contract->type/investissement/contrat_cautionnement-personne-morale.docx";
 						$templatePath11 = "../document_templates/Contracts/$contract->type/investissement/contrat_pret_personne_morale.docx";
@@ -412,24 +414,28 @@ class ContractController extends Controller
 						$templatePath13 = "../document_templates/Contracts/$contract->type/investissement/billet_a_ordre_societe.docx";
 						$templatePath14 = "../document_templates/Contracts/$contract->type/contract_$contract->type.docx";// ajouter le 02 oct 2024
 						$templatePath15 = "../document_templates/Contracts/$contract->type/RCCM_LOYERS.docx";// ajouter le 02 oct 2024
+						$templatePath16 = "../document_templates/Contracts/$contract->type/contrat_pah.docx";// ajouter le 02 oct 2024
+						$templatePath17 = "../document_templates/Contracts/$contract->type/engagement_domiciliation.docx";// ajouter le 02 oct 2024
 						$templateProcessor9= new TemplateProcessor($templatePath10);
 						$templateProcessor10= new TemplateProcessor($templatePath11);
 						$templateProcessor11= new TemplateProcessor($templatePath12);
 						$templateProcessor12= new TemplateProcessor($templatePath13);
 						$templateProcessor13= new TemplateProcessor($templatePath14);
 						$templateProcessor14= new TemplateProcessor($templatePath15);
+						$templateProcessor15= new TemplateProcessor($templatePath16);
+						$templateProcessor16= new TemplateProcessor($templatePath17);
 					
 					}
-					if($contract->type == "individual_business"  &&($data["verbal_trial.type_of_credit.name"] == "PP COMMERCANT"))
-					{
-						$templatePath14 = "../document_templates/Contracts/$contract->type/pep_commercant/contrat_pret_personne_morale.docx";
-						$templatePath15 = "../document_templates/Contracts/$contract->type/pep_commercant/collecte_fiche.docx";
-						$templatePath16 = "../document_templates/Contracts/$contract->type/contract_$contract->type.docx";
-						$templateProcessor13= new TemplateProcessor($templatePath14);
-						$templateProcessor14= new TemplateProcessor($templatePath15);
-						$templateProcessor15= new TemplateProcessor($templatePath16);
-						// ajouter le 02 oct 2024
-					}
+					// if($contract->type == "individual_business"  &&($data["verbal_trial.type_of_credit.name"] == "PP COMMERCANT"))
+					// {
+					// 	$templatePath14 = "../document_templates/Contracts/$contract->type/pep_commercant/contrat_pret_personne_morale.docx";
+					// 	$templatePath15 = "../document_templates/Contracts/$contract->type/pep_commercant/collecte_fiche.docx";
+					// 	$templatePath16 = "../document_templates/Contracts/$contract->type/contract_$contract->type.docx";
+					// 	$templateProcessor13= new TemplateProcessor($templatePath14);
+					// 	$templateProcessor14= new TemplateProcessor($templatePath15);
+					// 	$templateProcessor15= new TemplateProcessor($templatePath16);
+					// 	// ajouter le 02 oct 2024
+					// }
 					
 				}
 				if($contract->type == "company"){
@@ -443,6 +449,10 @@ class ContractController extends Controller
 					$templatePath26 = "../document_templates/Contracts/$contract->type/contrat_pret.docx";
 					$templatePath27 = "../document_templates/Contracts/$contract->type/nantissement_de_compte_bancaire.docx";
 					$templatePath28 = "../document_templates/Contracts/$contract->type/engagement_domiciliation.docx";
+					$templatePath29 = "../document_templates/Contracts/$contract->type/contrat_pah.docx";
+					$templatePath30 = "../document_templates/Contracts/$contract->type/billet_a_ordre.docx";
+					$templatePath31 = "../document_templates/Contracts/$contract->type/collecte.docx";
+					$templatePath32 = "../document_templates/Contracts/$contract->type/contrat_cautionnement.docx";
 					$templateProcessor2 = new TemplateProcessor($templatePath20);
 					$templateProcessor3 = new TemplateProcessor($templatePath21);
 					$templateProcessor4 = new TemplateProcessor($templatePath22);
@@ -452,20 +462,27 @@ class ContractController extends Controller
 					$templateProcessor8 = new TemplateProcessor($templatePath26);
 					$templateProcessor9 = new TemplateProcessor($templatePath27);
 					$templateProcessor10 = new TemplateProcessor($templatePath28);
+					$templateProcessor11 = new TemplateProcessor($templatePath29);
+					$templateProcessor12 = new TemplateProcessor($templatePath30);
+					$templateProcessor13 = new TemplateProcessor($templatePath31);
+					$templateProcessor14 = new TemplateProcessor($templatePath32);
 
 				}
-				// dd($data["verbal_trial.type_of_credit.name"]);
 				
 				if($contract->type == "particular"){
 					$templatePath3 = "../document_templates/Contracts/$contract->type/declaration_cession_$contract->type.docx";
 					$templatePath4 = "../document_templates/Contracts/$contract->type/contrat_pep_$contract->type.docx";
 					$templatePath5 = "../document_templates/Contracts/$contract->type/contrat_transfert_fudiciaire_$contract->type.docx";
 					$templatePath30 = "../document_templates/Contracts/$contract->type/contract_$contract->type.docx";
+					$templatePath31 = "../document_templates/Contracts/$contract->type/contrat_pah.docx";
+					$templatePath32 = "../document_templates/Contracts/$contract->type/contract_particular_gage.docx";
 					// $templatePath6 = "../document_templates/Contracts/$contract->type/contrat_cautionnement_$contract->type.docx";
 					$templateProcessor2 = new TemplateProcessor($templatePath3);
 					$templateProcessor3 = new TemplateProcessor($templatePath4);
 					$templateProcessor4 = new TemplateProcessor($templatePath5);
 					$templateProcessor30 = new TemplateProcessor($templatePath30);
+					$templateProcessor31 = new TemplateProcessor($templatePath31);
+					$templateProcessor32 = new TemplateProcessor($templatePath32);
 					if($contract->type == "particular"){
 					$templatePath3 = "../document_templates/Contracts/$contract->type/declaration_cession_$contract->type.docx";
 					$templatePath4 = "../document_templates/Contracts/$contract->type/contrat_pep_$contract->type.docx";
@@ -490,7 +507,7 @@ class ContractController extends Controller
 					$templateProcessor11 = new TemplateProcessor($templatePath12);
 						
 					}
-					// dd($data["verbal_trial.type_of_credit.name"]);
+				
 					if($contract->type == "particular" &&($data["verbal_trial.type_of_credit.name"] == "PP COMMERCANT" || $data["verbal_trial.type_of_credit.name"] == "COMMERCANT PP"))
 					{
 					 $templatePath9 = "../document_templates/Contracts/$contract->type/pp_commercant/collecte.docx";
@@ -508,16 +525,17 @@ class ContractController extends Controller
 						$templatePath41 = "../document_templates/Contracts/$contract->type/conso_immo/delegation.docx";
 						$templatePath42 = "../document_templates/Contracts/$contract->type/conso_immo/nantissement.docx";
 						$templatePath43 = "../document_templates/Contracts/$contract->type/conso_immo/fiche_s1.docx";
+						$templatePath44 = "../document_templates/Contracts/$contract->type/note_information.docx";
 						$templateProcessor40 = new TemplateProcessor($templatePath40);
 						$templateProcessor41 = new TemplateProcessor($templatePath41);
 						$templateProcessor42 = new TemplateProcessor($templatePath42);
 						$templateProcessor43 = new TemplateProcessor($templatePath43);
+						$templateProcessor44 = new TemplateProcessor($templatePath44);
 
 
 					}
 					
 				}
-				
 				
 				$templateProcessor = new TemplateProcessor($templatePath1);
 				$templateProcessor1 = new TemplateProcessor($templatePath2);
@@ -639,25 +657,53 @@ class ContractController extends Controller
 						return ['pah.' . $key => $value];
 					})->all());
 				}
+				
+				if(isset($contract->verbal_trial->pledge)){
+					$data = array_merge($data, collect($contract->verbal_trial->pledge)->mapWithKeys(function ($value, $key) {
+						return ['pledge.' . $key => $value];
+					})->all());
+				}
+				if(isset($data["pledge.identity_document"])){
+					$data["pledge.identity_document"] = [
+						"cni" => "Carte d'identité nationale",
+						"passport" => "Passeport",
+						"residence_certificate" => "Certificat de résidence",
+						"driving_licence" => "Permis de conduire",
+						"carte_sej"=>"Carte de séjour",
+						"recep"=>"Récépissé de la carte nationale d’identité "
+					][$data["pledge.identity_document"]];
+				}
+				// dd($contract->verbal_trial->pledges);
 				if(isset($data["pep.montant"])){
 
 					$data["pep.montant.fr"] = SpellNumber::value((float) $data["pep.montant"])->locale('fr')->toLetters();
+				}
+				if(isset($data["pledge.montant_estime"])){
+
+					$data["pledge.montant_estime.fr"] = SpellNumber::value((float) $data["pledge.montant_estime"])->locale('fr')->toLetters();
+					$data["pledge.date_naiss"] = Carbon::createFromFormat('Y-m-d', $data["pledge.date_naiss"])->translatedFormat('d F Y');
+					$data["pledge.date_delivery_document"] = Carbon::createFromFormat('Y-m-d', $data["pledge.date_delivery_document"])->translatedFormat('d F Y');
+					$data["pledge.date_carte_crise"] = Carbon::createFromFormat('Y-m-d', $data["pledge.date_carte_crise"])->translatedFormat('d F Y');
+					$data["pledge.date_mise_en_circulation"] = Carbon::createFromFormat('Y-m-d', $data["pledge.date_mise_en_circulation"])->translatedFormat('d F Y');
+
 				}
 				if(isset($data["pah.montant_terrain"])){
 
 					$data["pah.montant_terrain.fr"] = SpellNumber::value((float) $data["pah.montant_terrain"])->locale('fr')->toLetters();
 				}
-				// dd($data);
+				// dd($data);	
 				// dd($guaranteeList);
+				// dd($data["verbal_trial.type_of_credit.name"]);
 				$templateProcessor->cloneBlock('guaranteeList', 0, true, false, $guaranteeList);
 				$templateProcessor1->cloneBlock('guaranteeList', 0, true, false, $guaranteeList);
 				$templateProcessor2->cloneBlock('guaranteeList', 0, true, false, $guaranteeList);
 				$templateProcessor3->cloneBlock('guaranteeList', 0, true, false, $guaranteeList);
 				$templateProcessor4->cloneBlock('guaranteeList', 0, true, false, $guaranteeList);
-				// dd($contract->type);
 				if($contract->type == "particular")
 				{
 					$templateProcessor30->cloneBlock('guaranteeList', 0, true, false, $guaranteeList);
+					$templateProcessor31->cloneBlock('guaranteeList', 0, true, false, $guaranteeList);
+					$templateProcessor32->cloneBlock('guaranteeList', 0, true, false, $guaranteeList);
 				}
 				
 				
@@ -688,7 +734,7 @@ class ContractController extends Controller
 				
 				unset($data["observations"]);
 				unset($data["guarantors"]);
-				// dd($data);
+				// dd($data["verbal_trial.type_of_credit.name"]);
 				$templateProcessor->setValues($data);
 				$templateProcessor1->setValues($data);
 				$templateProcessor2->setValues($data);
@@ -697,6 +743,8 @@ class ContractController extends Controller
 				if($contract->type == "particular"){
 
 					$templateProcessor30->setValues($data);
+					$templateProcessor31->setValues($data);
+					$templateProcessor32->setValues($data);
 				}
 				if($contract->type == "particular" && $data["verbal_trial.type_of_credit.name"] == "CREDIT  CONSO"){
 					$templateProcessor5->cloneBlock('guaranteeList', 0, true, false, $guaranteeList);
@@ -717,8 +765,10 @@ class ContractController extends Controller
 				{
 					$templateProcessor8->cloneBlock('guaranteeList', 0, true, false, $guaranteeList);
 					$templateProcessor9->cloneBlock('guaranteeList', 0, true, false, $guaranteeList);
+					$templateProcessor10->cloneBlock('guaranteeList', 0, true, false, $guaranteeList);
 					$templateProcessor8->setValues($data);
 					$templateProcessor9->setValues($data);
+					$templateProcessor10->setValues($data);
 				}
 				if($contract->type == "particular" && ($data["verbal_trial.type_of_credit.name"] =="CREDIT CONSO/IMMO"))
 				{
@@ -726,10 +776,12 @@ class ContractController extends Controller
 					$templateProcessor41->cloneBlock('guaranteeList', 0, true, false, $guaranteeList);
 					$templateProcessor42->cloneBlock('guaranteeList', 0, true, false, $guaranteeList);
 					$templateProcessor43->cloneBlock('guaranteeList', 0, true, false, $guaranteeList);
+					$templateProcessor44->cloneBlock('guaranteeList', 0, true, false, $guaranteeList);
 					$templateProcessor40->setValues($data);
 					$templateProcessor41->setValues($data);
 					$templateProcessor42->setValues($data);
 					$templateProcessor43->setValues($data);
+					$templateProcessor44->setValues($data);
 
 				}
 				if($contract->type == "individual_business" && ($data["verbal_trial.type_of_credit.name"] == "CREDIT FDR" || $data["verbal_trial.type_of_credit.name"] == "CREDIT  BFR"))
@@ -747,28 +799,36 @@ class ContractController extends Controller
 					$templateProcessor9->setValues($data);
 
 				}
-				if($contract->type == "individual_business" && $data["verbal_trial.type_of_credit.name"] == "CREDIT D'INVESTISSEMENT")
+				if($contract->type == "individual_business" && ($data["verbal_trial.type_of_credit.name"] == "CREDIT D'INVESTISSEMENT" ||
+				$data["verbal_trial.type_of_credit.name"] == "AVANCE MARCHE/BC" || $data["verbal_trial.type_of_credit.name"] == "AVANCE SUR FACTURE" ||
+				$data["verbal_trial.type_of_credit.name"] == "PP COMMERCANT"))
 				{
 					$templateProcessor9->cloneBlock('guaranteeList', 0, true, false, $guaranteeList);
 					$templateProcessor10->cloneBlock('guaranteeList', 0, true, false, $guaranteeList);
 					$templateProcessor11->cloneBlock('guaranteeList', 0, true, false, $guaranteeList);
 					$templateProcessor12->cloneBlock('guaranteeList', 0, true, false, $guaranteeList);
 					$templateProcessor13->cloneBlock('guaranteeList', 0, true, false, $guaranteeList);
+					$templateProcessor14->cloneBlock('guaranteeList', 0, true, false, $guaranteeList);
+					$templateProcessor15->cloneBlock('guaranteeList', 0, true, false, $guaranteeList);
+					$templateProcessor16->cloneBlock('guaranteeList', 0, true, false, $guaranteeList);
 					$templateProcessor9->setValues($data);
 					$templateProcessor10->setValues($data);
 					$templateProcessor11->setValues($data);
 					$templateProcessor12->setValues($data);
 					$templateProcessor13->setValues($data);
-				}
-				if($contract->type == "individual_business"  &&($data["verbal_trial.type_of_credit.name"] == "PP COMMERCANT"))
-				{
-					$templateProcessor13->cloneBlock('guaranteeList', 0, true, false, $guaranteeList);
-					$templateProcessor14->cloneBlock('guaranteeList', 0, true, false, $guaranteeList);
-					$templateProcessor15->cloneBlock('guaranteeList', 0, true, false, $guaranteeList);
-					$templateProcessor13->setValues($data);
 					$templateProcessor14->setValues($data);
 					$templateProcessor15->setValues($data);
+					$templateProcessor16->setValues($data);
 				}
+				// if($contract->type == "individual_business"  &&($data["verbal_trial.type_of_credit.name"] == "PP COMMERCANT"))
+				// {
+				// 	$templateProcessor13->cloneBlock('guaranteeList', 0, true, false, $guaranteeList);
+				// 	$templateProcessor14->cloneBlock('guaranteeList', 0, true, false, $guaranteeList);
+				// 	$templateProcessor15->cloneBlock('guaranteeList', 0, true, false, $guaranteeList);
+				// 	$templateProcessor13->setValues($data);
+				// 	$templateProcessor14->setValues($data);
+				// 	$templateProcessor15->setValues($data);
+				// }
 				if($contract->type == "company" && ($data["verbal_trial.type_of_credit.name"] == "AVANCE SUR FACTURE" ||
 				$data["verbal_trial.type_of_credit.name"] == "AVANCE MARCHE/BC" ||
 				$data["verbal_trial.type_of_credit.name"] == "AVANCE MARCHE/BC_SOLO"))
@@ -777,13 +837,22 @@ class ContractController extends Controller
 					$templateProcessor6->cloneBlock('guaranteeList', 0, true, false, $guaranteeList);
 					$templateProcessor7->cloneBlock('guaranteeList', 0, true, false, $guaranteeList);
 					$templateProcessor8->cloneBlock('guaranteeList', 0, true, false, $guaranteeList);
+					$templateProcessor11->cloneBlock('guaranteeList', 0, true, false, $guaranteeList);
+					$templateProcessor12->cloneBlock('guaranteeList', 0, true, false, $guaranteeList);
+					$templateProcessor13->cloneBlock('guaranteeList', 0, true, false, $guaranteeList);
+					$templateProcessor14->cloneBlock('guaranteeList', 0, true, false, $guaranteeList);
 					// $templateProcessor9->cloneBlock('guaranteeList', 0, true, false, $guaranteeList);
 					$templateProcessor5->setValues($data);
 					$templateProcessor6->setValues($data);
 					$templateProcessor7->setValues($data);
 					$templateProcessor8->setValues($data);
+					$templateProcessor12->setValues($data);
+					$templateProcessor13->setValues($data);
+					$templateProcessor14->setValues($data);
 					// $templateProcessor9->setValues($data);
 				}
+				// dd($data["verbal_trial.type_of_credit.name"]);
+				// dd($contract->type);
 				if($contract->type == "company" && ($data["verbal_trial.type_of_credit.name"] == "CREDIT  CONSO" || $data["verbal_trial.type_of_credit.name"] = "CREDIT CONSO/IMMO"))
 				{
 					$templateProcessor5->cloneBlock('guaranteeList', 0, true, false, $guaranteeList);
@@ -792,16 +861,25 @@ class ContractController extends Controller
 					$templateProcessor8->cloneBlock('guaranteeList', 0, true, false, $guaranteeList);
 					$templateProcessor9->cloneBlock('guaranteeList', 0, true, false, $guaranteeList);
 					$templateProcessor10->cloneBlock('guaranteeList', 0, true, false, $guaranteeList);
+					$templateProcessor11->cloneBlock('guaranteeList', 0, true, false, $guaranteeList);
+					$templateProcessor12->cloneBlock('guaranteeList', 0, true, false, $guaranteeList);
+					$templateProcessor13->cloneBlock('guaranteeList', 0, true, false, $guaranteeList);
+					$templateProcessor14->cloneBlock('guaranteeList', 0, true, false, $guaranteeList);
 					$templateProcessor5->setValues($data);
 					$templateProcessor6->setValues($data);
 					$templateProcessor7->setValues($data);
 					$templateProcessor8->setValues($data);
 					$templateProcessor9->setValues($data);
 					$templateProcessor10->setValues($data);
+					$templateProcessor12->setValues($data);
+					$templateProcessor13->setValues($data);
+					$templateProcessor14->setValues($data);
 				}
-				// dd($data);
 				// dd($data["verbal_trial.type_of_credit.name"] == "AVANCE MARCHE/BC");
-				
+				// dd($data["verbal_trial.type_of_credit.name"]);
+				// dd($contract->type);
+
+				// dd("okk");
 				// Enregistrez les modifications dans un nouveau fichier
 				$outputFilePath = public_path("Contrat_gage-" . $contract->verbal_trial->applicant_first_name_.$contract->verbal_trial->applicant_last_name.".docx");
 				$outputFilePath1 = public_path("Billet-" . $contract->verbal_trial->applicant_first_name_.$contract->verbal_trial->applicant_last_name . ".docx");
@@ -829,6 +907,7 @@ class ContractController extends Controller
 				$outputFilePath23= public_path("Nantissement_de_compte_bancaire-" . $contract->verbal_trial->applicant_first_name_.$contract->verbal_trial->applicant_last_name . ".docx");
 				$outputFilePath24= public_path("Delegation-" . $contract->verbal_trial->applicant_first_name_.$contract->verbal_trial->applicant_last_name . ".docx");
 				$outputFilePath25= public_path("Nantissement_de_creances-" . $contract->verbal_trial->applicant_first_name_.$contract->verbal_trial->applicant_last_name . ".docx");
+				$outputFilePath26= public_path("Contrat_gage_autre-" . $contract->verbal_trial->applicant_first_name_.$contract->verbal_trial->applicant_last_name . ".docx");
 
 				$templateProcessor->saveAs($outputFilePath);
 				$templateProcessor1->saveAs($outputFilePath1);
@@ -837,6 +916,8 @@ class ContractController extends Controller
 				$templateProcessor4->saveAs($outputFilePath4);
 				if($contract->type == "particular"){
 					$templateProcessor30->saveAs($outputFilePath13);
+					$templateProcessor31->saveAs($outputFilePath19);
+					$templateProcessor32->saveAs($outputFilePath26);
 
 				}
 				if($contract->type == "particular" && $data["verbal_trial.type_of_credit.name"] == "CREDIT  CONSO"){
@@ -861,7 +942,8 @@ class ContractController extends Controller
 					$templateProcessor40->saveAs($outputFilePath8);
 					$templateProcessor41->saveAs($outputFilePath24);
 					$templateProcessor42->saveAs($outputFilePath25);
-					$templateProcessor43->saveAs($outputFilePath12);
+					$templateProcessor43->saveAs($outputFilePath22);
+					$templateProcessor44->saveAs($outputFilePath18);
 				}
 				
 				if($contract->type == "individual_business" && ($data["verbal_trial.type_of_credit.name"] == "CREDIT FDR" || $data["verbal_trial.type_of_credit.name"] == "CREDIT  BFR"))
@@ -873,20 +955,25 @@ class ContractController extends Controller
 					$templateProcessor8->saveAs($outputFilePath13);
 					$templateProcessor9->saveAs($outputFilePath8);
 				}
-				if($contract->type == "individual_business" && $data["verbal_trial.type_of_credit.name"] == "CREDIT D'INVESTISSEMENT")
+				if($contract->type == "individual_business" && ($data["verbal_trial.type_of_credit.name"] == "CREDIT D'INVESTISSEMENT" ||
+				$data["verbal_trial.type_of_credit.name"] == "AVANCE MARCHE/BC" || $data["verbal_trial.type_of_credit.name"] == "AVANCE SUR FACTURE" ||
+				$data["verbal_trial.type_of_credit.name"] == "PP COMMERCANT"))
 				{
 					$templateProcessor9->saveAs($outputFilePath14);
 					$templateProcessor10->saveAs($outputFilePath15);
 					$templateProcessor11->saveAs($outputFilePath16);
 					$templateProcessor12->saveAs($outputFilePath17);
 					$templateProcessor13->saveAs($outputFilePath13);
+					$templateProcessor14->saveAs($outputFilePath20);
+					$templateProcessor15->saveAs($outputFilePath19);
+					$templateProcessor16->saveAs($outputFilePath9);
 				}
-				if($contract->type == "individual_business"  &&($data["verbal_trial.type_of_credit.name"] == "PP COMMERCANT"))
-				{
-					$templateProcessor13->saveAs($outputFilePath12);
-					$templateProcessor14->saveAs($outputFilePath8);
-					$templateProcessor15->saveAs($outputFilePath13);
-				}
+				// if($contract->type == "individual_business"  &&($data["verbal_trial.type_of_credit.name"] == "PP COMMERCANT"))
+				// {
+				// 	$templateProcessor13->saveAs($outputFilePath12);
+				// 	$templateProcessor14->saveAs($outputFilePath8);
+				// 	$templateProcessor15->saveAs($outputFilePath13);
+				// }
 				if($contract->type == "company" && ($data["verbal_trial.type_of_credit.name"] == "AVANCE SUR FACTURE" ||
 				$data["verbal_trial.type_of_credit.name"] == "AVANCE MARCHE/BC" ||
 				$data["verbal_trial.type_of_credit.name"] == "AVANCE MARCHE/BC_SOLO"))
@@ -895,6 +982,10 @@ class ContractController extends Controller
 					$templateProcessor6->saveAs($outputFilePath22);
 					$templateProcessor7->saveAs($outputFilePath16);
 					$templateProcessor8->saveAs($outputFilePath13);
+					$templateProcessor11->saveAs($outputFilePath19);
+					$templateProcessor12->saveAs($outputFilePath10);
+					$templateProcessor13->saveAs($outputFilePath8);
+					$templateProcessor14->saveAs($outputFilePath11);
 					// $templateProcessor9->saveAs($outputFilePath8);
 				}
 				if($contract->type == "company" && ($data["verbal_trial.type_of_credit.name"] == "CREDIT  CONSO" || $data["verbal_trial.type_of_credit.name"] = "CREDIT CONSO/IMMO"))
@@ -905,6 +996,10 @@ class ContractController extends Controller
 					$templateProcessor8->saveAs($outputFilePath13);
 					$templateProcessor9->saveAs($outputFilePath23);
 					$templateProcessor10->saveAs($outputFilePath9);
+					$templateProcessor11->saveAs($outputFilePath19);
+					$templateProcessor12->saveAs($outputFilePath10);
+					$templateProcessor13->saveAs($outputFilePath8);
+					$templateProcessor14->saveAs($outputFilePath11);
 				}
 
 				// Vérifiez si les fichiers ont été créés
@@ -916,6 +1011,8 @@ class ContractController extends Controller
 					$zip->addFile($outputFilePath4, basename($outputFilePath4));
 					if($contract->type == "particular"){
 						$zip->addFile($outputFilePath13, basename($outputFilePath13));
+						$zip->addFile($outputFilePath19, basename($outputFilePath19));
+						$zip->addFile($outputFilePath26, basename($outputFilePath26));
 					}
 					if($contract->type == "particular" && $data["verbal_trial.type_of_credit.name"] == "CREDIT  CONSO"){
 						// $templateProcessor5->setValues($data);
@@ -939,7 +1036,8 @@ class ContractController extends Controller
 						$zip->addFile($outputFilePath8, basename($outputFilePath8));
 						$zip->addFile($outputFilePath24, basename($outputFilePath24));
 						$zip->addFile($outputFilePath25, basename($outputFilePath25));
-						$zip->addFile($outputFilePath12, basename($outputFilePath12));
+						$zip->addFile($outputFilePath22, basename($outputFilePath22));
+						$zip->addFile($outputFilePath18, basename($outputFilePath18));
 					}
 						if($contract->type == "individual_business" && ($data["verbal_trial.type_of_credit.name"] == "CREDIT FDR" || $data["verbal_trial.type_of_credit.name"] == "CREDIT  BFR"))
 						{
@@ -951,22 +1049,27 @@ class ContractController extends Controller
 							$zip->addFile($outputFilePath8, basename($outputFilePath8));
 							
 						}
-					if($contract->type == "individual_business" && $data["verbal_trial.type_of_credit.name"] == "CREDIT D'INVESTISSEMENT")
+					if($contract->type == "individual_business" && ($data["verbal_trial.type_of_credit.name"] == "CREDIT D'INVESTISSEMENT" ||
+					$data["verbal_trial.type_of_credit.name"] == "AVANCE MARCHE/BC" || $data["verbal_trial.type_of_credit.name"] == "AVANCE SUR FACTURE" ||
+					$data["verbal_trial.type_of_credit.name"] == "PP COMMERCANT"))
 					{
 						$zip->addFile($outputFilePath14, basename($outputFilePath14));
 						$zip->addFile($outputFilePath15, basename($outputFilePath15));
 						$zip->addFile($outputFilePath16, basename($outputFilePath16));
 						$zip->addFile($outputFilePath17, basename($outputFilePath17));
 						$zip->addFile($outputFilePath13, basename($outputFilePath13));
+						$zip->addFile($outputFilePath20, basename($outputFilePath20));
+						$zip->addFile($outputFilePath19, basename($outputFilePath19));
+						$zip->addFile($outputFilePath9, basename($outputFilePath9));
 
 					}
-				if($contract->type == "individual_business"  &&($data["verbal_trial.type_of_credit.name"] == "PP COMMERCANT"))
-					{
-						$zip->addFile($outputFilePath12, basename($outputFilePath12));
-						$zip->addFile($outputFilePath8, basename($outputFilePath8));
-						$zip->addFile($outputFilePath13, basename($outputFilePath13));
+				// if($contract->type == "individual_business"  &&($data["verbal_trial.type_of_credit.name"] == "PP COMMERCANT"))
+				// 	{
+				// 		$zip->addFile($outputFilePath12, basename($outputFilePath12));
+				// 		$zip->addFile($outputFilePath8, basename($outputFilePath8));
+				// 		$zip->addFile($outputFilePath13, basename($outputFilePath13));
 
-					}
+				// 	}
 				if($contract->type =="company" && ($data["verbal_trial.type_of_credit.name"] == "AVANCE SUR FACTURE" ||
 				$data["verbal_trial.type_of_credit.name"] == "AVANCE MARCHE/BC" || 
 				$data["verbal_trial.type_of_credit.name"] == "AVANCE MARCHE/BC_SOLO"))
@@ -975,6 +1078,10 @@ class ContractController extends Controller
 					$zip->addFile($outputFilePath22,basename($outputFilePath22));
 					$zip->addFile($outputFilePath16,basename($outputFilePath16));
 					$zip->addFile($outputFilePath13,basename($outputFilePath13));
+					$zip->addFile($outputFilePath19,basename($outputFilePath19));
+					$zip->addFile($outputFilePath10,basename($outputFilePath10));
+					$zip->addFile($outputFilePath8,basename($outputFilePath8));
+					$zip->addFile($outputFilePath11,basename($outputFilePath11));
 					// $zip->addFile($outputFilePath8,basename($outputFilePath8));
 				}
 				if($contract->type == "company" && ($data["verbal_trial.type_of_credit.name"] == "CREDIT  CONSO" || $data["verbal_trial.type_of_credit.name"] = "CREDIT CONSO/IMMO"))
@@ -985,6 +1092,10 @@ class ContractController extends Controller
 					$zip->addFile($outputFilePath13,basename($outputFilePath13));
 					$zip->addFile($outputFilePath23,basename($outputFilePath23));
 					$zip->addFile($outputFilePath9,basename($outputFilePath9));
+					$zip->addFile($outputFilePath19,basename($outputFilePath19));
+					$zip->addFile($outputFilePath10,basename($outputFilePath10));
+					$zip->addFile($outputFilePath8,basename($outputFilePath8));
+					$zip->addFile($outputFilePath11,basename($outputFilePath11));
 					
 				}
 					$zip->close();
@@ -1108,6 +1219,7 @@ class ContractController extends Controller
 	 */
 	public function store(Request $request)
 	{
+		// dd($request);
 		if (($authorisation = Gate::inspect('create', Contract::class))->allowed()) {
 			$requestData = $request->all();
 			$validator = Validator::make($requestData, [
@@ -1166,7 +1278,6 @@ class ContractController extends Controller
 				} elseif ($requestData["type"] == "individual_business") {
 					$validator = Validator::make($requestData, [
 						'individual_business_denomination' => "required|min:2",
-						'individual_business_corporate_purpose' => "required|min:2",
 						'individual_business_head_office_address' => "required|min:2",
 						'individual_business_rccm_number' => "required|min:2",
 						'individual_business_nif_number' => "required|min:2",
@@ -1193,7 +1304,6 @@ class ContractController extends Controller
 						IndividualBusiness::create([
 							"contract_id" => $contract->id,
 							"denomination" => $requestData["individual_business_denomination"],
-							"corporate_purpose" => $requestData["individual_business_corporate_purpose"],
 							"head_office_address" => $requestData["individual_business_head_office_address"],
 							"rccm_number" => $requestData["individual_business_rccm_number"],
 							"nif" => $requestData["individual_business_nif_number"],
@@ -1248,6 +1358,18 @@ class ContractController extends Controller
 								"numero_serie" => $pledge["numero_serie"],
 								"date_mise_en_circulation" => $pledge["date_mise_en_circulation"],
 								"date_carte_crise" => $pledge["date_carte_crise"],
+								"civility" => $pledge["civility"],
+								"nom" => $pledge["nom"],
+								"prenom" => $pledge["prenom"],
+								"date_naiss" => $pledge["date_naiss"],
+								"lieux_naiss" => $pledge["lieux_naiss"],
+								"identity_document" => $pledge["identity_document"],
+								"num_identity_document" => $pledge["num_identity_document"],
+								"date_delivery_document" => $pledge["date_delivery_document"],
+								"office_delivery" => $pledge["office_delivery"],
+								"adresse" => $pledge["adresse"],
+								"nationalite" => $pledge["nationalite"],
+								"phone" => $pledge["phone"],
 							]);
 						}
 						$relationList[] = "pledges";
