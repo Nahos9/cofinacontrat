@@ -60,12 +60,13 @@ const recherClient = async () => {
 watch(numMatrucle, async (newValue) => {
   if (newValue) {
     clientsList.value = await recherClient(newValue);
+    const clientData = clientsList.value.data?.data?.[0];
     // console.log("dans le wacth", clientsList.value);
     pvData.value.applicant_first_name =
-      clientsList.value.data.data[0].nom_replegal;
+      clientData.nom_replegal ?? clientData.raison_sociale_client;
     pvData.value.applicant_last_name =
-      clientsList.value.data.data[0].nom_replegal;
-    pvData.value.account_number = clientsList.value.data.data[0].no_compte;
+      clientData.nom_replegal ?? clientData.prenom_client;
+    pvData.value.account_number = clientData.no_compte;
   } else {
     clientsList.value = [];
   }
