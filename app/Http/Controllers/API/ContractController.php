@@ -551,11 +551,12 @@ class ContractController extends Controller
 				$data["verbal_trial.day_due_amount.fr"] = SpellNumber::value((float) $data["verbal_trial.day_due_amount"])->locale('fr')->toLetters();
 				$data["verbal_trial.amount.fr"] = SpellNumber::value((float) $data["verbal_trial.amount"])->locale('fr')->toLetters();
 				$data["total_amount_of_interest.fr"] = SpellNumber::value((float) $data["total_amount_of_interest"])->locale('fr')->toLetters();
-				// dd($data["total_amount_of_interest"]);
+				
 				$data["verbal_trial.duration.fr"] = SpellNumber::value((float) $data["verbal_trial.duration"])->locale('fr')->toLetters();
 				$data["verbal_trial.due_amount.fr"] = SpellNumber::value((float) $data["verbal_trial.due_amount"])->locale('fr')->toLetters();
 				$data["total_to_pay"] = (float) $data["total_amount_of_interest"] + (float) $data["verbal_trial.amount"] +(((float) $data["total_amount_of_interest"] / 100)*18);
-				$data["total_to_pay.fr"] = SpellNumber::value((float) $data["total_to_pay"])->locale('fr')->toLetters();
+				$data["total_to_pay.fr"] = SpellNumber::value((int) $data["total_to_pay"])->locale('fr')->toLetters();
+				// dd($data["total_to_pay"]);
 				$data["echance.fr"] = SpellNumber::value((float) $data["verbal_trial.duration"])->locale('fr')->toLetters();
 				$data["montant_second_ech.fr"] = SpellNumber::value((float) $data["montant_second_ech"])->locale('fr')->toLetters();
 				$data["montant_heb"] = $data["montant_second_ech"] / 4;
@@ -595,12 +596,15 @@ class ContractController extends Controller
 				$data["total_amount_of_interest"] = number_format(((float) $data["total_amount_of_interest"]), 0, ',', ' ');
 				$data["verbal_trial.due_amount"] = number_format(((float) $data["verbal_trial.due_amount"]), 0, ',', ' ');
 				// $data["due_amount"] = number_format(((float) $data["due_amount"]), 0, ',', ' ');
-				$data["due_amount"] = (float) $data["due_amount"];
-				$data["montant_engagement"] = ((float) $data["due_amount"] * 150) /100;
+				$data["montant_second_ech"] = (float) $data["montant_second_ech"];
+				$data["montant_engagement"] = ((float) $data["montant_second_ech"] * 150) /100;
 				$data["montant_engement_heb"] = (float) $data["montant_engagement"] / 4;
+				// dd($data["montant_engement_heb"]);
 				$data["montant_engagement.fr"] = SpellNumber::value((float) $data["montant_engagement"])->locale('fr')->toLetters();
 				$data["montant_engement_heb.fr"] = SpellNumber::value((float) $data["montant_engement_heb"])->locale('fr')->toLetters();
-				// dd($data);
+				$data["due_amount"] = number_format(((float) $data["due_amount"]), 0, ',', ' ');
+				
+				// dd($data["due_amount"]);
 				// dd($data["montant_engagement"]);  
 				// $data["verbal_trial.amount"] = (float) $data["verbal_trial.amount"];
 				// $data["due_amount"] = number_format(((float) $data["due_amount"]), 0, ',', ' ');

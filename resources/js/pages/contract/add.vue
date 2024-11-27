@@ -134,8 +134,6 @@ watch(numMatricule, async (newValue) => {
       clientsList.value.data.data[0].lieu_naissance;
     contractData.value.individual_business_date_delivrance =
       clientsList.value.data.data[0].date_delivrance_piece;
-    contractData.value.individual_business_office_delivery =
-      clientsList.value.data.data[0].lieu_delivrance_piece;
     contractData.value.individual_business_num_piece =
       clientsList.value.data.data[0].numero_piece_identite;
     contractData.value.individual_business_home_address =
