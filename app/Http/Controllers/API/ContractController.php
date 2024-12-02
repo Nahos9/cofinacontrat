@@ -549,22 +549,23 @@ class ContractController extends Controller
 				Carbon::setLocale('fr');
 				$data["ht_rate"] = "17";
 				$data["current_date"] = Carbon::now()->translatedFormat('d F Y');
-				$data["verbal_trial.day_due_amount"] = ((float) $data["verbal_trial.due_amount"]) / 20;
-				$data["verbal_trial.day_due_amount.fr"] = SpellNumber::value((float) $data["verbal_trial.day_due_amount"])->locale('fr')->toLetters();
+				$data["verbal_trial.day_due_amount"] = (int)((int) $data["verbal_trial.due_amount"] / 20);
+				$data["verbal_trial.day_due_amount.fr"] = SpellNumber::value((int) $data["verbal_trial.day_due_amount"])->locale('fr')->toLetters();
+				// dd($data["verbal_trial.day_due_amount.fr"]);
 				$data["verbal_trial.amount.fr"] = SpellNumber::value((float) $data["verbal_trial.amount"])->locale('fr')->toLetters();
 				$data["total_amount_of_interest.fr"] = SpellNumber::value((float) $data["total_amount_of_interest"])->locale('fr')->toLetters();
 				
 				$data["verbal_trial.duration.fr"] = SpellNumber::value((float) $data["verbal_trial.duration"])->locale('fr')->toLetters();
 				$data["verbal_trial.due_amount.fr"] = SpellNumber::value((float) $data["verbal_trial.due_amount"])->locale('fr')->toLetters();
-				$data["total_to_pay"] = (float) $data["total_amount_of_interest"] + (float) $data["verbal_trial.amount"] +(((float) $data["total_amount_of_interest"] / 100)*18);
+				$data["total_to_pay"] = (int)((int) $data["total_amount_of_interest"] + (int) $data["verbal_trial.amount"] +(((int) $data["total_amount_of_interest"] / 100)*18));
 				$data["total_to_pay.fr"] = SpellNumber::value((int) $data["total_to_pay"])->locale('fr')->toLetters();
-				// dd($data["total_to_pay"]);
+				// dd($data["total_to_pay.fr"]);
 				$data["echance.fr"] = SpellNumber::value((float) $data["verbal_trial.duration"])->locale('fr')->toLetters();
 				$data["montant_second_ech.fr"] = SpellNumber::value((float) $data["montant_second_ech"])->locale('fr')->toLetters();
-				$data["montant_heb"] = $data["montant_second_ech"] / 4;
-				$data["montant_heb.fr"] = SpellNumber::value((float) $data["montant_heb"])->locale('fr')->toLetters();
-				$data["montant_troisieme_ech.fr"] = SpellNumber::value((float) $data["montant_troisieme_ech"])->locale('fr')->toLetters();
-				$data["montant_fudiciaire.fr"] = SpellNumber::value((float) $data["montant_fudiciaire"])->locale('fr')->toLetters();
+				$data["montant_heb"] = (int) ($data["montant_second_ech"] / 4);
+				$data["montant_heb.fr"] = SpellNumber::value((int) $data["montant_heb"])->locale('fr')->toLetters();
+				$data["montant_troisieme_ech.fr"] = SpellNumber::value((int) $data["montant_troisieme_ech"])->locale('fr')->toLetters();
+				$data["montant_fudiciaire.fr"] = SpellNumber::value((int) $data["montant_fudiciaire"])->locale('fr')->toLetters();
 				$data["verbal_trial.duration.fr"] = SpellNumber::value((float) $data["verbal_trial.duration"])->locale('fr')->toLetters();
 				$data["signatory"] = (((float) $data["verbal_trial.amount"]) <= 10000000) ? "Madame Ameh Délali MESSANGAN épouse AMEDEMEGNAH, Responsable juridique" : "Mr. Koffi Djramedo GAMADO, Head Crédit";
 				$data["verbal_trial.periodicity.fr"] = ["mensual" => "Mensuel", "quarterly" => "Trimestrielle", "semi-annual" => "Semestrielle", "annual" => "Annuel", "in-fine" => "A la fin"][$data["verbal_trial.periodicity"]];
@@ -579,6 +580,12 @@ class ContractController extends Controller
 					"carte_sej"=>"Carte de séjour",
 					"recep" =>"Récépissé de la carte nationale d’identité "
 				][$data["representative_type_of_identity_document"]];
+				$data["verbal_trial.civility"] = [
+					"Mr" => "Monsieur",
+					"Mme" => "Madame",
+					"Mlle" => "Mademoiselle"
+				][$data["verbal_trial.civility"]];
+				// dd($data["verbal_trial.civility"]);
 				if(isset($data["individual_business.type_of_identity_document"])){
 					$data["individual_business.type_of_identity_document"] = [
 						"cni" => "Carte d'identité nationale",
@@ -598,15 +605,23 @@ class ContractController extends Controller
 				$data["total_amount_of_interest"] = number_format(((float) $data["total_amount_of_interest"]), 0, ',', ' ');
 				$data["verbal_trial.due_amount"] = number_format(((float) $data["verbal_trial.due_amount"]), 0, ',', ' ');
 				// $data["due_amount"] = number_format(((float) $data["due_amount"]), 0, ',', ' ');
-				$data["montant_second_ech"] = (float) $data["montant_second_ech"];
-				$data["montant_engagement"] = ((float) $data["montant_second_ech"] * 150) /100;
-				$data["montant_engement_heb"] = (float) $data["montant_engagement"] / 4;
+				$data["montant_second_ech"] = (int) $data["montant_second_ech"];
+				$data["montant_engagement"] = ((int) $data["montant_second_ech"] * 150) /100;
+				$data["montant_engement_heb"] = (int) $data["montant_engagement"] / 4;
+				$data["montant_engagement.fr"] = SpellNumber::value((int) $data["montant_engagement"])->locale('fr')->toLetters();
+				$data["montant_engement_heb.fr"] = SpellNumber::value((int) $data["montant_engement_heb"])->locale('fr')->toLetters();
 				// dd($data["montant_engement_heb"]);
-				$data["montant_engagement.fr"] = SpellNumber::value((float) $data["montant_engagement"])->locale('fr')->toLetters();
-				$data["montant_engement_heb.fr"] = SpellNumber::value((float) $data["montant_engement_heb"])->locale('fr')->toLetters();
 				$data["due_amount"] = number_format(((float) $data["due_amount"]), 0, ',', ' ');
+				$data["montant_engement_heb"] = number_format(((float) $data["montant_engement_heb"]), 0, ',', ' ');
+				$data["montant_engagement"] = number_format(((float) $data["montant_engagement"]), 0, ',', ' ');
+				$data["total_to_pay"] = number_format(((float) $data["total_to_pay"]), 0, ',', ' ');
+				$data["montant_troisieme_ech"] = number_format(((float) $data["montant_troisieme_ech"]), 0, ',', ' ');
+				$data["montant_fudiciaire"] = number_format(((float) $data["montant_fudiciaire"]), 0, ',', ' ');
 				
-				// dd($data["due_amount"]);
+
+			
+				
+				// dd($data["montant_fudiciaire"]);
 				// dd($data["montant_engagement"]);  
 				// $data["verbal_trial.amount"] = (float) $data["verbal_trial.amount"];
 				// $data["due_amount"] = number_format(((float) $data["due_amount"]), 0, ',', ' ');
