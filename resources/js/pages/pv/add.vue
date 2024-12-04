@@ -34,6 +34,7 @@ const pvData = ref({
   periodicity: "mensual",
   due_amount: "",
   insurance_premium: "",
+  frais_administration: "",
   administrative_fees_percentage: 0,
   // taf: 0,
   tax_fee_interest_rate: 14,
@@ -89,6 +90,7 @@ const getResetPvError = () => {
     periodicity: "",
     due_amount: "",
     insurance_premium: "",
+    frais_administration: "",
     administrative_fees_percentage: "",
     // taf: "",
     tax_fee_interest_rate: "",
@@ -167,6 +169,7 @@ const onSubmit = () => {
           periodicity: pvData.value.periodicity,
           due_amount: pvData.value.due_amount,
           insurance_premium: pvData.value.insurance_premium,
+          frais_administration: pvData.value.frais_administration,
           administrative_fees_percentage:
             pvData.value.administrative_fees_percentage,
           taf: pvData.value.taf,
@@ -230,6 +233,7 @@ watch(numPret, async (newValue) => {
     pvData.value.amount = pretList.value.data.data[0].mt_demande;
     pvData.value.due_amount = pretList.value.data.data[0].mt_pret_int;
     pvData.value.insurance_premium = pretList.value.data.data[0].mt_assurance;
+    pvData.value.frais_administration = pretList.value.data.data[0].mt_fraidos;
     pvData.value.duration = pretList.value.data.data[0].nb_ech_pret;
     pvData.value.tax_fee_interest_rate =
       pretList.value.data.data[0].tx_int_pret;
@@ -430,6 +434,16 @@ watch(numPret, async (newValue) => {
                     type="number"
                     :error-messages="pvError.insurance_premium"
                     label="Prime d'assurance"
+                    placeholder="Ex: 25000"
+                    :rules="[requiredValidator]"
+                  />
+                </VCol>
+                <VCol cols="12" md="6" lg="4">
+                  <AppTextField
+                    v-model="pvData.frais_administration"
+                    type="number"
+                    :error-messages="pvError.frais_administration"
+                    label="Frais d’administration crédit"
                     placeholder="Ex: 25000"
                     :rules="[requiredValidator]"
                   />

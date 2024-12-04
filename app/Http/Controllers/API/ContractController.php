@@ -584,8 +584,16 @@ class ContractController extends Controller
 					"Mr" => "Monsieur",
 					"Mme" => "Madame",
 					"Mlle" => "Mademoiselle"
-				][$data["verbal_trial.civility"]];
-				// dd($data["verbal_trial.civility"]);
+					][$data["verbal_trial.civility"]];
+				if(isset($data["individual_business.civility"])){
+					$data["individual_business.civility"] = [
+						"Mr" => "Monsieur",
+						"Mme" => "Madame",
+						"Mlle" => "Mademoiselle"
+					][$data["individual_business.civility"]];
+					// dd($data["individual_business.civility"]);
+				}
+				// dd('ok');
 				if(isset($data["individual_business.type_of_identity_document"])){
 					$data["individual_business.type_of_identity_document"] = [
 						"cni" => "Carte d'identité nationale",
@@ -611,12 +619,16 @@ class ContractController extends Controller
 				$data["montant_engagement.fr"] = SpellNumber::value((int) $data["montant_engagement"])->locale('fr')->toLetters();
 				$data["montant_engement_heb.fr"] = SpellNumber::value((int) $data["montant_engement_heb"])->locale('fr')->toLetters();
 				// dd($data["montant_engement_heb"]);
+				$data["due_amount.fr"] = SpellNumber::value((float) $data["due_amount"])->locale('fr')->toLetters();
 				$data["due_amount"] = number_format(((float) $data["due_amount"]), 0, ',', ' ');
 				$data["montant_engement_heb"] = number_format(((float) $data["montant_engement_heb"]), 0, ',', ' ');
 				$data["montant_engagement"] = number_format(((float) $data["montant_engagement"]), 0, ',', ' ');
-				$data["total_to_pay"] = number_format(((float) $data["total_to_pay"]), 0, ',', ' ');
+				// $data["total_to_pay"] = number_format(((float) $data["total_to_pay"]), 0, ',', ' ');
 				$data["montant_troisieme_ech"] = number_format(((float) $data["montant_troisieme_ech"]), 0, ',', ' ');
+				$data["montant_second_ech"] = number_format(((float) $data["montant_second_ech"]), 0, ',', ' ');
 				$data["montant_fudiciaire"] = number_format(((float) $data["montant_fudiciaire"]), 0, ',', ' ');
+				$data["verbal_trial.frais_administration"] = number_format(((float) $data["verbal_trial.frais_administration"]), 0, ',', ' ');
+				// dd($data);
 				
 
 			
@@ -625,7 +637,6 @@ class ContractController extends Controller
 				// dd($data["montant_engagement"]);  
 				// $data["verbal_trial.amount"] = (float) $data["verbal_trial.amount"];
 				// $data["due_amount"] = number_format(((float) $data["due_amount"]), 0, ',', ' ');
-				$data["due_amount.fr"] = SpellNumber::value((float) $data["due_amount"])->locale('fr')->toLetters();
 				$data["verbal_trial.administrative_fees_percentage"] = number_format(((float) $data["verbal_trial.administrative_fees_percentage"]), 0, ',', ' ');
 				$data["verbal_trial.insurance_premium"] = number_format(((float) $data["verbal_trial.insurance_premium"]), 0, ',', ' ');
 				$data["total_to_pay"] = number_format(((float) $data["total_to_pay"]), 0, ',', ' ');
@@ -678,6 +689,7 @@ class ContractController extends Controller
 						return ['pah.' . $key => $value];
 					})->all());
 				}
+				// dd($contract->verbal_trial->pledge);
 				if(isset($contract->verbal_trial->pledge)){
 					$data = array_merge($data, collect($contract->verbal_trial->pledge)->mapWithKeys(function ($value, $key) {
 						return ['pledge.' . $key => $value];
@@ -692,12 +704,21 @@ class ContractController extends Controller
 						"carte_sej"=>"Carte de séjour",
 						"recep"=>"Récépissé de la carte nationale d’identité "
 					][$data["pledge.identity_document"]];
+					$data["pledge.civility"] = [
+						"Mr" => "Monsieur",
+						"Mme" => "Madame",
+						"Mlle" => "Mademoiselle"
+					][$data["pledge.civility"]];
 				}
 				// dd($contract->verbal_trial->pledges);
 				if(isset($data["pep.montant"])){
 
 					$data["pep.montant.fr"] = SpellNumber::value((float) $data["pep.montant"])->locale('fr')->toLetters();
+					$data["pep.date_debut"] = Carbon::createFromFormat('Y-m-d', $data["pep.date_debut"])->translatedFormat('d F Y');
+					$data["pep.montant"] = number_format(((float) $data["pep.montant"]), 0, ',', ' ');
+
 				}
+				// dd($data["pep.date_debut"]);
 				if(isset($data["pledge.montant_estime"])){
 
 					$data["pledge.montant_estime.fr"] = SpellNumber::value((float) $data["pledge.montant_estime"])->locale('fr')->toLetters();
@@ -705,6 +726,8 @@ class ContractController extends Controller
 					$data["pledge.date_delivery_document"] = Carbon::createFromFormat('Y-m-d', $data["pledge.date_delivery_document"])->translatedFormat('d F Y');
 					$data["pledge.date_carte_crise"] = Carbon::createFromFormat('Y-m-d', $data["pledge.date_carte_crise"])->translatedFormat('d F Y');
 					$data["pledge.date_mise_en_circulation"] = Carbon::createFromFormat('Y-m-d', $data["pledge.date_mise_en_circulation"])->translatedFormat('d F Y');
+					$data["pledge.montant_estime"] = number_format(((float) $data["pledge.montant_estime"]), 0, ',', ' ');
+
 
 				}
 
@@ -729,7 +752,7 @@ class ContractController extends Controller
 				
 				
 				if ($contract->has_pledges == "1") {
-					
+					// dd("ok");
 					$pledgeList = [];
 					foreach ($contract->pledges as $pledge) {
 						$tmp = $pledge->toArray();
@@ -901,9 +924,11 @@ class ContractController extends Controller
 				// dd($data["verbal_trial.type_of_credit.name"] == "AVANCE MARCHE/BC");
 				// dd($data["verbal_trial.type_of_credit.name"]);
 				// dd($contract->type);
-				// dd($data);
+				// dd($data["total_to_pay"]);
 
-				// dd("okk");
+				// dd($data);
+				// dd($data["verbal_trial.civility"]);
+
 				// Enregistrez les modifications dans un nouveau fichier
 				$outputFilePath = public_path("Contrat_gage-" . $contract->verbal_trial->applicant_first_name_.$contract->verbal_trial->applicant_last_name.".docx");
 				$outputFilePath1 = public_path("Billet-" . $contract->verbal_trial->applicant_first_name_.$contract->verbal_trial->applicant_last_name . ".docx");
@@ -984,7 +1009,7 @@ class ContractController extends Controller
 				$data["verbal_trial.type_of_credit.name"] == "AVANCE MARCHE/BC" || $data["verbal_trial.type_of_credit.name"] == "AVANCE SUR FACTURE" ||
 				$data["verbal_trial.type_of_credit.name"] == "PP COMMERCANT"))
 				{
-					$templateProcessor9->saveAs($outputFilePath14);
+					$templateProcessor9->saveAs($outputFilePath11);
 					$templateProcessor10->saveAs($outputFilePath15);
 					$templateProcessor11->saveAs($outputFilePath16);
 					$templateProcessor12->saveAs($outputFilePath17);
@@ -1079,7 +1104,7 @@ class ContractController extends Controller
 					$data["verbal_trial.type_of_credit.name"] == "AVANCE MARCHE/BC" || $data["verbal_trial.type_of_credit.name"] == "AVANCE SUR FACTURE" ||
 					$data["verbal_trial.type_of_credit.name"] == "PP COMMERCANT"))
 					{
-						$zip->addFile($outputFilePath14, basename($outputFilePath14));
+						$zip->addFile($outputFilePath11, basename($outputFilePath11));
 						$zip->addFile($outputFilePath15, basename($outputFilePath15));
 						$zip->addFile($outputFilePath16, basename($outputFilePath16));
 						$zip->addFile($outputFilePath17, basename($outputFilePath17));

@@ -32,6 +32,7 @@ class VerbalTrial extends Model
         'due_amount',
         'administrative_fees_percentage',
         'insurance_premium',
+        'frais_administration',
         'tax_fee_interest_rate',
         'credit_admin_id',
         'caf_id',

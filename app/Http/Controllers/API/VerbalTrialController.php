@@ -153,9 +153,9 @@ class VerbalTrialController extends Controller
         }
       }
 
-      if ($currentUser->profile == "credit_admin") {
-        $verbalTrialList->where('credit_admin_id', $currentUser->id);
-      }
+      // if ($currentUser->profile == "credit_admin") {
+      //   $verbalTrialList->where('credit_admin_id', $currentUser->id);
+      // }
 
       if (isset($request["paginate"]) && ($request->paginate == false)) {
         $verbalTrialList = $verbalTrialList->orderByDesc('updated_at')->get();
@@ -339,6 +339,7 @@ class VerbalTrialController extends Controller
         'due_amount' => 'required|numeric',
         'administrative_fees_percentage' => 'required|numeric',
         'insurance_premium' => 'required|numeric',
+        'frais_administration' => 'required|numeric',
         'tax_fee_interest_rate' => 'required|numeric',
         'caf_id' => 'required|exists:users,id',
         'credit_admin_id' => 'required|exists:users,id',

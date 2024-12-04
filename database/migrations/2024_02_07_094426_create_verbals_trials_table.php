@@ -28,6 +28,7 @@ return new class extends Migration {
 			$table->decimal('due_amount', 21, 2);
 			$table->decimal('administrative_fees_percentage', 21, 2);
 			$table->decimal('insurance_premium', 21, 2);
+			$table->decimal('frais_administration', 21, 2);
 			$table->float('tax_fee_interest_rate');
 			$table->foreignId('caf_id')->constrained(table: "users", column: "id")->cascadeOnDelete();
 			$table->foreignId('credit_admin_id')->constrained(table: "users", column: "id")->cascadeOnDelete();
