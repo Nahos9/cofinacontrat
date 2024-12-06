@@ -148,6 +148,10 @@ watch(numMatricule, async (newValue) => {
       clientsList.value.data.data[0].adresse_1;
     contractData.value.individual_business_head_office_address =
       clientsList.value.data.data[0].adresse_1;
+    contractData.value.individual_business_rccm_number =
+      clientsList.value.data.data[0].numero_piece_identite;
+    contractData.value.individual_business_phone_number =
+      clientsList.value.data.data[0].tel_port;
   } else {
     clientsList.value = [];
   }
@@ -209,18 +213,18 @@ const getResetPvError = () => {
     individual_business_rccm_number: "",
     individual_business_nif_number: "",
     individual_business_phone_number: "",
-    individual_business_civility: "",
-    individual_business_first_name: "",
-    individual_business_lieux_naiss: "",
-    individual_business_nationalite: "",
-    individual_business_last_name: "",
-    individual_business_home_address: "",
-    individual_business_date_naiss: "",
-    individual_business_num_piece: "",
-    individual_business_date_delivrance: "",
-    individual_business_number_phone: "",
-    individual_business_office_delivery: "",
-    individual_business_type_of_identity_document: "",
+    // individual_business_civility: "",
+    // individual_business_first_name: "",
+    // individual_business_lieux_naiss: "",
+    // individual_business_nationalite: "",
+    // individual_business_last_name: "",
+    // individual_business_home_address: "",
+    // individual_business_date_naiss: "",
+    // individual_business_num_piece: "",
+    // individual_business_date_delivrance: "",
+    // individual_business_number_phone: "",
+    // individual_business_office_delivery: "",
+    // individual_business_type_of_identity_document: "",
     individual_business_bp: "",
     individual_business_commune: "",
   };
@@ -326,34 +330,34 @@ const onSubmit = () => {
           contractData.value.individual_business_nif_number;
         $data.individual_business_phone_number =
           contractData.value.individual_business_phone_number;
-        $data.individual_business_civility =
-          contractData.value.individual_business_civility;
-        $data.individual_business_first_name =
-          contractData.value.individual_business_first_name;
-        $data.individual_business_last_name =
-          contractData.value.individual_business_last_name;
-        $data.individual_business_date_naiss =
-          contractData.value.individual_business_date_naiss;
-        $data.individual_business_date_delivrance =
-          contractData.value.individual_business_date_delivrance;
-        $data.individual_business_home_address =
-          contractData.value.individual_business_home_address;
-        $data.individual_business_lieux_naiss =
-          contractData.value.individual_business_lieux_naiss;
-        $data.individual_business_nationalite =
-          contractData.value.individual_business_nationalite;
-        $data.individual_business_num_piece =
-          contractData.value.individual_business_num_piece;
-        $data.individual_business_number_phone =
-          contractData.value.individual_business_number_phone;
-        $data.individual_business_office_delivery =
-          contractData.value.individual_business_office_delivery;
-        $data.individual_business_type_of_identity_document =
-          contractData.value.individual_business_type_of_identity_document;
         $data.individual_business_bp =
           contractData.value.individual_business_bp;
         $data.individual_business_commune =
           contractData.value.individual_business_commune;
+        // $data.individual_business_civility =
+        //   contractData.value.individual_business_civility;
+        // $data.individual_business_first_name =
+        //   contractData.value.individual_business_first_name;
+        // $data.individual_business_last_name =
+        //   contractData.value.individual_business_last_name;
+        // $data.individual_business_date_naiss =
+        //   contractData.value.individual_business_date_naiss;
+        // $data.individual_business_date_delivrance =
+        //   contractData.value.individual_business_date_delivrance;
+        // $data.individual_business_home_address =
+        //   contractData.value.individual_business_home_address;
+        // $data.individual_business_lieux_naiss =
+        //   contractData.value.individual_business_lieux_naiss;
+        // $data.individual_business_nationalite =
+        //   contractData.value.individual_business_nationalite;
+        // $data.individual_business_num_piece =
+        //   contractData.value.individual_business_num_piece;
+        // $data.individual_business_number_phone =
+        //   contractData.value.individual_business_number_phone;
+        // $data.individual_business_office_delivery =
+        //   contractData.value.individual_business_office_delivery;
+        // $data.individual_business_type_of_identity_document =
+        //   contractData.value.individual_business_type_of_identity_document;
       }
 
       if (contractData.value.has_pledges == "1") {
@@ -830,7 +834,7 @@ if (route.query.id) {
               </VRow>
             </VCardText>
           </VCard>
-          <VCard
+          <!-- <VCard
             v-if="contractData.type == 'individual_business'"
             class="mb-6"
             title="Information sur le gérant"
@@ -946,7 +950,7 @@ if (route.query.id) {
                 </VCol>
               </VRow>
             </VCardText>
-          </VCard>
+          </VCard> -->
         </VCol>
 
         <VCol cols="12">
