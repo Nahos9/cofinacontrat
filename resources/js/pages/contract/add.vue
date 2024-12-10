@@ -150,6 +150,8 @@ watch(numMatricule, async (newValue) => {
       clientsList.value.data.data[0].adresse_1;
     contractData.value.individual_business_rccm_number =
       clientsList.value.data.data[0].numero_piece_identite;
+    contractData.value.company_rccm_number =
+      clientsList.value.data.data[0].numero_piece_identite;
     contractData.value.individual_business_phone_number =
       clientsList.value.data.data[0].tel_port;
   } else {
