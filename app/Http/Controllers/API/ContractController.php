@@ -689,7 +689,7 @@ class ContractController extends Controller
 						return ['pah.' . $key => $value];
 					})->all());
 				}
-				// dd($contract->verbal_trial->pledge);
+				
 				if(isset($contract->verbal_trial->pledge)){
 					$data = array_merge($data, collect($contract->verbal_trial->pledge)->mapWithKeys(function ($value, $key) {
 						return ['pledge.' . $key => $value];
@@ -1380,7 +1380,7 @@ class ContractController extends Controller
 
 					$relationList[] = "individual_business";
 				}
-
+				// dd($request);
 				if (isset($requestData["has_pledges"])) {
 					if ($requestData["has_pledges"]) {
 						$validator = Validator::make($requestData, [
