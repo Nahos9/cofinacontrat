@@ -689,6 +689,7 @@ class ContractController extends Controller
 						return ['pah.' . $key => $value];
 					})->all());
 				}
+				// dd($contract->verbal_trial->pledge);
 				
 				if(isset($contract->verbal_trial->pledge)){
 					$data = array_merge($data, collect($contract->verbal_trial->pledge)->mapWithKeys(function ($value, $key) {
