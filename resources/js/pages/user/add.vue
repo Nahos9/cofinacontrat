@@ -35,6 +35,7 @@ const roles = [
   { value: "md", title: "MD" },
   { value: "caf", title: "CAF" },
   { value: "ca", title: "CA" },
+  { value: "create_attestation", title: "Créer attestation" },
 ];
 
 const router = useRouter();

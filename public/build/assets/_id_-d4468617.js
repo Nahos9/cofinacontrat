@@ -1,1 +1,0 @@
-import{n as e,r as t,o,c as s,d as a}from"./main-b79bab7d.js";const r=a("h1",null,"Modifier l'attestation",-1),n=[r],d={__name:"[id]",setup(c){return e().params.id,t(null),(l,u)=>(o(),s("div",null,n))}};export{d as default};
