@@ -15,7 +15,7 @@ return new class extends Migration {
 			$table->string('name');
 			$table->string('email')->unique();
 			$table->string('full_name')->unique();
-			$table->enum('profile', ['admin', 'credit_analyst', 'credit_admin', 'head_credit', 'operation', 'legal', 'dex', 'caf', 'ca', 'md']);
+			$table->enum('profile', ['admin', 'credit_analyst', 'credit_admin', 'head_credit', 'operation', 'legal', 'dex', 'caf', 'ca', 'md', 'create_attestation']);
 			$table->timestamp('email_verified_at')->nullable();
 			$table->string('password');
 			$table->string('si_profile_id')->nullable();

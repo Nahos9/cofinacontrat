@@ -11,6 +11,7 @@ use App\Http\Controllers\API\TypeOfApplicantController;
 use App\Http\Controllers\API\TypeOfCreditController;
 use App\Http\Controllers\API\TypeOfGuaranteeController;
 use App\Http\Controllers\API\VerbalTrialController;
+use App\Http\Controllers\AttestationController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -127,6 +128,14 @@ Route::middleware('auth:sanctum')->group(function () {
 		Route::post("/", [DeadlinePostponedController::class, "store"])->name("store");
 		Route::put("/{id}", [DeadlinePostponedController::class, "update"])->name("update");
 		Route::delete("/{id}", [DeadlinePostponedController::class, "destroy"])->name("destroy");
+	});
+	Route::prefix("attestation")->name("attestation.")->group(function () {
+		Route::get("/", [AttestationController::class, "index"])->name("index");
+		Route::get("/{id}", [AttestationController::class, "show"])->name("show");
+		Route::post("/", [AttestationController::class, "store"])->name("store");
+		Route::put("/{id}", [AttestationController::class, "update"])->name("update");
+		Route::delete("/{id}", [AttestationController::class, "destroy"])->name("destroy");
+		Route::get("/download/{id}", [AttestationController::class, "download"])->name("download");
 	});
 });
 

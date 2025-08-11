@@ -38,7 +38,9 @@ export const redirects = [
 
 			if (userRole === 'md')
 				return { name: 'pv' }
-
+			if (userRole === 'create_attestation')
+				return { name: 'attestation' }		
+			
 			return { name: 'login', query: to.query }
 		},
 	},

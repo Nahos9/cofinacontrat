@@ -40,6 +40,9 @@ import type {
 declare module 'vue-router/auto/routes' {
   export interface RouteNamedMap {
     '$error': RouteRecordInfo<'$error', '/:error(.*)', { error: ParamValue<true> }, { error: ParamValue<false> }>,
+    'attestation': RouteRecordInfo<'attestation', '/attestation', Record<never, never>, Record<never, never>>,
+    'attestation-add': RouteRecordInfo<'attestation-add', '/attestation/add', Record<never, never>, Record<never, never>>,
+    'attestation-edit-id': RouteRecordInfo<'attestation-edit-id', '/attestation/edit/:id', { id: ParamValue<true> }, { id: ParamValue<false> }>,
     'cat': RouteRecordInfo<'cat', '/cat', Record<never, never>, Record<never, never>>,
     'cat-id': RouteRecordInfo<'cat-id', '/cat/:id', { id: ParamValue<true> }, { id: ParamValue<false> }>,
     'cat-add': RouteRecordInfo<'cat-add', '/cat/add', Record<never, never>, Record<never, never>>,

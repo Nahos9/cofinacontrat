@@ -100,6 +100,27 @@ export default [
       },
     ],
   },
+  {
+    title: "Attestation",
+    to: "attestation",
+    icon: { icon: "tabler-file-plus" },
+    action: "read",
+    subject: "attestation",
+    children: [
+      {
+        title: "Attestations",
+        to: "attestation",
+        action: "read",
+        subject: "attestation",
+      },
+      {
+        title: "Ajouter",
+        to: "attestation-add",
+        action: "create",
+        subject: "attestation",
+      },
+    ],
+  },
   // {
   //   title: "Contrat Hypothécaire",
   //   icon: { icon: "tabler-home-ribbon" },

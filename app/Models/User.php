@@ -102,6 +102,7 @@ class User extends Authenticatable
 			"caf" => "CAF",
 			"ca" => "Chef d'agence",
 			"md" => "MD",
+			"create_attestation" => "Attestation",
 		][$this->profile];
 	}
 
@@ -398,6 +399,14 @@ class User extends Authenticatable
 						"action" => ["manage"],
 						"subject" => ["settings-user"]
 					]
+				];
+			case ('create_attestation'):
+				return [
+					[
+						"action" => ["create", "read", "update", "delete", "download"],
+						"subject" => ["attestation"]
+					]
+
 				];
 		}
 	}
