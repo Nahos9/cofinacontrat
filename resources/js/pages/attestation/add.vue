@@ -22,6 +22,7 @@ const form = ref({
   montant_endettement: "",
   type_attestation: "",
   type: "",
+  gages: [], // Nouveau champ pour les gages
 });
 const $toast = useToast();
 const router = useRouter();
@@ -41,7 +42,36 @@ const civilites = [
 ]
 const userToken = useCookie("userToken");
 
+// Fonction pour ajouter un nouveau gage
+const addGage = () => {
+  form.value.gages.push({
+    marque: "",
+    immatriculation: ""
+  });
+};
 
+// Fonction pour supprimer un gage
+const removeGage = (index) => {
+  form.value.gages.splice(index, 1);
+};
+
+// Fonction pour initialiser le premier gage si nécessaire
+const initializeGages = () => {
+  if (form.value.type_attestation === "main levée de gage" && form.value.gages.length === 0) {
+    addGage();
+  }
+};
+
+// Surveiller les changements du type d'attestation
+watch(() => form.value.type_attestation, (newValue) => {
+  if (newValue === "main levée de gage") {
+    if (form.value.gages.length === 0) {
+      addGage();
+    }
+  } else {
+    form.value.gages = [];
+  }
+});
 
 const createAttestation = async () => {
   try {
@@ -57,6 +87,7 @@ const createAttestation = async () => {
     type: form.value.type,
     type_attestation: form.value.type_attestation,
     montant_endettement: form.value.montant_endettement,
+    gages: form.value.gages, // Ajouter les gages à la requête
   }, {
     headers: {
       'Authorization': `Bearer ${userToken.value}`,
@@ -81,6 +112,7 @@ const createAttestation = async () => {
         type: "",
         type_attestation: "", 
         montant_endettement: "",
+        gages: [], // Réinitialiser les gages
       }
     }
   })
@@ -113,6 +145,47 @@ const createAttestation = async () => {
             </div>
             <VTextField label="Numéro de compte" class="mb-2" v-model="form.account_number" />
             <VTextField label="Montant d'endettement" v-if="form.type_attestation == 'endettement'" class="mb-2" v-model="form.montant_endettement" />
+            
+            <!-- Section des gages pour "main levée de gage" -->
+            <div v-if="form.type_attestation === 'main levée de gage'" class="mb-4">
+              <VCard variant="outlined" class="pa-4">
+                <VCardTitle class="text-h6 mb-3">Gages</VCardTitle>
+                <div v-for="(gage, index) in form.gages" :key="index" class="d-flex gap-2 mb-3 align-center">
+                  <VTextField 
+                    label="Marque" 
+                    v-model="gage.marque" 
+                    class="flex-grow-1"
+                    placeholder="Ex: Toyota, BMW, etc."
+                  />
+                  <VTextField 
+                    label="Immatriculation" 
+                    v-model="gage.immatriculation" 
+                    class="flex-grow-1"
+                    placeholder="Ex: 1234ABC"
+                  />
+                  <VBtn 
+                    icon 
+                    color="error" 
+                    variant="outlined" 
+                    @click="removeGage(index)"
+                    :disabled="form.gages.length === 1"
+                    class="ml-2"
+                  >
+                    <VIcon>mdi-delete</VIcon>
+                  </VBtn>
+                </div>
+                <VBtn 
+                  color="primary" 
+                  variant="outlined" 
+                  @click="addGage"
+                  class="mt-2"
+                >
+                  <VIcon class="mr-2">mdi-plus</VIcon>
+                  Ajouter un gage
+                </VBtn>
+              </VCard>
+            </div>
+            
             <VTextField type="date" class="mb-2"  label="Date de création du compte" v-model="form.date_de_creation_compte" />
            <div class="d-flex gap-2">
             <VBtn type="submit" class="z-index-1000 mb-2">Créer</VBtn>

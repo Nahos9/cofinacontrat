@@ -25,6 +25,14 @@ class AttestationController extends Controller
     public function store(Request $request)
     {
         $attestation = attestation::create($request->all());
+        if($request->has('gages')){
+            foreach($request->gages as $gage){
+                $attestation->gages()->create([
+                    'immatriculation' => $gage['immatriculation'],
+                    'marque' => $gage['marque'],
+                ]);
+            }
+        }
         return response()->json($attestation);
     }
     public function update(Request $request, $id)
@@ -67,6 +75,11 @@ class AttestationController extends Controller
                     $templateProcessor->setValue('last_name', $attestation->last_name);
                     $templateProcessor->setValue('first_name', $attestation->first_name);
                     $templateProcessor->setValue('civilite', $attestation->civilite);
+                    if($attestation->civilite == "Monsieur"){
+                        $templateProcessor->setValue('genre', "client");
+                    }else{
+                        $templateProcessor->setValue('genre', "cliente");
+                    }
                     $templateProcessor->setValue('account_number', $attestation->account_number);
                     $templateProcessor->setValue('date_de_creation_compte', $formattedDate = Carbon::parse($attestation->date_de_creation_compte)->format('d/m/Y'));
                     $templateProcessor->setValue('type', $attestation->type);
@@ -85,6 +98,11 @@ class AttestationController extends Controller
                     $templateProcessor->setValue('last_name', $attestation->last_name);
                     $templateProcessor->setValue('first_name', $attestation->first_name);
                     $templateProcessor->setValue('civilite', $attestation->civilite);
+                    if($attestation->civilite == "Monsieur"){
+                        $templateProcessor->setValue('genre', "client");
+                    }else{
+                        $templateProcessor->setValue('genre', "cliente");
+                    }
                     $templateProcessor->setValue('account_number', $attestation->account_number);
                     $templateProcessor->setValue('date_de_creation_compte', $formattedDate = Carbon::parse($attestation->date_de_creation_compte)->format('d/m/Y'));
                     $templateProcessor->setValue('type', $attestation->type);
@@ -102,6 +120,11 @@ class AttestationController extends Controller
                     $templateProcessor->setValue('last_name', $attestation->last_name);
                     $templateProcessor->setValue('first_name', $attestation->first_name);
                     $templateProcessor->setValue('civilite', $attestation->civilite);
+                    if($attestation->civilite == "Monsieur"){
+                        $templateProcessor->setValue('genre', "client");
+                    }else{
+                        $templateProcessor->setValue('genre', "cliente");
+                    }
                     $templateProcessor->setValue('account_number', $attestation->account_number);
                     $templateProcessor->setValue('date_de_creation_compte', $formattedDate = Carbon::parse($attestation->date_de_creation_compte)->format('d/m/Y'));
                     $templateProcessor->setValue('type', $attestation->type);
@@ -158,6 +181,7 @@ class AttestationController extends Controller
                 if($attestation->type_attestation == "non endettement"){
                     $templateProcessor = new TemplateProcessor($templatePath3);
                     $templateProcessor->setValue('raison_sociale', $attestation->raison_sociale);
+                    
                     $templateProcessor->setValue('adresse', $attestation->address);
                     $templateProcessor->setValue('date_de_creation_compte', $formattedDate = Carbon::parse($attestation->date_de_creation_compte)->format('d/m/Y'));
                     $templateProcessor->setValue('type', $attestation->type);
@@ -169,7 +193,36 @@ class AttestationController extends Controller
                     return response()->download($outputFilePath)->deleteFileAfterSend(true);
                 }
                 if($attestation->type_attestation == "main levée de gage"){
+                    $vehicules = [
+                        [
+                            "immatriculation" => "LQ-123-AA",
+                            "marque" => "Toyota",
+                        ],
+                        [
+                            "immatriculation" => "DA-454-AA",
+                            "marque" => "Hyundai",
+                        ]
+                    ];
+                    
+                
                     $templateProcessor = new TemplateProcessor($templatePath4);
+                    $templateProcessor->cloneRow('marque', count($vehicules));
+                    foreach ($vehicules as $index => $vehicule) {
+                        $rowIndex = $index + 1; // cloneRow commence à 1
+                        $templateProcessor->setValue("marque#{$rowIndex}", $vehicule['marque']);
+                        $templateProcessor->setValue("immatriculation#{$rowIndex}", $vehicule['immatriculation']);
+                    }
+                   
+                    $templateProcessor->setValue('raison_sociale', $attestation->raison_sociale);
+                    $templateProcessor->setValue('adresse', $attestation->address);
+                    $templateProcessor->setValue('date_de_creation_compte', $formattedDate = Carbon::parse($attestation->date_de_creation_compte)->format('d/m/Y'));
+                    $templateProcessor->setValue('type', $attestation->type);
+                    $templateProcessor->setValue('account_number', $attestation->account_number);
+                    $templateProcessor->setValue('type_attestation', $attestation->type_attestation);
+                    $templateProcessor->setValue('date_du_jour', $today);
+                    $outputFilePath = public_path("Attestation-main-levee-de-gage-" . $attestation->last_name . "-" . $attestation->first_name . ".docx");
+                    $templateProcessor->saveAs($outputFilePath);
+                    return response()->download($outputFilePath)->deleteFileAfterSend(true);
                 }
             }
         }

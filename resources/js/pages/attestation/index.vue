@@ -332,7 +332,7 @@ function getVisiblePages() {
             <th>Nom</th>
             <th>Prénom</th>
             <th>Email</th>
-            <th>Téléphone</th>
+            <th>Type d'attestation</th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -341,7 +341,7 @@ function getVisiblePages() {
             <td>{{ attestation.last_name }} {{ attestation.raison_sociale }}</td>
             <td>{{ attestation.first_name }}</td>
             <td>{{ attestation.email }}</td>
-            <td>{{ attestation.phone }}</td>
+            <td>{{ attestation.type_attestation }}</td>
             <td>
               <VBtn
                 icon
@@ -486,7 +486,7 @@ function getVisiblePages() {
       
       <VCardText>
         <VForm @submit.prevent="editAttestation">
-            <VSelect class="z-index-1000 mb-2" label="Type" v-model="editForm.type" :items="types" />
+            <VSelect class="z-index-1000 mb-2" label="Type" v-model="editForm.type" :items="types" disabled />
             <VSelect class="z-index-40 mb-2" label="Type d'attestation" v-model="editForm.type_attestation" :items="type_attestation" />
             <VSelect class="z-index-40 mb-2" v-if="editForm.type == 'personne physique'" label="Civilité" v-model="editForm.civilite" :items="civilites" />
             <div class="d-flex  gap-2 mb-2" v-if="editForm.type == 'personne physique'">

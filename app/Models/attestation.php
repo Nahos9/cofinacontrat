@@ -24,4 +24,9 @@ class attestation extends Model
         'type_attestation',
         'is_deleted'
     ];
+
+    public function gages()
+    {
+        return $this->hasMany(attestation_gage::class, 'attestation_id', 'id'   );
+    }
 }
