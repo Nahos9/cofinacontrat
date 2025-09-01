@@ -72,7 +72,7 @@ class AttestationController extends Controller
             if($attestation->type == "personne physique"){
                 if($attestation->type_attestation == "cloture"){
                     $templateProcessor = new TemplateProcessor($templatePath);
-                    $templateProcessor->setValue('last_name', $attestation->last_name);
+                    // $templateProcessor->setValue('last_name', $attestation->last_name);
                     $templateProcessor->setValue('first_name', $attestation->first_name);
                     $templateProcessor->setValue('civilite', $attestation->civilite);
                     if($attestation->civilite == "Monsieur"){
@@ -95,7 +95,7 @@ class AttestationController extends Controller
                     $montant_endettement = SpellNumber::value((int) $attestation->montant_endettement)->locale('fr')->toLetters();
                   
                     $templateProcessor = new TemplateProcessor($templatePath2);
-                    $templateProcessor->setValue('last_name', $attestation->last_name);
+                    // $templateProcessor->setValue('last_name', $attestation->last_name);
                     $templateProcessor->setValue('first_name', $attestation->first_name);
                     $templateProcessor->setValue('civilite', $attestation->civilite);
                     if($attestation->civilite == "Monsieur"){
@@ -117,7 +117,7 @@ class AttestationController extends Controller
                 }
                 if($attestation->type_attestation == "non endettement"){
                     $templateProcessor = new TemplateProcessor($templatePath3);
-                    $templateProcessor->setValue('last_name', $attestation->last_name);
+                    // $templateProcessor->setValue('last_name', $attestation->last_name);
                     $templateProcessor->setValue('first_name', $attestation->first_name);
                     $templateProcessor->setValue('civilite', $attestation->civilite);
                     if($attestation->civilite == "Monsieur"){
@@ -137,7 +137,40 @@ class AttestationController extends Controller
 
                 }
                 if($attestation->type_attestation == "main levée de gage"){
+                   
                     $templateProcessor = new TemplateProcessor($templatePath4);
+                    $vehicules = [];
+                    if($attestation->gages != null){
+                        $vehicules = $attestation->gages;
+                    }
+                    // Validation des placeholders requis avant cloneRow
+                    $availableVars = $templateProcessor->getVariables();
+                    if (!in_array('marque', $availableVars) || !in_array('immatriculation', $availableVars)) {
+                        return response()->json([
+                            'error' => 'Le placeholder requis est introuvable ou invalide dans le modèle Word. Assurez-vous d\'utiliser exactement ${marque} et ${immatriculation} sur la même ligne du tableau (sans mise en forme qui casse le champ).',
+                            'placeholders_trouves' => $availableVars,
+                            'template' => $templatePath4,
+                        ], 422);
+                    }
+                    $templateProcessor->cloneRow('marque', count($vehicules));
+                    foreach ($vehicules as $index => $vehicule) {
+                        $rowIndex = $index + 1; // cloneRow commence à 1
+                        $templateProcessor->setValue("marque#{$rowIndex}", $vehicule['marque']);
+                        $templateProcessor->setValue("immatriculation#{$rowIndex}", $vehicule['immatriculation']);
+                    }
+                    $templateProcessor->setValue('first_name', $attestation->first_name);
+                    $templateProcessor->setValue('last_name', $attestation->last_name);
+                    $templateProcessor->setValue('civilite', $attestation->civilite);
+                    if($attestation->civilite == "Monsieur"){
+                        $templateProcessor->setValue('genre', "client");
+                    }else{
+                        $templateProcessor->setValue('genre', "cliente");
+                    }
+                    $templateProcessor->setValue('date_du_jour', $today);
+                    $outputFilePath = public_path("Attestation-main-levee-de-gage-" . $attestation->last_name . "-" . $attestation->first_name . ".docx");
+                    $templateProcessor->saveAs($outputFilePath);
+                    return response()->download($outputFilePath)->deleteFileAfterSend(true);
+
                 }
             }
             $templatePath = base_path("document_templates/Attestations/Personne_morale/attestation_de_cloture.docx");
@@ -192,7 +225,9 @@ class AttestationController extends Controller
                     $templateProcessor->saveAs($outputFilePath);
                     return response()->download($outputFilePath)->deleteFileAfterSend(true);
                 }
+                
                 if($attestation->type_attestation == "main levée de gage"){
+        
                     $vehicules = [
                         [
                             "immatriculation" => "LQ-123-AA",
@@ -206,6 +241,20 @@ class AttestationController extends Controller
                     
                 
                     $templateProcessor = new TemplateProcessor($templatePath4);
+                    // Validation des placeholders requis avant cloneRow
+                    $vehicules = [];
+                    if($attestation->gages != null){
+                        $vehicules = $attestation->gages;
+                    }
+                    // Validation des placeholders requis avant cloneRow
+                    $availableVars = $templateProcessor->getVariables();
+                    if (!in_array('marque', $availableVars) || !in_array('immatriculation', $availableVars)) {
+                        return response()->json([
+                            'error' => 'Le placeholder requis est introuvable ou invalide dans le modèle Word. Assurez-vous d\'utiliser exactement ${marque} et ${immatriculation} sur la même ligne du tableau (sans mise en forme qui casse le champ).',
+                            'placeholders_trouves' => $availableVars,
+                            'template' => $templatePath4,
+                        ], 422);
+                    }
                     $templateProcessor->cloneRow('marque', count($vehicules));
                     foreach ($vehicules as $index => $vehicule) {
                         $rowIndex = $index + 1; // cloneRow commence à 1

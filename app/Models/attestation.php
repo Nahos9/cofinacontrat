@@ -9,13 +9,13 @@ class attestation extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'last_name',
+        // 'last_name',
         'civilite',
         'first_name',
         'raison_sociale',
-        'email',
-        'phone',
-        'address',
+        // 'email',
+        // 'phone',
+        // 'address',
         'montant_endettement',
         'city',
         'type',

@@ -107,7 +107,6 @@ const recherPret = async () => {
 watch(numMatricule, async (newValue) => {
   if (newValue) {
     clientsList.value = await recherClient(newValue);
-    console.log("dans le wacth", clientsList.value);
     contractData.value.representative_birth_date =
       clientsList.value.data.data[0].date_naissance_entrepreneur;
     contractData.value.representative_birth_place =
@@ -162,7 +161,6 @@ watch(numMatricule, async (newValue) => {
 watch(numPret, async (newValue) => {
   if (newValue) {
     pretList.value = await recherPret(newValue);
-    console.log("dans le wacth", pretList.value);
     contractData.value.total_amount_of_interest =
       pretList.value.data.data[0].mt_pret_int;
     contractData.value.montant_troisieme_ech =

@@ -122,10 +122,10 @@ const editingAttestation = ref(null)
 
 // Form data for editing
 const editForm = ref({
-  last_name: '',
+  // last_name: '',
   first_name: '',
   raison_sociale: '',
-  email: '',
+  // email: '',
   phone: '',
   account_number: '',
   date_de_creation_compte: '',
@@ -140,10 +140,10 @@ const editForm = ref({
 function openEditModal(attestation) {
   editingAttestation.value = attestation
   editForm.value = {
-    last_name: attestation.last_name,
+    // last_name: attestation.last_name,
     first_name: attestation.first_name,
     civilite: attestation.civilite,
-    email: attestation.email,
+    // email: attestation.email,
     phone: attestation.phone,
     raison_sociale: attestation.raison_sociale,
     account_number: attestation.account_number,
@@ -161,14 +161,14 @@ const editAttestation = async () => {
     .put(
       `/api/attestation/${editingAttestation.value.id}`,
       {
-        last_name: editForm.value.last_name,
+        //  last_name: editForm.value.last_name,
         first_name: editForm.value.first_name,
         raison_sociale: editForm.value.raison_sociale,
         account_number: editForm.value.account_number,
         date_de_creation_compte: editForm.value.date_de_creation_compte,
         type: editForm.value.type,
         type_attestation: editForm.value.type_attestation,
-        email: editForm.value.email,
+        // email: editForm.value.email,
         phone: editForm.value.phone,
         city: editForm.value.city,
       },
@@ -331,7 +331,7 @@ function getVisiblePages() {
           <tr>
             <th>Nom</th>
             <th>Prénom</th>
-            <th>Email</th>
+            <!-- <th>Email</th> -->
             <th>Type d'attestation</th>
             <th>Actions</th>
           </tr>
@@ -340,7 +340,7 @@ function getVisiblePages() {
           <tr v-for="attestation in paginatedAttestations" :key="attestation.id" class="text-center">
             <td>{{ attestation.last_name }} {{ attestation.raison_sociale }}</td>
             <td>{{ attestation.first_name }}</td>
-            <td>{{ attestation.email }}</td>
+            <!-- <td>{{ attestation.email }}</td> -->
             <td>{{ attestation.type_attestation }}</td>
             <td>
               <VBtn

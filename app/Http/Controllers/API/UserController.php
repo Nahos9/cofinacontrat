@@ -326,8 +326,12 @@ class UserController extends Controller
 {
     $search = $request->input('search', '');
 	$clients = DB::connection('oracle')
-    ->table(DB::raw('"COFINA"."CLIENT"'))
-    ->where('matricule_client', '=', $search)
+    ->table(DB::raw('"COFINA"."COMPTE"'))
+	->join(DB::raw('"COFINA"."CLIENT"'),
+		DB::raw('"COFINA"."CLIENT"."MATRICULE_CLIENT"'), 
+        '=', 
+        DB::raw('"COFINA"."COMPTE"."MATRICULE_CLIENT"'))
+	->where(DB::raw('"COFINA"."CLIENT"."MATRICULE_CLIENT"'), '=', $search)
     ->get();
 	// dd($clients);
     return $this->responseOk([

@@ -24,6 +24,33 @@ const form = ref({
   type: "",
   gages: [], // Nouveau champ pour les gages
 });
+
+// Propriété calculée pour adapter le format au <input type="date">
+const dateCreationInput = computed({
+  get() {
+    const value = form.value.date_de_creation_compte
+    return value ? String(value).slice(0, 10) : ""
+  },
+  set(val) {
+    form.value.date_de_creation_compte = val ? `${val} 00:00:00` : ""
+  }
+})
+
+const numMatricule = ref("");
+const clientsList = ref(null);
+
+
+const recherClient = async () => {
+  if (numMatricule.value) {
+    const response = await fetch(
+      `/api/clients/search?search=${encodeURIComponent(numMatricule.value)}`
+    );
+    if (!response.ok) {
+      throw new Error("Erreur lors de la récupération des données");
+    }
+    return await response.json();
+  }
+};
 const $toast = useToast();
 const router = useRouter();
 const types  = [
@@ -76,8 +103,8 @@ watch(() => form.value.type_attestation, (newValue) => {
 const createAttestation = async () => {
   try {
     await axios.post('/api/attestation', {
-    last_name: form.value.last_name,
-    first_name: form.value.first_name,
+    last_name: form.value.type == 'personne physique' ? form.value.last_name : null,
+    first_name:form.value.type == 'personne physique' ? form.value.first_name : null,
     civilite: form.value.civilite,
     raison_sociale: form.value.raison_sociale,
     email: form.value.email,
@@ -101,11 +128,11 @@ const createAttestation = async () => {
       router.push('/attestation');
 
       form.value = {
-        last_name: "",
+        // last_name: "",
         first_name: "",
         civilite: "",
         raison_sociale: "",
-        email: "",
+        // email: "",
         phone: "",
         account_number: "",
         date_de_creation_compte: "",
@@ -120,6 +147,22 @@ const createAttestation = async () => {
     console.log(err);
   }
 }
+
+
+watch(numMatricule, async (newValue) => {
+  if (newValue) {
+    clientsList.value = await recherClient(newValue);
+   
+    form.value.first_name = clientsList.value.data.data[0].nom_replegal;
+    form.value.raison_sociale = clientsList.value.data.data[0].raison_sociale_client;
+    form.value.email = clientsList.value.data.data[0].email;
+    form.value.phone = clientsList.value.data.data[0].tel_port;
+    form.value.account_number = clientsList.value.data.data[0].no_compte;
+    form.value.date_de_creation_compte = clientsList.value.data.data[0].d_ouverture;
+  } else {
+    clientsList.value = [];
+  }
+});
 </script>
 
 <template>
@@ -127,20 +170,26 @@ const createAttestation = async () => {
     <VCol cols="12">
       <VCard>
         <VCardTitle>Nouvelle attestation</VCardTitle>
+        <VCol cols="12" md="6" lg="4">
+        <AppTextField
+          v-model="numMatricule"
+          label="Numéro du matricule client"
+        />
+      </VCol>
         <VCardText>
           <VForm @submit.prevent="createAttestation">
             <VSelect class="z-index-1000 mb-2" label="Type" v-model="form.type" :items="types" />
             <VSelect class="z-index-40 mb-2" label="Type d'attestation" v-model="form.type_attestation" :items="type_attestation" />
             <VSelect class="z-index-40 mb-2" v-if="form.type == 'personne physique'" label="Civilité" v-model="form.civilite" :items="civilites"  />
-            <div class="d-flex  gap-2 mb-2" v-if="form.type == 'personne physique'">
-              <VTextField label="Nom" v-model="form.last_name" />
-              <VTextField label="Prénom" v-model="form.first_name" />
+            <div class="mb-2" v-if="form.type == 'personne physique'">
+              <VTextField label="Nom" v-model="form.first_name" />
+              <!-- <VTextField label="Prénom" v-model="form.first_name" /> -->
             </div>
             <div v-if="form.type == 'personne morale'" class="mb-2">
               <VTextField label="Raison sociale" v-model="form.raison_sociale" />
             </div>
-            <div class="d-flex gap-2 mb-2">
-              <VTextField label="Email" v-model="form.email" />
+            <div class="mb-2">
+              <!-- <VTextField label="Email" v-model="form.email" /> -->
               <VTextField label="Téléphone" v-model="form.phone" />
             </div>
             <VTextField label="Numéro de compte" class="mb-2" v-model="form.account_number" />
@@ -186,7 +235,7 @@ const createAttestation = async () => {
               </VCard>
             </div>
             
-            <VTextField type="date" class="mb-2"  label="Date de création du compte" v-model="form.date_de_creation_compte" />
+            <VTextField type="date" class="mb-2"  label="Date de création du compte" v-model="dateCreationInput" />
            <div class="d-flex gap-2">
             <VBtn type="submit" class="z-index-1000 mb-2">Créer</VBtn>
             <VBtn type="reset" class="z-index-1000 mb-2">Réinitialiser</VBtn>
