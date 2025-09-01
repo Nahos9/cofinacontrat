@@ -597,7 +597,7 @@ class ContractController extends Controller
 				
 				$data["verbal_trial.duration.fr"] = SpellNumber::value((float) $data["verbal_trial.duration"])->locale('fr')->toLetters();
 				$data["verbal_trial.due_amount.fr"] = SpellNumber::value((float) $data["verbal_trial.due_amount"])->locale('fr')->toLetters();
-				$data["total_to_pay"] = (int)((int) $data["total_amount_of_interest"] + (int) $data["verbal_trial.amount"] +(((int) $data["total_amount_of_interest"] / 100)*18));
+				$data["total_to_pay"] = (int)((int) $data["total_amount_of_interest"] + (int) $data["verbal_trial.amount"] +(((int) $data["total_amount_of_interest"] / 100)*19));
 				$data["total_to_pay.fr"] = SpellNumber::value((int) $data["total_to_pay"])->locale('fr')->toLetters();
 				// dd($data["total_to_pay.fr"]);
 				$data["echance.fr"] = SpellNumber::value((float) $data["verbal_trial.duration"])->locale('fr')->toLetters();
