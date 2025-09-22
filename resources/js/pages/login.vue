@@ -10,6 +10,7 @@ import authV2MaskDark from "@images/pages/misc-mask-dark.png";
 import authV2MaskLight from "@images/pages/misc-mask-light.png";
 import { VNodeRenderer } from "@layouts/components/VNodeRenderer";
 import { themeConfig } from "@themeConfig";
+import imgAccueil from "@images/img_accueil.png";
 
 const authThemeImg = useGenerateImageVariant(
   authV2LoginIllustrationLight,
@@ -110,13 +111,13 @@ const onSubmit = () => {
       <div class="position-relative bg-background rounded-lg w-100 ma-8 me-0">
         <div class="d-flex align-center justify-center w-100 h-100">
           <VImg
-            max-width="505"
-            :src="authThemeImg"
-            class="auth-illustration mt-16 mb-2"
+            :src="imgAccueil"
+            class="auth-illustration w-100 h-100"
+            cover
           />
         </div>
 
-        <VImg :src="authThemeMask" class="auth-footer-mask" />
+        <!-- <VImg :src="authThemeMask" class="auth-footer-mask" /> -->
       </div>
     </VCol>
 

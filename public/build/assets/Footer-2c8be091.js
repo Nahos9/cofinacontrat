@@ -1,1 +1,0 @@
-import{_ as e}from"./_plugin-vue_export-helper-c27b6911.js";import{o as t,c as s,d as a,x as c}from"./main-224c26e2.js";const o={},n={class:"h-100 d-flex align-center justify-space-between"},r={class:"d-flex align-center"};function l(_,i){return t(),s("div",n,[a("span",r," © "+c(new Date().getFullYear())+" COFINA GABON ",1)])}const p=e(o,[["render",l]]);export{p as default};
