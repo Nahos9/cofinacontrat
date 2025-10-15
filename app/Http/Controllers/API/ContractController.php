@@ -641,7 +641,7 @@ class ContractController extends Controller
 						"residence_certificate" => "certificat de résidence",
 						"driving_licence" => "permis de conduire",
 						"carte_sej"=>"carte de séjour",
-						"recep"=>"Récépissé de la carte nationale d’identité "
+						"recep"=>"récépissé de la carte nationale d’identité "
 					][$data["individual_business.type_of_identity_document"]];
 				}
 				if(isset($data["individual_business.type_of_identity_document"])){
@@ -655,6 +655,14 @@ class ContractController extends Controller
 						$data["carte"] = "du";
 					}
 				}
+				
+				// if($data["individual_business.type_of_identity_document"] == "recep" ||  $data["individual_business.type_of_identity_document"] == "passport" || $data["individual_business.type_of_identity_document"] == "driving_licence" || $data["individual_business.type_of_identity_document"] == "residence_certificate"){
+				// 	$data["carte"] = "du";
+				// }
+				// if($data["individual_business.type_of_identity_document"] == "cni" || $data["individual_business.type_of_identity_document"] =="carte_sej")
+				// {
+				// 	$data["carte"] = "de la";
+				// }
 				
 				// if($data["individual_business.type_of_identity_document"] == "residence_certificate"){
 				// 	$data["carte"] = "le certificat de résidence";

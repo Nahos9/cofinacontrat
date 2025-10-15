@@ -19,6 +19,7 @@ return new class extends Migration {
 			$table->string("applicant_last_name");
 			$table->string("account_number");
 			$table->string("activity");
+			$table->string("fonction")->nullable();
 			$table->string("purpose_of_financing");
 			$table->foreignId('type_of_credit_id')->constrained(table: 'types_of_credit', column: 'id')->cascadeOnDelete();
 			$table->decimal('amount', 21, 2);

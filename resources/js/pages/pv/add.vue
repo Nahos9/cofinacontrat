@@ -27,6 +27,7 @@ const pvData = ref({
   applicant_last_name: "",
   account_number: "",
   activity: "",
+  fonction:"",
   purpose_of_financing: "",
   type_of_credit_id: "",
   amount: "",
@@ -83,6 +84,7 @@ const getResetPvError = () => {
     applicant_last_name: "",
     account_number: "",
     activity: "",
+    fonction: "",
     purpose_of_financing: "",
     type_of_credit_id: "",
     amount: "",
@@ -148,59 +150,76 @@ const creditAdminList = computed(() => creditAdminListData.value.data);
 
 const refForm = ref();
 
-const onSubmit = () => {
-  refForm.value?.validate().then(async ({ valid }) => {
-    if (valid) {
-      const res = await $api("/verbal-trial", {
-        method: "POST",
-        body: {
-          committee_id: pvData.value.committee_id,
-          committee_date: pvData.value.committee_date,
-          caf_id: pvData.value.caf_id,
-          civility: pvData.value.civility,
-          applicant_first_name: pvData.value.applicant_first_name,
-          applicant_last_name: pvData.value.applicant_last_name,
-          account_number: pvData.value.account_number,
-          activity: pvData.value.activity,
-          purpose_of_financing: pvData.value.purpose_of_financing,
-          type_of_credit_id: pvData.value.type_of_credit_id,
-          amount: pvData.value.amount,
-          duration: pvData.value.duration,
-          periodicity: pvData.value.periodicity,
-          due_amount: pvData.value.due_amount,
-          insurance_premium: pvData.value.insurance_premium,
-          frais_administration: pvData.value.frais_administration,
-          administrative_fees_percentage:
-            pvData.value.administrative_fees_percentage,
-          taf: pvData.value.taf,
-          tax_fee_interest_rate: pvData.value.tax_fee_interest_rate,
-          guarantees: pvData.value.guarantees,
-          credit_admin_id: pvData.value.credit_admin_id,
-        },
-      });
+// Etat du dialogue de r\u00e9capitulatif et progression soumission
+const showRecapDialog = ref(false);
+const isSubmitting = ref(false);
 
-      let nextRoute = "/pv";
-      pvError.value = getResetPvError();
-      if (res.status == 201) {
-        pvData.value.guarantees.forEach((guarantee) => {
-          if (guarantee.type_of_guarantee_id == 9) {
-            nextRoute = "/pv/without-notification";
-          }
-        });
-        router.push(nextRoute);
-      } else {
-        for (const key in res.errors) {
-          res.errors[key].forEach((message) => {
-            pvError.value[key] += message + "\n";
-          });
-        }
-      }
-      nextTick(() => {
-        // refForm.value?.reset()
-        refForm.value?.resetValidation();
-      });
+// Helpers d'affichage
+const getItemLabelById = (list, id, titleKey = "full_name") => {
+  return list?.value?.find((i) => i.id == id)?.[titleKey] ?? id ?? "";
+};
+
+const onSubmit = () => {
+  refForm.value?.validate().then(({ valid }) => {
+    if (valid) {
+      // Ouvre le r\u00e9capitulatif pour confirmation
+      showRecapDialog.value = true;
     }
   });
+};
+
+const confirmSubmit = async () => {
+  isSubmitting.value = true;
+  pvError.value = getResetPvError();
+  const res = await $api("/verbal-trial", {
+    method: "POST",
+    body: {
+      committee_id: pvData.value.committee_id,
+      committee_date: pvData.value.committee_date,
+      caf_id: pvData.value.caf_id,
+      civility: pvData.value.civility,
+      applicant_first_name: pvData.value.applicant_first_name,
+      applicant_last_name: pvData.value.applicant_last_name,
+      account_number: pvData.value.account_number,
+      activity: pvData.value.activity,
+      fonction: pvData.value.fonction,
+      purpose_of_financing: pvData.value.purpose_of_financing,
+      type_of_credit_id: pvData.value.type_of_credit_id,
+      amount: pvData.value.amount,
+      duration: pvData.value.duration,
+      periodicity: pvData.value.periodicity,
+      due_amount: pvData.value.due_amount,
+      insurance_premium: pvData.value.insurance_premium,
+      frais_administration: pvData.value.frais_administration,
+      administrative_fees_percentage: pvData.value.administrative_fees_percentage,
+      taf: pvData.value.taf,
+      tax_fee_interest_rate: pvData.value.tax_fee_interest_rate,
+      guarantees: pvData.value.guarantees,
+      credit_admin_id: pvData.value.credit_admin_id,
+    },
+  });
+
+  let nextRoute = "/pv";
+  if (res.status == 201) {
+    pvData.value.guarantees.forEach((guarantee) => {
+      if (guarantee.type_of_guarantee_id == 9) {
+        nextRoute = "/pv/without-notification";
+      }
+    });
+    showRecapDialog.value = false;
+    router.push(nextRoute);
+  } else if (res?.errors) {
+    for (const key in res.errors) {
+      res.errors[key].forEach((message) => {
+        pvError.value[key] += message + "\n";
+      });
+    }
+  }
+
+  nextTick(() => {
+    refForm.value?.resetValidation();
+  });
+  isSubmitting.value = false;
 };
 
 const removeGuaranteeItem = (id) => {
@@ -359,11 +378,19 @@ watch(numPret, async (newValue) => {
                 </VCol>
                 <VCol cols="12" md="6" lg="4">
                   <AppTextField
-                    v-model="pvData.activity"
-                    :error-messages="pvError.activity"
-                    label="Fonction"
+                    v-model="pvData.fonction"
+                    :error-messages="pvError.fonction"
+                    label="Profession"
                     placeholder="Ex: Homme d'affaire"
                     :rules="[requiredValidator]"
+                  />
+                </VCol>
+                <VCol cols="12" md="6" lg="4">
+                  <AppTextField
+                    v-model="pvData.activity"
+                    :error-messages="pvError.activity"
+                    label="Activé"
+                    placeholder="Ex: vente de produits"
                   />
                 </VCol>
                 <VCol cols="12" md="6" lg="4">
@@ -448,6 +475,7 @@ watch(numPret, async (newValue) => {
                     :rules="[requiredValidator]"
                   />
                 </VCol>
+                
 
                 <!-- <VCol cols="12">
                   <VSlider
@@ -528,6 +556,7 @@ watch(numPret, async (newValue) => {
             <VCardText class="add-products-form">
               <div
                 v-for="(guarantee, index) in pvData.guarantees"
+                :key="index"
                 class="my-4 ma-sm-4"
               >
                 <GuaranteeEdit
@@ -564,6 +593,124 @@ watch(numPret, async (newValue) => {
         </VCol>
       </VRow>
     </VForm>
+
+    <!-- Dialogue de r\u00e9capitulatif avant confirmation -->
+    <VDialog v-model="showRecapDialog" max-width="900">
+      <VCard>
+        <VCardTitle class="text-h6">Récapitulatif du PV</VCardTitle>
+        <VCardText>
+          <VRow class="mb-2">
+            <VCol cols="12" md="6">
+              <strong>Numéro du comité:</strong>
+              <div>{{ pvData.committee_id }}</div>
+            </VCol>
+            <VCol cols="12" md="6">
+              <strong>Date du comité:</strong>
+              <div>{{ pvData.committee_date }}</div>
+            </VCol>
+            <VCol cols="12" md="6">
+              <strong>Chargé d'affaire:</strong>
+              <div>{{ getItemLabelById(cafList, pvData.caf_id) }}</div>
+            </VCol>
+            <VCol cols="12" md="6">
+              <strong>Administrateur Crédit:</strong>
+              <div>{{ getItemLabelById(creditAdminList, pvData.credit_admin_id) }}</div>
+            </VCol>
+            <VCol cols="12" md="6">
+              <strong>Civilité:</strong>
+              <div>{{ pvData.civility }}</div>
+            </VCol>
+            <VCol cols="12" md="6">
+              <strong>Demandeur:</strong>
+              <div>{{ pvData.applicant_first_name }} {{ pvData.applicant_last_name }}</div>
+            </VCol>
+            <VCol cols="12" md="6">
+              <strong>Numéro de compte:</strong>
+              <div>{{ pvData.account_number }}</div>
+            </VCol>
+            <VCol cols="12" md="6">
+              <strong>Profession:</strong>
+              <div>{{ pvData.fonction }}</div>
+            </VCol>
+            <VCol cols="12" md="6">
+              <strong>Activé:</strong>
+              <div>{{ pvData.activity }}</div>
+            </VCol> 
+            <VCol cols="12" md="6">
+              <strong>Objet du financement:</strong>
+              <div>{{ pvData.purpose_of_financing }}</div>
+            </VCol>
+            <VCol cols="12" md="6">
+              <strong>Type de crédit:</strong>
+              <div>{{ getItemLabelById(typeOfCreditList, pvData.type_of_credit_id, 'full_name') }}</div>
+            </VCol>
+            <VCol cols="12" md="6">
+              <strong>Montant demandé:</strong>
+              <div>{{ pvData.amount }}</div>
+            </VCol>
+            <VCol cols="12" md="6">
+              <strong>Montant des intérêts:</strong>
+              <div>{{ pvData.due_amount }}</div>
+            </VCol>
+            <VCol cols="12" md="6">
+              <strong>Durée (mois):</strong>
+              <div>{{ pvData.duration }}</div>
+            </VCol>
+            <VCol cols="12" md="6">
+              <strong>Périodicité:</strong>
+              <div>{{ pvData.periodicity }}</div>
+            </VCol>
+            <VCol cols="12" md="6">
+              <strong>Prime d'assurance:</strong>
+              <div>{{ pvData.insurance_premium }}</div>
+            </VCol>
+            <VCol cols="12" md="6">
+              <strong>Frais d'administration:</strong>
+              <div>{{ pvData.frais_administration }}</div>
+            </VCol>
+            <VCol cols="12" md="6">
+              <strong>Frais de dossier (%):</strong>
+              <div>{{ pvData.administrative_fees_percentage }}</div>
+            </VCol>
+            <VCol cols="12" md="6">
+              <strong>Taux d'intérêt HT (%):</strong>
+              <div>{{ pvData.tax_fee_interest_rate }}</div>
+            </VCol>
+          </VRow>
+
+          <VDivider class="my-4" />
+          <h6 class="text-subtitle-1 mb-2">Garanties</h6>
+          <VTable density="compact">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Type</th>
+                <th>Valeur</th>
+                <th>Échéance</th>
+                <th>Commentaire</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(g, idx) in pvData.guarantees" :key="idx">
+                <td>{{ idx + 1 }}</td>
+                <td>{{ g.type_of_guarantee_id }}</td>
+                <td>{{ g.value ?? '-' }}</td>
+                <td>{{ g.expiration_date ?? '-' }}</td>
+                <td>{{ g.comment ?? '-' }}</td>
+              </tr>
+            </tbody>
+          </VTable>
+        </VCardText>
+        <VCardActions class="justify-end">
+          <VBtn variant="tonal" color="secondary" @click="showRecapDialog = false">
+            Modifier
+          </VBtn>
+          <VBtn color="primary" :loading="isSubmitting" @click="confirmSubmit">
+            Confirmer et enregistrer
+          </VBtn>
+        </VCardActions>
+      </VCard>
+    </VDialog>
   </div>
 </template>
 

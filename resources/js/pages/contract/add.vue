@@ -274,117 +274,99 @@ const documentTypeList = [
 
 const refForm = ref();
 
+// Etat du dialogue de récapitulatif et progression
+const showRecapDialog = ref(false);
+const isSubmitting = ref(false);
+
 const onSubmit = () => {
-  refForm.value?.validate().then(async ({ valid }) => {
+  refForm.value?.validate().then(({ valid }) => {
     if (valid) {
-      const $data = {
-        verbal_trial_id: contractData.value.verbal_trial_id,
-        representative_birth_date: contractData.value.representative_birth_date,
-        representative_birth_place:
-          contractData.value.representative_birth_place,
-        representative_nationality:
-          contractData.value.representative_nationality,
-        representative_home_address:
-          contractData.value.representative_home_address,
-        representative_phone_number:
-          contractData.value.representative_phone_number,
-        number_of_pret: contractData.value.number_of_pret,
-        montant_fudiciaire: contractData.value.montant_fudiciaire,
-        montant_second_ech: contractData.value.montant_second_ech,
-        montant_troisieme_ech: contractData.value.montant_troisieme_ech,
-        representative_type_of_identity_document:
-          contractData.value.representative_type_of_identity_document,
-        date_of_first_echeance: contractData.value.date_of_first_echeance,
-        date_of_last_echeance: contractData.value.date_of_last_echeance,
-        representative_number_of_identity_document:
-          contractData.value.representative_number_of_identity_document,
-        representative_office_delivery:
-          contractData.value.representative_office_delivery,
-        representative_date_of_issue_of_identity_document:
-          contractData.value.representative_date_of_issue_of_identity_document,
-        total_amount_of_interest: contractData.value.total_amount_of_interest,
-        due_amount: contractData.value.due_amount,
-        number_of_due_dates: contractData.value.number_of_due_dates,
-        type: contractData.value.type,
-        has_pledges: contractData.value.has_pledges,
-      };
-
-      if (contractData.value.type == "company") {
-        $data.company_denomination = contractData.value.company_denomination;
-        $data.company_legal_status = contractData.value.company_legal_status;
-        $data.company_bp = contractData.value.company_bp;
-        $data.company_nif = contractData.value.company_nif;
-        $data.company_commune = contractData.value.company_commune;
-        $data.company_head_office_address =
-          contractData.value.company_head_office_address;
-        $data.company_rccm_number = contractData.value.company_rccm_number;
-        $data.company_phone_number = contractData.value.company_phone_number;
-      } else if (contractData.value.type == "individual_business") {
-        $data.individual_business_denomination =
-          contractData.value.individual_business_denomination;
-        $data.individual_business_head_office_address =
-          contractData.value.individual_business_head_office_address;
-        $data.individual_business_rccm_number =
-          contractData.value.individual_business_rccm_number;
-        $data.individual_business_nif_number =
-          contractData.value.individual_business_nif_number;
-        $data.individual_business_phone_number =
-          contractData.value.individual_business_phone_number;
-        $data.individual_business_bp =
-          contractData.value.individual_business_bp;
-        $data.individual_business_commune =
-          contractData.value.individual_business_commune;
-        // $data.individual_business_civility =
-        //   contractData.value.individual_business_civility;
-        // $data.individual_business_first_name =
-        //   contractData.value.individual_business_first_name;
-        // $data.individual_business_last_name =
-        //   contractData.value.individual_business_last_name;
-        // $data.individual_business_date_naiss =
-        //   contractData.value.individual_business_date_naiss;
-        // $data.individual_business_date_delivrance =
-        //   contractData.value.individual_business_date_delivrance;
-        // $data.individual_business_home_address =
-        //   contractData.value.individual_business_home_address;
-        // $data.individual_business_lieux_naiss =
-        //   contractData.value.individual_business_lieux_naiss;
-        // $data.individual_business_nationalite =
-        //   contractData.value.individual_business_nationalite;
-        // $data.individual_business_num_piece =
-        //   contractData.value.individual_business_num_piece;
-        // $data.individual_business_number_phone =
-        //   contractData.value.individual_business_number_phone;
-        // $data.individual_business_office_delivery =
-        //   contractData.value.individual_business_office_delivery;
-        // $data.individual_business_type_of_identity_document =
-        //   contractData.value.individual_business_type_of_identity_document;
-      }
-
-      if (contractData.value.has_pledges == "1") {
-        $data.pledges = contractData.value.pledges;
-      }
-
-      const res = await $api("/contract", {
-        method: "POST",
-        body: $data,
-      });
-
-      formError.value = getResetPvError();
-      if (res.status == 201) {
-        router.push("/contract");
-      } else {
-        for (const key in res.errors) {
-          res.errors[key].forEach((message) => {
-            formError.value[key] += message + "\n";
-          });
-        }
-      }
-      nextTick(() => {
-        // refForm.value?.reset()
-        refForm.value?.resetValidation();
-      });
+      showRecapDialog.value = true;
     }
   });
+};
+
+const confirmSubmit = async () => {
+  isSubmitting.value = true;
+  const $data = {
+    verbal_trial_id: contractData.value.verbal_trial_id,
+    representative_birth_date: contractData.value.representative_birth_date,
+    representative_birth_place: contractData.value.representative_birth_place,
+    representative_nationality: contractData.value.representative_nationality,
+    representative_home_address: contractData.value.representative_home_address,
+    representative_phone_number: contractData.value.representative_phone_number,
+    number_of_pret: contractData.value.number_of_pret,
+    montant_fudiciaire: contractData.value.montant_fudiciaire,
+    montant_second_ech: contractData.value.montant_second_ech,
+    montant_troisieme_ech: contractData.value.montant_troisieme_ech,
+    representative_type_of_identity_document:
+      contractData.value.representative_type_of_identity_document,
+    date_of_first_echeance: contractData.value.date_of_first_echeance,
+    date_of_last_echeance: contractData.value.date_of_last_echeance,
+    representative_number_of_identity_document:
+      contractData.value.representative_number_of_identity_document,
+    representative_office_delivery:
+      contractData.value.representative_office_delivery,
+    representative_date_of_issue_of_identity_document:
+      contractData.value.representative_date_of_issue_of_identity_document,
+    total_amount_of_interest: contractData.value.total_amount_of_interest,
+    due_amount: contractData.value.due_amount,
+    number_of_due_dates: contractData.value.number_of_due_dates,
+    type: contractData.value.type,
+    has_pledges: contractData.value.has_pledges,
+  };
+
+  if (contractData.value.type == "company") {
+    $data.company_denomination = contractData.value.company_denomination;
+    $data.company_legal_status = contractData.value.company_legal_status;
+    $data.company_bp = contractData.value.company_bp;
+    $data.company_nif = contractData.value.company_nif;
+    $data.company_commune = contractData.value.company_commune;
+    $data.company_head_office_address =
+      contractData.value.company_head_office_address;
+    $data.company_rccm_number = contractData.value.company_rccm_number;
+    $data.company_phone_number = contractData.value.company_phone_number;
+  } else if (contractData.value.type == "individual_business") {
+    $data.individual_business_denomination =
+      contractData.value.individual_business_denomination;
+    $data.individual_business_head_office_address =
+      contractData.value.individual_business_head_office_address;
+    $data.individual_business_rccm_number =
+      contractData.value.individual_business_rccm_number;
+    $data.individual_business_nif_number =
+      contractData.value.individual_business_nif_number;
+    $data.individual_business_phone_number =
+      contractData.value.individual_business_phone_number;
+    $data.individual_business_bp = contractData.value.individual_business_bp;
+    $data.individual_business_commune =
+      contractData.value.individual_business_commune;
+  }
+
+  if (contractData.value.has_pledges == "1") {
+    $data.pledges = contractData.value.pledges;
+  }
+
+  const res = await $api("/contract", {
+    method: "POST",
+    body: $data,
+  });
+
+  formError.value = getResetPvError();
+  if (res.status == 201) {
+    showRecapDialog.value = false;
+    router.push("/contract");
+  } else if (res?.errors) {
+    for (const key in res.errors) {
+      res.errors[key].forEach((message) => {
+        formError.value[key] += message + "\n";
+      });
+    }
+  }
+
+  nextTick(() => {
+    refForm.value?.resetValidation();
+  });
+  isSubmitting.value = false;
 };
 
 const removePledgeItem = (id) => {
@@ -566,6 +548,7 @@ if (route.query.id) {
             <VCardText class="add-products-form">
               <div
                 v-for="(pledge, index) in contractData.pledges"
+                :key="index"
                 class="my-4 ma-sm-4"
               >
                 <PledgeEdit
@@ -972,6 +955,219 @@ if (route.query.id) {
         </VCol>
       </VRow>
     </VForm>
+
+    <!-- Dialogue de récapitulatif avant confirmation -->
+    <VDialog v-model="showRecapDialog" max-width="900">
+      <VCard>
+        <VCardTitle class="text-h6">Récapitulatif du contrat</VCardTitle>
+        <VCardText>
+          <VRow class="mb-2">
+            <VCol cols="12" md="6">
+              <strong>Procès verbal:</strong>
+              <div>{{ contractData.verbal_trial_id }}</div>
+            </VCol>
+            <VCol cols="12" md="6">
+              <strong>Montant total des intérêts:</strong>
+              <div>{{ contractData.total_amount_of_interest }}</div>
+            </VCol>
+            <VCol cols="12" md="6">
+              <strong>Montant transféré fudiciaire:</strong>
+              <div>{{ contractData.montant_fudiciaire }}</div>
+            </VCol>
+            <VCol cols="12" md="6">
+              <strong>Première échéance:</strong>
+              <div>{{ contractData.date_of_first_echeance }}</div>
+            </VCol>
+            <VCol cols="12" md="6">
+              <strong>Dernière échéance:</strong>
+              <div>{{ contractData.date_of_last_echeance }}</div>
+            </VCol>
+            <VCol cols="12" md="6">
+              <strong>Nombre d'échéances:</strong>
+              <div>{{ contractData.number_of_due_dates }}</div>
+            </VCol>
+            <VCol cols="12" md="6">
+              <strong>Montant intercalaire:</strong>
+              <div>{{ contractData.due_amount }}</div>
+            </VCol>
+            <VCol cols="12" md="6">
+              <strong>Montant échéance:</strong>
+              <div>{{ contractData.montant_second_ech }}</div>
+            </VCol>
+            <VCol cols="12" md="6">
+              <strong>Montant dernière échéance:</strong>
+              <div>{{ contractData.montant_troisieme_ech }}</div>
+            </VCol>
+            <VCol cols="12" md="6">
+              <strong>Numéro de prêt:</strong>
+              <div>{{ contractData.number_of_pret }}</div>
+            </VCol>
+            <VCol cols="12" md="6">
+              <strong>Type:</strong>
+              <div>{{ contractData.type }}</div>
+            </VCol>
+            <VCol cols="12" md="6">
+              <strong>Avec gage:</strong>
+              <div>{{ contractData.has_pledges == '1' ? 'Oui' : 'Non' }}</div>
+            </VCol>
+          </VRow>
+
+          <VDivider class="my-4" />
+          <h6 class="text-subtitle-1 mb-2">Informations client</h6>
+          <VRow class="mb-2">
+            <VCol cols="12" md="6">
+              <strong>Date de naissance:</strong>
+              <div>{{ contractData.representative_birth_date }}</div>
+            </VCol>
+            <VCol cols="12" md="6">
+              <strong>Lieu de naissance:</strong>
+              <div>{{ contractData.representative_birth_place }}</div>
+            </VCol>
+            <VCol cols="12" md="6">
+              <strong>Nationalité:</strong>
+              <div>{{ contractData.representative_nationality }}</div>
+            </VCol>
+            <VCol cols="12" md="6">
+              <strong>Adresse domicile:</strong>
+              <div>{{ contractData.representative_home_address }}</div>
+            </VCol>
+            <VCol cols="12" md="6">
+              <strong>Téléphone:</strong>
+              <div>{{ contractData.representative_phone_number }}</div>
+            </VCol>
+            <VCol cols="12" md="6">
+              <strong>Type pièce d'identité:</strong>
+              <div>{{ contractData.representative_type_of_identity_document }}</div>
+            </VCol>
+            <VCol cols="12" md="6">
+              <strong>Numéro pièce d'identité:</strong>
+              <div>{{ contractData.representative_number_of_identity_document }}</div>
+            </VCol>
+            <VCol cols="12" md="6">
+              <strong>Délivrée par:</strong>
+              <div>{{ contractData.representative_office_delivery }}</div>
+            </VCol>
+            <VCol cols="12" md="6">
+              <strong>Date de délivrance:</strong>
+              <div>{{ contractData.representative_date_of_issue_of_identity_document }}</div>
+            </VCol>
+          </VRow>
+
+          <VCard
+            v-if="contractData.type == 'company' || contractData.type == 'professions_libérales' || contractData.type == 'ong'"
+            variant="tonal"
+            class="mb-4"
+          >
+            <VCardText>
+              <h6 class="text-subtitle-1 mb-2">Informations société</h6>
+              <VRow>
+                <VCol cols="12" md="6">
+                  <strong>Dénomination:</strong>
+                  <div>{{ contractData.company_denomination }}</div>
+                </VCol>
+                <VCol cols="12" md="6">
+                  <strong>Forme juridique:</strong>
+                  <div>{{ contractData.company_legal_status }}</div>
+                </VCol>
+                <VCol cols="12" md="6">
+                  <strong>Adresse siège social:</strong>
+                  <div>{{ contractData.company_head_office_address }}</div>
+                </VCol>
+                <VCol cols="12" md="6">
+                  <strong>Numéro RCCM:</strong>
+                  <div>{{ contractData.company_rccm_number }}</div>
+                </VCol>
+                <VCol cols="12" md="6">
+                  <strong>Téléphone société:</strong>
+                  <div>{{ contractData.company_phone_number }}</div>
+                </VCol>
+                <VCol cols="12" md="6">
+                  <strong>NIF:</strong>
+                  <div>{{ contractData.company_nif }}</div>
+                </VCol>
+                <VCol cols="12" md="6">
+                  <strong>BP:</strong>
+                  <div>{{ contractData.company_bp }}</div>
+                </VCol>
+                <VCol cols="12" md="6">
+                  <strong>Commune:</strong>
+                  <div>{{ contractData.company_commune }}</div>
+                </VCol>
+              </VRow>
+            </VCardText>
+          </VCard>
+
+          <VCard v-if="contractData.type == 'individual_business'" variant="tonal">
+            <VCardText>
+              <h6 class="text-subtitle-1 mb-2">Informations entreprise individuelle</h6>
+              <VRow>
+                <VCol cols="12" md="6">
+                  <strong>Dénomination:</strong>
+                  <div>{{ contractData.individual_business_denomination }}</div>
+                </VCol>
+                <VCol cols="12" md="6">
+                  <strong>Adresse siège social:</strong>
+                  <div>{{ contractData.individual_business_head_office_address }}</div>
+                </VCol>
+                <VCol cols="12" md="6">
+                  <strong>Commune:</strong>
+                  <div>{{ contractData.individual_business_commune }}</div>
+                </VCol>
+                <VCol cols="12" md="6">
+                  <strong>BP:</strong>
+                  <div>{{ contractData.individual_business_bp }}</div>
+                </VCol>
+                <VCol cols="12" md="6">
+                  <strong>Numéro RCCM:</strong>
+                  <div>{{ contractData.individual_business_rccm_number }}</div>
+                </VCol>
+                <VCol cols="12" md="6">
+                  <strong>Numéro NIF:</strong>
+                  <div>{{ contractData.individual_business_nif_number }}</div>
+                </VCol>
+                <VCol cols="12" md="6">
+                  <strong>Téléphone:</strong>
+                  <div>{{ contractData.individual_business_phone_number }}</div>
+                </VCol>
+              </VRow>
+            </VCardText>
+          </VCard>
+
+          <VDivider class="my-4" />
+          <h6 class="text-subtitle-1 mb-2">Gages</h6>
+          <VTable density="compact">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Type</th>
+                <th>Montant estimé</th>
+                <th>Marque</th>
+                <th>Immatriculation</th>
+                <th>Commentaire</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(g, idx) in (contractData.pledges || [])" :key="idx">
+                <td>{{ idx + 1 }}</td>
+                <td>{{ g.type }}</td>
+                <td>{{ g.montant_estime ?? '-' }}</td>
+                <td>{{ g.marque ?? '-' }}</td>
+                <td>{{ g.immatriculation ?? '-' }}</td>
+                <td>{{ g.comment ?? '-' }}</td>
+              </tr>
+            </tbody>
+          </VTable>
+        </VCardText>
+        <VCardActions class="justify-end">
+          <VBtn variant="tonal" color="secondary" @click="showRecapDialog = false">
+            Modifier
+          </VBtn>
+          <VBtn color="primary" :loading="isSubmitting" @click="confirmSubmit">
+            Confirmer et enregistrer
+          </VBtn>
+        </VCardActions>
+      </VCard>
+    </VDialog>
   </div>
 </template>
 

@@ -23,6 +23,7 @@ class VerbalTrial extends Model
         'applicant_last_name',
         'account_number',
         'activity',
+        'fonction',
         'purpose_of_financing',
         'type_of_credit_id',
         'amount',
