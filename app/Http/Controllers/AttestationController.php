@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use PhpOffice\PhpWord\TemplateProcessor;
 use Illuminate\Support\Facades\Response;
 use Rmunate\Utilities\SpellNumber;
+use App\Services\DocumentService;
 
 class AttestationController extends Controller
 {
@@ -52,11 +53,11 @@ class AttestationController extends Controller
     public function download(Request $request, $id)
     {
         $zip = new \ZipArchive();
-		$zipFileName = 'attestations.zip';
-		$zipFilePath = public_path($zipFileName);
-		if ($zip->open($zipFilePath, \ZipArchive::CREATE | \ZipArchive::OVERWRITE) !== TRUE) {
-			return $this->responseError(["error" => "Impossible de créer le fichier ZIP"], 500);
-		}
+        $zipFileName = 'attestations.zip';
+        $zipFilePath = public_path($zipFileName);
+        if ($zip->open($zipFilePath, \ZipArchive::CREATE | \ZipArchive::OVERWRITE) !== TRUE) {
+            return response()->json(["error" => "Impossible de créer le fichier ZIP"], 500);
+        }
         $attestation = attestation::find($id);
         // dd($attestation);
         if ($attestation) {
@@ -88,7 +89,17 @@ class AttestationController extends Controller
                     $templateProcessor->setValue('date_du_jour', $today);
                     $outputFilePath = public_path("Attestation-cloture-" . $attestation->last_name . "-" . $attestation->first_name . ".docx");
                     $templateProcessor->saveAs($outputFilePath);
-                   return response()->download($outputFilePath)->deleteFileAfterSend(true);
+                    $service = new DocumentService();
+                    $pdf = $service->convertDocxToPdf($outputFilePath);
+                    if ($pdf) {
+                        $locked = $service->protectPdf($pdf);
+                        $zip->addFile($locked ?: $pdf, basename($locked ?: $pdf));
+                        @unlink($outputFilePath);
+                        @unlink($locked ?: $pdf);
+                        $zip->close();
+                        return response()->download($zipFilePath)->deleteFileAfterSend(true);
+                    }
+                    return response()->download($outputFilePath)->deleteFileAfterSend(true);
                 }
                 if($attestation->type_attestation == "endettement"){
                     $montant_endettement = 0;
@@ -113,6 +124,16 @@ class AttestationController extends Controller
                     $templateProcessor->setValue('date_du_jour', $today);
                     $outputFilePath = public_path("Attestation-endettement-" . $attestation->last_name . "-" . $attestation->first_name . ".docx");
                     $templateProcessor->saveAs($outputFilePath);
+                    $service = new DocumentService();
+                    $pdf = $service->convertDocxToPdf($outputFilePath);
+                    if ($pdf) {
+                        $locked = $service->protectPdf($pdf);
+                        $zip->addFile($locked ?: $pdf, basename($locked ?: $pdf));
+                        @unlink($outputFilePath);
+                        @unlink($locked ?: $pdf);
+                        $zip->close();
+                        return response()->download($zipFilePath)->deleteFileAfterSend(true);
+                    }
                     return response()->download($outputFilePath)->deleteFileAfterSend(true);
                 }
                 if($attestation->type_attestation == "non endettement"){
@@ -133,6 +154,16 @@ class AttestationController extends Controller
                     $templateProcessor->setValue('date_du_jour', $today);
                     $outputFilePath = public_path("Attestation-non-endettement-" . $attestation->last_name . "-" . $attestation->first_name . ".docx");
                     $templateProcessor->saveAs($outputFilePath);
+                    $service = new DocumentService();
+                    $pdf = $service->convertDocxToPdf($outputFilePath);
+                    if ($pdf) {
+                        $locked = $service->protectPdf($pdf);
+                        $zip->addFile($locked ?: $pdf, basename($locked ?: $pdf));
+                        @unlink($outputFilePath);
+                        @unlink($locked ?: $pdf);
+                        $zip->close();
+                        return response()->download($zipFilePath)->deleteFileAfterSend(true);
+                    }
                     return response()->download($outputFilePath)->deleteFileAfterSend(true);
 
                 }
@@ -169,6 +200,16 @@ class AttestationController extends Controller
                     $templateProcessor->setValue('date_du_jour', $today);
                     $outputFilePath = public_path("Attestation-main-levee-de-gage-" . $attestation->last_name . "-" . $attestation->first_name . ".docx");
                     $templateProcessor->saveAs($outputFilePath);
+                    $service = new DocumentService();
+                    $pdf = $service->convertDocxToPdf($outputFilePath);
+                    if ($pdf) {
+                        $locked = $service->protectPdf($pdf);
+                        $zip->addFile($locked ?: $pdf, basename($locked ?: $pdf));
+                        @unlink($outputFilePath);
+                        @unlink($locked ?: $pdf);
+                        $zip->close();
+                        return response()->download($zipFilePath)->deleteFileAfterSend(true);
+                    }
                     return response()->download($outputFilePath)->deleteFileAfterSend(true);
 
                 }
@@ -191,6 +232,16 @@ class AttestationController extends Controller
                     $templateProcessor->setValue('date_du_jour', $today);
                     $outputFilePath = public_path("Attestation-cloture-" . $attestation->last_name . "-" . $attestation->first_name . ".docx");
                     $templateProcessor->saveAs($outputFilePath);
+                    $service = new DocumentService();
+                    $pdf = $service->convertDocxToPdf($outputFilePath);
+                    if ($pdf) {
+                        $locked = $service->protectPdf($pdf);
+                        $zip->addFile($locked ?: $pdf, basename($locked ?: $pdf));
+                        @unlink($outputFilePath);
+                        @unlink($locked ?: $pdf);
+                        $zip->close();
+                        return response()->download($zipFilePath)->deleteFileAfterSend(true);
+                    }
                     return response()->download($outputFilePath)->deleteFileAfterSend(true);
 
                 }
@@ -209,6 +260,16 @@ class AttestationController extends Controller
                     $templateProcessor->setValue('date_du_jour', $today);
                     $outputFilePath = public_path("Attestation-endettement-" . $attestation->last_name . "-" . $attestation->first_name . ".docx");
                     $templateProcessor->saveAs($outputFilePath);
+                    $service = new DocumentService();
+                    $pdf = $service->convertDocxToPdf($outputFilePath);
+                    if ($pdf) {
+                        $locked = $service->protectPdf($pdf);
+                        $zip->addFile($locked ?: $pdf, basename($locked ?: $pdf));
+                        @unlink($outputFilePath);
+                        @unlink($locked ?: $pdf);
+                        $zip->close();
+                        return response()->download($zipFilePath)->deleteFileAfterSend(true);
+                    }
                     return response()->download($outputFilePath)->deleteFileAfterSend(true);
                 }
                 if($attestation->type_attestation == "non endettement"){
