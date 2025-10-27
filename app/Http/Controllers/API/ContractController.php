@@ -30,6 +30,78 @@ class ContractController extends Controller
 {
 
 	/**
+	 * Rendre un document .docx non modifiable en ajoutant la protection readOnly
+	 * dans word/settings.xml à l'intérieur de l'archive docx.
+	 */
+	private function protectDocx(string $filePath): void
+	{
+		$zip = new \ZipArchive();
+		if ($zip->open($filePath) === true) {
+			$settingsXml = $zip->getFromName('word/settings.xml');
+			if ($settingsXml !== false) {
+				$protectionPassword = env('DOCX_PROTECT_PASSWORD', 'Cofina2025');
+				$spinCount = 100000;
+				[$hashB64, $saltB64] = $this->generateDocxProtectionHash($protectionPassword, $spinCount);
+				$legacy = $this->generateLegacyWordPasswordHash($protectionPassword);
+				$protectionTag = '<w:documentProtection w:edit="readOnly" w:enforcement="1" w:password="' . $legacy . '" w:cryptProviderType="rsaFull" w:cryptAlgorithmClass="hash" w:cryptAlgorithmType="typeAny" w:cryptAlgorithmSid="4" w:cryptSpinCount="' . $spinCount . '" w:hash="' . $hashB64 . '" w:salt="' . $saltB64 . '"/>';
+				if (strpos($settingsXml, 'w:documentProtection') === false) {
+					$settingsXml = preg_replace('/<w:settings([^>]*)>/', '<w:settings$1>' . $protectionTag, $settingsXml, 1);
+				} else {
+					$settingsXml = preg_replace('/<w:documentProtection[^>]*\/>/', $protectionTag, $settingsXml, 1);
+				}
+				$zip->addFromString('word/settings.xml', $settingsXml);
+			}
+			$zip->close();
+		}
+	}
+
+	/**
+	 * Génère le hash et le sel (base64) pour la protection DOCX (SHA-1 + spinCount)
+	 */
+	private function generateDocxProtectionHash(string $password, int $spinCount = 100000): array
+	{
+		$passwordUtf16Le = iconv('UTF-8', 'UTF-16LE', $password);
+		$salt = random_bytes(16);
+		$current = sha1($salt . $passwordUtf16Le, true);
+		for ($i = 0; $i < $spinCount; $i++) {
+			$current = sha1($current . $passwordUtf16Le, true);
+		}
+		return [base64_encode($current), base64_encode($salt)];
+	}
+
+	/**
+	 * Hash legacy (w:password) compatible Word, pour compatibilité maximale.
+	 */
+	private function generateLegacyWordPasswordHash(string $password): string
+	{
+		$utf16le = iconv('UTF-8', 'UTF-16LE', $password) ?: '';
+		$length = (int) (strlen($utf16le) / 2);
+		$key = 0x0000;
+		for ($i = 0; $i < $length; $i++) {
+			$low = ord($utf16le[$i * 2]);
+			$high = ord($utf16le[$i * 2 + 1]);
+			$charCode = $low | ($high << 8);
+			$key ^= $charCode;
+			$key = (($key << 1) | ($key >> 15)) & 0xFFFF;
+		}
+		$key ^= $length;
+		$key ^= 0xCE4B;
+		return strtoupper(str_pad(dechex($key), 4, '0', STR_PAD_LEFT));
+	}
+
+	/**
+	 * Sauvegarde un TemplateProcessor et applique la protection lecture seule.
+	 */
+	private function saveAndProtect(TemplateProcessor $processor, string $outputPath): void
+	{
+		$processor->saveAs($outputPath);
+		// Protection des fichiers Word désactivée
+		// if (file_exists($outputPath)) {
+		// 	$this->protectDocx($outputPath);
+		// }
+	}
+
+	/**
 	 * Affiche les contrats
 	 *
 	 * @queryParam  verbal_trial_id                                         int                 Filtrer par ID du PV.                                                   No-example
@@ -620,7 +692,7 @@ class ContractController extends Controller
 					"residence_certificate" => "certificat de résidence",
 					"driving_licence" => "permis de conduire",
 					"carte_sej"=>"carte de séjour",
-					"recep" =>"récépissé de la carte nationale d’identité "
+					"recep" =>"récépissé de la carte nationale d'identité "
 				][$data["representative_type_of_identity_document"]];
 				$data["verbal_trial.civility"] = [
 					"Mr" => "Monsieur",
@@ -643,7 +715,7 @@ class ContractController extends Controller
 						"residence_certificate" => "certificat de résidence",
 						"driving_licence" => "permis de conduire",
 						"carte_sej"=>"carte de séjour",
-						"recep"=>"récépissé de la carte nationale d’identité "
+						"recep"=>"récépissé de la carte nationale d'identité "
 					][$data["individual_business.type_of_identity_document"]];
 				}
 				if(isset($data["individual_business.type_of_identity_document"])){
@@ -768,7 +840,7 @@ class ContractController extends Controller
 						"residence_certificate" => "certificat de résidence",
 						"driving_licence" => "permis de conduire",
 						"carte_sej"=>"carte de séjour",
-						"recep"=>"récépissé de la carte nationale d’identité "
+						"recep"=>"récépissé de la carte nationale d'identité "
 					][$data["pledge.identity_document"]];
 					$data["pledge.civility"] = [
 						"Mr" => "Monsieur",
@@ -1057,76 +1129,76 @@ class ContractController extends Controller
 				$outputFilePath29= public_path("Contrat_de_nantissement_de_fonds_de_commerce-" . $contract->verbal_trial->applicant_first_name_.$contract->verbal_trial->applicant_last_name . ".docx");
 				$outputFilePath30= public_path("Contrat_de_gage_du_stock-" . $contract->verbal_trial->applicant_first_name_.$contract->verbal_trial->applicant_last_name . ".docx");
 				$outputFilePath31= public_path("Contrat_de_gage_autre-" . $contract->verbal_trial->applicant_first_name_.$contract->verbal_trial->applicant_last_name . ".docx");
-				$templateProcessor->saveAs($outputFilePath);
-				$templateProcessor1->saveAs($outputFilePath1);
-				$templateProcessor2->saveAs($outputFilePath2);
-				$templateProcessor3->saveAs($outputFilePath3);
-				$templateProcessor4->saveAs($outputFilePath4);
+				$this->saveAndProtect($templateProcessor, $outputFilePath);
+				$this->saveAndProtect($templateProcessor1, $outputFilePath1);
+				$this->saveAndProtect($templateProcessor2, $outputFilePath2);
+				$this->saveAndProtect($templateProcessor3, $outputFilePath3);
+				$this->saveAndProtect($templateProcessor4, $outputFilePath4);
 				if($contract->type == "particular"){
-					$templateProcessor30->saveAs($outputFilePath13);
-					$templateProcessor31->saveAs($outputFilePath19);
-					$templateProcessor32->saveAs($outputFilePath26);
+					$this->saveAndProtect($templateProcessor30, $outputFilePath13);
+					$this->saveAndProtect($templateProcessor31, $outputFilePath19);
+					$this->saveAndProtect($templateProcessor32, $outputFilePath26);
 
 				}
 				if($contract->type == "particular" && $data["verbal_trial.type_of_credit.name"] == "CREDIT  CONSO"){
 					// $templateProcessor5->setValues($data);
-					$templateProcessor5->saveAs($outputFilePath5);
-					$templateProcessor6->saveAs($outputFilePath6);
-					$templateProcessor7->saveAs($outputFilePath7);
-					$templateProcessor8->saveAs($outputFilePath13);
-					$templateProcessor9->saveAs($outputFilePath18);
-					$templateProcessor10->saveAs($outputFilePath19);
-					$templateProcessor11->saveAs($outputFilePath20);
-					$templateProcessor12->saveAs($outputFilePath28);
+					$this->saveAndProtect($templateProcessor5, $outputFilePath5);
+					$this->saveAndProtect($templateProcessor6, $outputFilePath6);
+					$this->saveAndProtect($templateProcessor7, $outputFilePath7);
+					$this->saveAndProtect($templateProcessor8, $outputFilePath13);
+					$this->saveAndProtect($templateProcessor9, $outputFilePath18);
+					$this->saveAndProtect($templateProcessor10, $outputFilePath19);
+					$this->saveAndProtect($templateProcessor11, $outputFilePath20);
+					$this->saveAndProtect($templateProcessor12, $outputFilePath28);
 					// dd("ok");
 
 				}
 				if($contract->type == "particular" &&($data["verbal_trial.type_of_credit.name"] == "PP COMMERCANT" || $data["verbal_trial.type_of_credit.name"] == "COMMERCANT PP"))
 					{
-						$templateProcessor8->saveAs($outputFilePath8);
-						$templateProcessor9->saveAs($outputFilePath9);
-						$templateProcessor10->saveAs($outputFilePath13);
+						$this->saveAndProtect($templateProcessor8, $outputFilePath8);
+						$this->saveAndProtect($templateProcessor9, $outputFilePath9);
+						$this->saveAndProtect($templateProcessor10, $outputFilePath13);
 					}
 				if($contract->type == "particular" && ($data["verbal_trial.type_of_credit.name"] =="CREDIT CONSO/IMMO"))
 					{
 						
-						$templateProcessor40->saveAs($outputFilePath8);
-						$templateProcessor41->saveAs($outputFilePath24);
-						$templateProcessor42->saveAs($outputFilePath25);
-						$templateProcessor43->saveAs($outputFilePath22);
-						$templateProcessor44->saveAs($outputFilePath18);
-						$templateProcessor45->saveAs($outputFilePath28);
+						$this->saveAndProtect($templateProcessor40, $outputFilePath8);
+						$this->saveAndProtect($templateProcessor41, $outputFilePath24);
+						$this->saveAndProtect($templateProcessor42, $outputFilePath25);
+						$this->saveAndProtect($templateProcessor43, $outputFilePath22);
+						$this->saveAndProtect($templateProcessor44, $outputFilePath18);
+						$this->saveAndProtect($templateProcessor45, $outputFilePath28);
 
 					}
 				
 				if($contract->type == "individual_business" && ($data["verbal_trial.type_of_credit.name"] == "CREDIT FDR" || $data["verbal_trial.type_of_credit.name"] == "CREDIT  BFR"))
 					{
 						// dd("dedans");
-						$templateProcessor5->saveAs($outputFilePath10);
-						$templateProcessor6->saveAs($outputFilePath11);
-						$templateProcessor7->saveAs($outputFilePath12);
-						$templateProcessor8->saveAs($outputFilePath13);
-						$templateProcessor9->saveAs($outputFilePath8);
-						$templateProcessor10->saveAs($outputFilePath19);
-						$templateProcessor11->saveAs($outputFilePath27);
-						$templateProcessor12->saveAs($outputFilePath5);
-						$templateProcessor13->saveAs($outputFilePath30);
-						$templateProcessor14->saveAs($outputFilePath29);
+						$this->saveAndProtect($templateProcessor5, $outputFilePath10);
+						$this->saveAndProtect($templateProcessor6, $outputFilePath11);
+						$this->saveAndProtect($templateProcessor7, $outputFilePath12);
+						$this->saveAndProtect($templateProcessor8, $outputFilePath13);
+						$this->saveAndProtect($templateProcessor9, $outputFilePath8);
+						$this->saveAndProtect($templateProcessor10, $outputFilePath19);
+						$this->saveAndProtect($templateProcessor11, $outputFilePath27);
+						$this->saveAndProtect($templateProcessor12, $outputFilePath5);
+						$this->saveAndProtect($templateProcessor13, $outputFilePath30);
+						$this->saveAndProtect($templateProcessor14, $outputFilePath29);
 					}
 				if($contract->type == "individual_business" && ($data["verbal_trial.type_of_credit.name"] == "CREDIT D'INVESTISSEMENT" ||
 					$data["verbal_trial.type_of_credit.name"] == "AVANCE MARCHE/BC" || $data["verbal_trial.type_of_credit.name"] == "AVANCE SUR FACTURE" ||
 					$data["verbal_trial.type_of_credit.name"] == "PP COMMERCANT"))
 					{
-						$templateProcessor9->saveAs($outputFilePath11);
-						$templateProcessor10->saveAs($outputFilePath15);
-						$templateProcessor11->saveAs($outputFilePath16);
-						$templateProcessor12->saveAs($outputFilePath17);
-						$templateProcessor13->saveAs($outputFilePath13);
-						$templateProcessor14->saveAs($outputFilePath20);
-						$templateProcessor15->saveAs($outputFilePath19);
-						$templateProcessor16->saveAs($outputFilePath9);
-						$templateProcessor17->saveAs($outputFilePath5);
-						$templateProcessor18->saveAs($outputFilePath27);
+						$this->saveAndProtect($templateProcessor9, $outputFilePath11);
+						$this->saveAndProtect($templateProcessor10, $outputFilePath15);
+						$this->saveAndProtect($templateProcessor11, $outputFilePath16);
+						$this->saveAndProtect($templateProcessor12, $outputFilePath17);
+						$this->saveAndProtect($templateProcessor13, $outputFilePath13);
+						$this->saveAndProtect($templateProcessor14, $outputFilePath20);
+						$this->saveAndProtect($templateProcessor15, $outputFilePath19);
+						$this->saveAndProtect($templateProcessor16, $outputFilePath9);
+						$this->saveAndProtect($templateProcessor17, $outputFilePath5);
+						$this->saveAndProtect($templateProcessor18, $outputFilePath27);
 					}
 			
 				if($contract->type == "company" && ($data["verbal_trial.type_of_credit.name"] == "AVANCE SUR FACTURE" ||
@@ -1134,37 +1206,37 @@ class ContractController extends Controller
 					$data["verbal_trial.type_of_credit.name"] == "AVANCE MARCHE/BC_SOLO"))
 					{
 						
-						$templateProcessor5->saveAs($outputFilePath21);
-						$templateProcessor6->saveAs($outputFilePath22);
-						$templateProcessor7->saveAs($outputFilePath16);
-						$templateProcessor8->saveAs($outputFilePath13);
-						$templateProcessor11->saveAs($outputFilePath19);
-						$templateProcessor12->saveAs($outputFilePath10);
-						$templateProcessor13->saveAs($outputFilePath8);
-						$templateProcessor14->saveAs($outputFilePath11);
-						$templateProcessor15->saveAs($outputFilePath5);
-						$templateProcessor16->saveAs($outputFilePath27);
-						$templateProcessor17->saveAs($outputFilePath29);
+						$this->saveAndProtect($templateProcessor5, $outputFilePath21);
+						$this->saveAndProtect($templateProcessor6, $outputFilePath22);
+						$this->saveAndProtect($templateProcessor7, $outputFilePath16);
+						$this->saveAndProtect($templateProcessor8, $outputFilePath13);
+						$this->saveAndProtect($templateProcessor11, $outputFilePath19);
+						$this->saveAndProtect($templateProcessor12, $outputFilePath10);
+						$this->saveAndProtect($templateProcessor13, $outputFilePath8);
+						$this->saveAndProtect($templateProcessor14, $outputFilePath11);
+						$this->saveAndProtect($templateProcessor15, $outputFilePath5);
+						$this->saveAndProtect($templateProcessor16, $outputFilePath27);
+						$this->saveAndProtect($templateProcessor17, $outputFilePath29);
 						// $templateProcessor9->saveAs($outputFilePath8);
 					}
 				if($contract->type == "company" && ($data["verbal_trial.type_of_credit.name"] == "CREDIT  CONSO" || $data["verbal_trial.type_of_credit.name"] = "CREDIT CONSO/IMMO"))
 					{
 						// dd("ok");
-						$templateProcessor5->saveAs($outputFilePath21);
-						$templateProcessor6->saveAs($outputFilePath22);
-						$templateProcessor7->saveAs($outputFilePath16);
-						$templateProcessor8->saveAs($outputFilePath13);
-						$templateProcessor9->saveAs($outputFilePath23);
-						$templateProcessor10->saveAs($outputFilePath9);
-						$templateProcessor11->saveAs($outputFilePath19);
-						$templateProcessor12->saveAs($outputFilePath10);
-						$templateProcessor13->saveAs($outputFilePath8);
-						$templateProcessor14->saveAs($outputFilePath11);
-						$templateProcessor15->saveAs($outputFilePath5);
-						$templateProcessor16->saveAs($outputFilePath27);
-						$templateProcessor17->saveAs($outputFilePath29);
-						$templateProcessor18->saveAs($outputFilePath30);
-						$templateProcessor19->saveAs($outputFilePath31);
+						$this->saveAndProtect($templateProcessor5, $outputFilePath21);
+						$this->saveAndProtect($templateProcessor6, $outputFilePath22);
+						$this->saveAndProtect($templateProcessor7, $outputFilePath16);
+						$this->saveAndProtect($templateProcessor8, $outputFilePath13);
+						$this->saveAndProtect($templateProcessor9, $outputFilePath23);
+						$this->saveAndProtect($templateProcessor10, $outputFilePath9);
+						$this->saveAndProtect($templateProcessor11, $outputFilePath19);
+						$this->saveAndProtect($templateProcessor12, $outputFilePath10);
+						$this->saveAndProtect($templateProcessor13, $outputFilePath8);
+						$this->saveAndProtect($templateProcessor14, $outputFilePath11);
+						$this->saveAndProtect($templateProcessor15, $outputFilePath5);
+						$this->saveAndProtect($templateProcessor16, $outputFilePath27);
+						$this->saveAndProtect($templateProcessor17, $outputFilePath29);
+						$this->saveAndProtect($templateProcessor18, $outputFilePath30);
+						$this->saveAndProtect($templateProcessor19, $outputFilePath31);
 					}
 
 				// Vérifiez si les fichiers ont été créés
@@ -1367,7 +1439,7 @@ class ContractController extends Controller
 
 				// Enregistrez les modifications dans un nouveau fichier
 				$outputFilePath = public_path("Billet-a-ordre-" . $contract->verbal_trial->committee_id . ".docx");
-				$templateProcessor->saveAs($outputFilePath);
+				$this->saveAndProtect($templateProcessor, $outputFilePath);
 
 				// return response()->download($outputFilePath)->deleteFileAfterSend(true);
 				return Response::file($outputFilePath, ["Content-Type" => "application/vnd.openxmlformats-officedocument.wordprocessingml.document"]);
@@ -1846,6 +1918,7 @@ class ContractController extends Controller
 		} else {
 			return $this->responseError(["id" => ["Le contrat n'existe pas"]], 404);
 		}
-
 	}
+
 }
+
